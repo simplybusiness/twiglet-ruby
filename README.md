@@ -1,5 +1,7 @@
 # Twig
 
+![Node.js CI](https://github.com/simplybusiness/twig/workflows/Node.js%20CI/badge.svg?branch=master)
+
 Why Twig? Because it's a log, only micro-sized.
 
 This is a machine-readable first, human-readable second, JSON-based logging micro-library suitable for a wide variety of microservice uses.
