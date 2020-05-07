@@ -38,25 +38,16 @@ All application specific information is embedded in the `message` attribute JSON
 
 | Attribute name (mandatory) | Description                     |
 | -------------------------- | ------------------------------- |
-| log.level                  | String, is one of DEBUG, INFO,  |
-|                            | WARNING, ERROR and CRITICAL.    |
-| -------------------------- | ------------------------------- |
+| log.level | String, is one of DEBUG, INFO, WARNING, ERROR and CRITICAL. |
 | service.name               | String, the name of the service |
-| -------------------------- | ------------------------------- |
-| timestamp                  | String, ISO8601 UTC with        |
-|                            | millisecond timestamp           |
-| -------------------------- | ------------------------------- |
+| timestamp                  | String, ISO8601 UTC |
 | message                    | JSON, the original log message  |
 
 | Attribute name (optional)  | Description                     |
 | -------------------------- | ------------------------------- |
 | error.stack_trace          | Stack trace, as JSON[4]         |
-| -------------------------- | ------------------------------- |
 | tags                       | Array, e.g. ["production"]      |
-| -------------------------- | ------------------------------- |
-| trace.id                   | String, UUIDv4 - this is a      |
-|                            | correlation ID                  |
-| -------------------------- | ------------------------------- |
+| trace.id                   | String, UUIDv4 - a correlation ID |
 | (other examples)           | ...                             |
 
 [4] Helper method to be provided to allow stack trace objects to be represented cleanly as JSON.
