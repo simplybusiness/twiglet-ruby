@@ -27,12 +27,22 @@ describe("logging", () => {
     })
   })
 
+  it("should log an empty message", () => {
+    this.log.info()
+    const contents = this.log.output.printed
+
+    expect(contents.log.level).toBe("INFO")
+    expect(contents.message).toBeDefined()
+    expect(contents.message).toBe("")
+  })
+
   it("should log mandatory attributes", () => {
-    this.log.error({})
+    this.log.error({ message: "" })
     const contents = this.log.output.printed
     expect(contents.timestamp).toBe("2016-02-15T12:34:56.789Z")
     expect(contents.service.name).toBe("petshop")
     expect(contents.log.level).toBe("ERROR")
+    expect(contents.message).toBe("")
   })
 
   it("should log the provided message", () => {
@@ -48,6 +58,7 @@ describe("logging", () => {
       trace: {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
+      message: "",
       request: { method: "GET" },
       response: { status_code: 200 }
     }
