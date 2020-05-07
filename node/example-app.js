@@ -10,13 +10,17 @@ const log = Logger({
 
 // Start our new super service
 log.info({
-  "event.action": "startup",
+  event: {
+    action: "startup"
+  },
   message: `Ready to go, listening on port ${PORT}`,
-  "server.port": PORT
+  server: {
+    port: PORT
+  }
 })
 
 // We get a request
-const request_log = log.with({ "event.action": "HTTP request", "trace.id": "126bb6fa-28a2-470f-b013-eefbf9182b2d" })
+const request_log = log.with({ event: { action: "HTTP request" }, trace: { id: "126bb6fa-28a2-470f-b013-eefbf9182b2d" }})
 
 // Oh noes!
 db_err = true // this time!
