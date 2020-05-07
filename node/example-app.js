@@ -2,7 +2,7 @@ const Logger = require('./logger')
 
 const PORT=8080
 
-const log = new Logger({
+const log = Logger({
   now: Date.now,
   output: console,
   service: "my-super-service"
