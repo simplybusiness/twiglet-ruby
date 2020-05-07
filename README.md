@@ -36,35 +36,28 @@ https://www.elastic.co/blog/introducing-the-elastic-common-schema
 We have decided to standardise on the Elastic Common Schema for log attribute names. Whilst some attributes are expected for all logs, service owners should feel free to add relevant entries from the ECS schema if they are needed.
 All application specific information is embedded in the `message` attribute JSON payload.
 
------------------------------------------------------------------ 
-| Attribute name (mandatory) | Description                      |
------------------------------------------------------------------
-| log.level                  | String, is one of DEBUG, INFO,   |
-|                            | WARNING, ERROR and CRITICAL.     |
------------------------------------------------------------------
-| service.name               | String, the name of the service  |
------------------------------------------------------------------
-| timestamp                  | String, ISO8601 UTC with         |
-|                            | millisecond timestamp            |
------------------------------------------------------------------
-| message                    | JSON, the original log message   |
------------------------------------------------------------------
+| Attribute name (mandatory) | Description                     |
+| -------------------------- | ------------------------------- |
+| log.level                  | String, is one of DEBUG, INFO,  |
+|                            | WARNING, ERROR and CRITICAL.    |
+| -------------------------- | ------------------------------- |
+| service.name               | String, the name of the service |
+| -------------------------- | ------------------------------- |
+| timestamp                  | String, ISO8601 UTC with        |
+|                            | millisecond timestamp           |
+| -------------------------- | ------------------------------- |
+| message                    | JSON, the original log message  |
 
------------------------------------------------------------------
-| Attribute name (optional)  | Description                      |
------------------------------------------------------------------
-| error.stack_trace          | JSON, the stack trace if         |
-|                            | applicable, formatted as JSON[4] |
------------------------------------------------------------------
-| tags                       | Array, e.g. ["production"]       |
------------------------------------------------------------------
-| trace.id                   | String, UUIDv4 - this is a       |
-|                            | correlation ID                   |
------------------------------------------------------------------
-| (other examples)           | ...                              |
------------------------------------------------------------------
-
-
+| Attribute name (optional)  | Description                     |
+| -------------------------- | ------------------------------- |
+| error.stack_trace          | Stack trace, as JSON[4]         |
+| -------------------------- | ------------------------------- |
+| tags                       | Array, e.g. ["production"]      |
+| -------------------------- | ------------------------------- |
+| trace.id                   | String, UUIDv4 - this is a      |
+|                            | correlation ID                  |
+| -------------------------- | ------------------------------- |
+| (other examples)           | ...                             |
 
 [4] Helper method to be provided to allow stack trace objects to be represented cleanly as JSON.
 
