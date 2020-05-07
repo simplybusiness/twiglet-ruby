@@ -25,7 +25,7 @@ The design goals of this library are:
 - Each log entry pertains to an 'event'[2]
 - Each log entry either a) propagates an existing trace.id or b) creates a new trace.id as a correlation ID if one does not already exist[3]
 - Stack traces are written inside a single JSON log object rather than sprawling over several lines (TODO:)
-- Personally Identifiable Information. Don't log it. 
+- Personally Identifiable Information. Don't log it.
 
 [1] It turns out that there isn't a single authoritative standard for severity levels, we chose to go with DEBUG, INFO, WARNING, ERROR and CRITICAL as our choices.
 [2] The ‘event’ here merely refers to the action that the customer (or employee, service, or other actor) is currently attempting. It does not refer specifically to Kafka, or CQRS, though that might be the case.
@@ -73,6 +73,10 @@ If any other fields are provided in a log then these should be from the ECS sche
 }
 ```
 
-# LICENSE
+# Code of conduct
+
+Please see the code of conduct [file](CODE_OF_CONDUCT.md) for further info.
+
+# License
 
 This work is licensed under the MIT license - see the [LICENSE](LICENSE) file for further details.

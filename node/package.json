@@ -1,0 +1,39 @@
+{
+  "name": "@simplybusiness/twig",
+  "version": "1.0.0",
+  "description": "A simple JSON-logging micro-library for services",
+  "main": "logger.js",
+  "scripts": {
+    "test": "jshint *.js && jasmine test-logger.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/simplybusiness/twig.git"
+  },
+  "keywords": [
+    "JSON",
+    "logging",
+    "service"
+  ],
+  "author": "SimplyBusiness",
+  "contributors": [
+    "@sleepyfox <sleepyfox@gmail.com (https://github.com/sleepyfox)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/simplybusiness/twig/issues"
+  },
+  "homepage": "https://github.com/simplybusiness/twig#readme",
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "devDependencies": {
+    "jasmine": "^3.5.0",
+    "jshint": "^2.11.0"
+  },
+  "jshintConfig": {
+    "camelcase": false,
+    "esversion": 10,
+    "asi": true
+  }
+}
