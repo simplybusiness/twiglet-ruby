@@ -23,7 +23,7 @@ describe("logging", () => {
     this.log = Logger({
       now: () => "2016-02-15T12:34:56.789Z",
       output: new FakeConsole(),
-      service: "my-super-service"
+      service: "petshop"
     })
   })
 
@@ -31,7 +31,7 @@ describe("logging", () => {
     this.log.error({})
     const contents = this.log.output.printed
     expect(contents.timestamp).toBe("2016-02-15T12:34:56.789Z")
-    expect(contents.service.name).toBe("my-super-service")
+    expect(contents.service.name).toBe("petshop")
     expect(contents.log.level).toBe("ERROR")
   })
 
@@ -54,7 +54,7 @@ describe("logging", () => {
     const my_logger = Logger({
       now: () => "2016-02-15T12:34:56.789Z",
       output: new FakeConsole(),
-      service: "my-super-service"
+      service: "petshop"
     }, extra_properties)
 
     my_logger.error(extra_properties)
