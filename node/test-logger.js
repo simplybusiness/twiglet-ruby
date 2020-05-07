@@ -75,4 +75,25 @@ describe("logging", () => {
     expect(contents.request.method).toBe("GET")
     expect(contents.response.status_code).toBe(200)
   })
+
+  it("should be able to add properties with '.with'", () => {
+    // Let's add some context to this customer journey
+    const purchase_log = this.log.with({
+      trace: { id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb" },
+      customer: { full_name: "Freda Bloggs" },
+      event: { action: "pet purchase" }
+    })
+    // do stuff
+    purchase_log.info({
+      message: "customer bought a dog",
+      pet: { name: "Barker", species: "dog", breed: "Bitsa" }
+    })
+    const contents = purchase_log.output.printed
+
+    expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
+    expect(contents.customer.full_name).toBe("Freda Bloggs")
+    expect(contents.event.action).toBe("pet purchase")
+    expect(contents.message).toBe("customer bought a dog")
+    expect(contents.pet.name).toBe("Barker")
+  })
 })
