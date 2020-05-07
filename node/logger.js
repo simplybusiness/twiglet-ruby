@@ -30,10 +30,18 @@ const Logger = (conf, scoped_properties) => {
 
   const { now, output, service } = conf
 
-  const log = (severity, message) => {
-    var total_message = Object.assign({ "log.level": severity,
+  const log = (severity, message = "") => {
+    // Message is _either_ a string, or an object, in which case it
+    // MUST include a message property
+    if (typeof(message) === "string") { // Normally an object
+      message = { message: message }
+    } else if (typeof(message) === "object") {
+      assert(message.hasOwnProperty("message"),
+             "Log object must have a 'message' property")
+    }
+    var total_message = Object.assign({ log: { level: severity },
                                         "timestamp": now(),
-                                        "service.name": service },
+                                        service: { name: service }},
                                       scoped_properties,
                                       message)
     output.log(total_message)

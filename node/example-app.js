@@ -5,10 +5,10 @@ const PORT = 8080
 const log = Logger({
   now: Date.now,
   output: console,
-  service: "my-super-service"
+  service: "petshop"
 })
 
-// Start our new super service
+// Start our petshop
 log.info({
   event: {
     action: "startup"
