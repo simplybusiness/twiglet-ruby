@@ -1,8 +1,8 @@
 const Logger = require('./logger')
 
-const PORT=8080
+const PORT = 8080
 
-const log = new Logger({
+const log = Logger({
   now: Date.now,
   output: console,
   service: "my-super-service"
@@ -10,9 +10,9 @@ const log = new Logger({
 
 // Start our new super service
 log.info({
-  event: "startup",
+  "event.action": "startup",
   message: `Ready to go, listening on port ${PORT}`,
-  port: PORT
+  "server.port": PORT
 })
 
 // We get a request
@@ -25,4 +25,4 @@ if (db_err) {
 }
 
 // We return an error to the requester
-request_log.info({ request: { method: 'GET'}, response: { status: 500 }})
+request_log.info({ http: { request: { method: 'GET'}, response: { status_code: 500 }}})

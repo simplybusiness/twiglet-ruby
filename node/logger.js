@@ -53,7 +53,7 @@ const Logger = (conf, scoped_properties) => {
       return Logger(conf,
                     Object.assign({},
                                   scoped_properties,
-                                  more_roperties))
+                                  more_properties))
     } // end .with
   } // end return
 } // end Logger
