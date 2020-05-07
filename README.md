@@ -38,16 +38,16 @@ All application specific information is embedded in the `message` attribute JSON
 
 | Attribute name (mandatory) | Description                     |
 | -------------------------- | ------------------------------- |
-| log.level | String, is one of DEBUG, INFO, WARNING, ERROR and CRITICAL. |
-| service.name               | String, the name of the service |
-| timestamp                  | String, ISO8601 UTC |
-| message                    | JSON, the original log message  |
+| log.level | text, one of DEBUG, INFO, WARNING, ERROR or CRITICAL. |
+| service.name               | text, the name of the service |
+| @timestamp                 | text, ISO8601 UTC |
+| message                    | text, human-readable summary  |
 
 | Attribute name (optional)  | Description                     |
 | -------------------------- | ------------------------------- |
 | error.stack_trace          | Stack trace, as JSON[4]         |
 | tags                       | Array, e.g. ["production"]      |
-| trace.id                   | String, UUIDv4 - a correlation ID |
+| trace.id                   | text, UUIDv4 - a correlation ID |
 | (other examples)           | ...                             |
 
 [4] Helper method to be provided to allow stack trace objects to be represented cleanly as JSON.
@@ -55,20 +55,31 @@ All application specific information is embedded in the `message` attribute JSON
 Errors should provide appropriate data using the fields from https://www.elastic.co/guide/en/ecs/current/ecs-error.html
 If any other fields are provided in a log then these should be from the ECS schema rather than in a custom format, if at all possible.
 
-## Example log output
+## Example log output (prettified)
 ```json
 {
-  "log.level": "INFO",
-  "service.name": "payments",
-  "timestamp": "2016-07-13T11:34:18.000Z",
-  "event.action": "customer-payment-accepted",
-  "trace.id": "bf6f5ea3-614b-42f5-8e73-43deea2d1838",
+  "log": {
+    "level": "INFO"
+  },
+  "service": {
+    "name": "payments"
+  },
+  "@timestamp": "2020-05-07T11:51:33.976Z",
+  "event": {
+    "action": "customer-payment-accepted"
+  },
+  "trace": {
+    "id": "bf6f5ea3-614b-42f5-8e73-43deea2d1838"
+  },
   "tags": ["staging"],
-  "message": {
-    "user.email": "sleepyfox@gmail.com",
-    "pet.type": "cat",
-    "pet.name": "Spot",
-    "pet.colour": "Ginger Tabby"
+  "message": "Pet cat Spot purchased",
+  "user": {
+    "email": "sleepyfox@gmail.com"
+  },
+  "pet": {
+    "type": "cat",
+    "name": "Spot",
+    "colour": "Ginger Tabby"
   }
 }
 ```
