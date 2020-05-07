@@ -31,9 +31,9 @@ const Logger = (conf, scoped_properties) => {
   const { now, output, service } = conf
 
   const log = (severity, message) => {
-    var total_message = Object.assign({ "log.level": severity,
-                                        "timestamp": now(),
-                                        "service.name": service },
+    var total_message = Object.assign({ log: { level: severity },
+                                        timestamp: now(),
+                                        service: { name: service }},
                                       scoped_properties,
                                       message)
     output.log(total_message)
