@@ -31,5 +31,7 @@ if (db_err) {
 // We return an error to the requester
 request_log.info({ message: "The process ends here", http: { request: { method: 'GET'}, response: { status_code: 500 }}})
 
-// We can also log with an empty message
-request_log.info();
+// Logging with a non-empty message is an anti-pattern and is therefore forbidden
+// Both of the following lines would throw an error
+// request_log.error()
+// log.debug()
