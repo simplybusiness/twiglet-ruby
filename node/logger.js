@@ -42,11 +42,11 @@ const Logger = (conf, scoped_properties) => {
       assert(message.hasOwnProperty("message"),
              "Log object must have a 'message' property")
     }
-    const total_message = Object.assign({ log: { level: severity },
-                                        "timestamp": now(),
-                                        service: { name: service }},
-                                      scoped_properties,
-                                      message)
+    const total_message = { ...{ log: { level: severity },
+                                 "timestamp": now(),
+                                 service: { name: service }},
+                            ...scoped_properties,
+                            ...message }
     output.log(total_message)
   }
 
