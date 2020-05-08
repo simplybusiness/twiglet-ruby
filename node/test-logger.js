@@ -27,15 +27,6 @@ describe("logging", () => {
     })
   })
 
-  it("should log an empty message", () => {
-    this.log.info()
-    const contents = this.log.output.printed
-
-    expect(contents.log.level).toBe("INFO")
-    expect(contents.message).toBeDefined()
-    expect(contents.message).toBe("")
-  })
-
   it("should log mandatory attributes", () => {
     this.log.error({ message: "" })
     const contents = this.log.output.printed
