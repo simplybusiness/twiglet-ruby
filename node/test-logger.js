@@ -88,25 +88,25 @@ describe("logging", () => {
   })
 
   describe("enforcing non-empty message", () => {
-    it("should throws on error without a message", () => {
+    it("should throw an error without a message", () => {
       expect(() => {
         this.log.info()
       }).toThrow()
     })
 
-    it("should throws on error on an empty message", () => {
+    it("should throw an error on an empty message", () => {
       expect(() => {
         this.log.info("")
       }).toThrow()
     })
 
-    it("should throws on error on a null message", () => {
+    it("should throw an error on a null message", () => {
       expect(() => {
         this.log.info(null)
       }).toThrow()
     })
 
-    it("should throws on error on an undefined message", () => {
+    it("should throw an error on an undefined message", () => {
       expect(() => {
         this.log.info(undefined)
       }).toThrow()
