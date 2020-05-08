@@ -1,5 +1,5 @@
 // Dependencies
-const jasmine = require("jasmine")
+// const jasmine = require("jasmine")
 const Logger = require("./logger")
 
 // Constants
@@ -86,5 +86,13 @@ describe("logging", () => {
     expect(contents.event.action).toBe("pet purchase")
     expect(contents.message).toBe("customer bought a dog")
     expect(contents.pet.name).toBe("Barker")
+  })
+
+  describe("enforcing non-empty message", () => {
+    it("should throws on error on an empty message", () => {
+      expect(() => {
+        this.log.info()
+      }).toThrow()
+    })
   })
 })
