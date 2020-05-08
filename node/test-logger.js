@@ -100,6 +100,12 @@ describe("logging", () => {
       }).toThrow()
     })
 
+    it("should throw an error on a message of blank spaces", () => {
+      expect(() => {
+        this.log.info("")
+      }).toThrow()
+    })
+
     it("should throw an error on a null message", () => {
       expect(() => {
         this.log.info(null)
@@ -109,6 +115,36 @@ describe("logging", () => {
     it("should throw an error on an undefined message", () => {
       expect(() => {
         this.log.info(undefined)
+      }).toThrow()
+    })
+
+    it("should throw an error if message property is missing", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }})
+      }).toThrow()
+    })
+
+    it("should throw an error on an undefined message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: undefined })
+      }).toThrow()
+    })
+
+    it("should throw an error on an null message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: null })
+      }).toThrow()
+    })
+
+    it("should throw an error on an empty message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: "" })
+      }).toThrow()
+    })
+
+    it("should throw an error on an message of blank spaces as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: "   " })
       }).toThrow()
     })
   })
