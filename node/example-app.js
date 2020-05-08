@@ -29,4 +29,4 @@ if (db_err) {
 }
 
 // We return an error to the requester
-request_log.info({ http: { request: { method: 'GET'}, response: { status_code: 500 }}})
+request_log.info({ message: "The process ends here", http: { request: { method: 'GET'}, response: { status_code: 500 }}})
