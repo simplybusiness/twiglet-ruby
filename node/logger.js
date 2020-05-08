@@ -29,18 +29,24 @@ const Logger = (conf, scoped_properties) => {
                "configuration output.log must be a function")
 
   const { now, output, service } = conf
+  
+  const is_valid = (message) => {
+    return !(message === undefined || 
+             message === null || 
+             (typeof(message) === "string" && 
+              message.trim().length === 0)) 
+  }
 
   const log = (severity, message) => {
-    if (message === undefined || 
-        message === null || 
-        (typeof(message) === "string" && message.trim().length === 0)) {
-      throw new Error("There must be a non-empty message");
-    }
+    assert(is_valid(message),
+           "There must be a non-empty message")
     if (typeof(message) === "string") {
       message = { message: message }
     } else if (typeof(message) === "object") {
       assert(message.hasOwnProperty("message"),
              "Log object must have a 'message' property")
+      assert(is_valid(message.message),
+             "The 'message' property of log object must be non-empty")
     }
     const total_message = { ...{ log: { level: severity },
                                  "timestamp": now(),
