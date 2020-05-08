@@ -30,10 +30,13 @@ const Logger = (conf, scoped_properties) => {
 
   const { now, output, service } = conf
 
-  const log = (severity, message = "") => {
-    // Message is _either_ a string, or an object, in which case it
-    // MUST include a message property
-    if (typeof(message) === "string") { // Normally an object
+  const log = (severity, message) => {
+    if (message === undefined || 
+        message === null || 
+        (typeof(message) === "string" && message.trim().length === 0)) {
+      throw new Error("There must be a non-empty message");
+    }
+    if (typeof(message) === "string") {
       message = { message: message }
     } else if (typeof(message) === "object") {
       assert(message.hasOwnProperty("message"),
