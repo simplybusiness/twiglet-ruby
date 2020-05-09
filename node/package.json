@@ -4,7 +4,7 @@
   "description": "A simple JSON-logging micro-library for services",
   "main": "logger.js",
   "scripts": {
-    "test": "jshint *.js && jasmine test-logger.js"
+    "test": "jshint *.js && jasmine spec/logger-spec.js"
   },
   "repository": {
     "type": "git",

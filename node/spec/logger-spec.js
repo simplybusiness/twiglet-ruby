@@ -1,6 +1,6 @@
 // Dependencies
 const jasmine = require("jasmine")
-const Logger = require("./logger")
+const Logger = require("../logger")
 
 // Constants
 const DEBUG = false
