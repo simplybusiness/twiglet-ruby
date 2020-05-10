@@ -125,7 +125,7 @@ describe("logging", () => {
       "event.action": "pet purchase",
       message: "customer bought a dog",
       pet: { name: "Barker", breed: "Bitsa" }, 
-      "pet.species": "dog", 
+      "pet.species": "dog"
     })
     const contents = this.log.output.printed
     
@@ -137,5 +137,4 @@ describe("logging", () => {
     expect(contents.pet.species).toBe("dog")
     expect(contents.pet.breed).toBe("Bitsa")
   })
-
 })
