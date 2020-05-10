@@ -11,7 +11,7 @@ This library provides a minimal JSON logging interface suitable for use in (micr
 Create a new logger like so:
 
     const Logger = require('./logger')
-    const log = new Logger({ now: () => (new Date).toISOString(),
+    const log = Logger({ now: Date.now,
                              output: console,
                              service: "petshop" })
 
@@ -40,7 +40,7 @@ Add log event specific information simply as attributes in a POJO (Plain Old Jav
 
 This writes:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get"},"response":{status_code:200}},"url.path":"/pets"}
 
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
@@ -56,7 +56,35 @@ will print:
 
     {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"ERROR"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"POST","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
 
-# How to contribute
+## Use dotted keys
+
+Writing nested json objects could be confusing. This library has a built-in feature to convert dotted keys into nested objects, so if you log like this:
+
+    log.info({
+              "event.action": "HTTP request",
+              message: "GET /pets success",
+              "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb",
+              "http.request.method": "get",
+              "http.response.status_code: 200,
+              "url.path": "/pets"
+            })
+
+or mix between dotted keys and nested objects:
+
+    log.info({
+              "event.action": "HTTP request",
+              message: "GET /pets success",
+              trace: { id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb" },
+              "http.request.method": "get",
+              "http.response.status_code: 200,
+              url: { path: "/pets" }
+            })
+
+Both cases would print out exact the same log item:
+
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
+
+## How to contribute
 
 First: Please read our project [Code of Conduct](../CODE_OF_CONDUCT.md).
 
