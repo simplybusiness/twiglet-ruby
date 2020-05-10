@@ -57,7 +57,7 @@ describe("json_helper", () => {
       service: {
         id: "ps001",
         name: "petshop",
-        "service.version": "0.9.1"
+        version: "0.9.1"
       },
       log: {
         level: "ERROR"
