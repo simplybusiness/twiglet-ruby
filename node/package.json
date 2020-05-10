@@ -35,5 +35,8 @@
     "camelcase": false,
     "esversion": 10,
     "asi": true
+  },
+  "dependencies": {
+    "deepmerge": "^4.2.2"
   }
 }
