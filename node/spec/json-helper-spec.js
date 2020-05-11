@@ -3,7 +3,7 @@ const json_helper = require("../json-helper")
 
 describe("json_helper", () => {
   it("should retain an object without . in any keys", () => {
-    const json = {
+    const before = {
       message: "Out of pets exception",
       service: {
         name: "petshop"
@@ -14,21 +14,19 @@ describe("json_helper", () => {
       timestamp: "2020-05-09T15:13:20.736Z"
     }
 
-    const converted = json_helper(json)
-    expect(json).toEqual(converted)
+    const after = json_helper(before)
+    expect(before).toEqual(after)
   })
 
   it("should convert keys with . into nested objects", () => {
-    const json = {
+    const before = {
       message: "Out of pets exception",
       "service.name": "petshop",
       "log.level": "ERROR",
       timestamp: "2020-05-09T15:13:20.736Z"
     }
 
-    const converted = json_helper(json)
-
-    expect(converted).toEqual({
+    const after = {
       message: "Out of pets exception",
       service: {
         name: "petshop"
@@ -37,11 +35,13 @@ describe("json_helper", () => {
         level: "ERROR"
       },
       timestamp: "2020-05-09T15:13:20.736Z"
-    })
+    }
+
+    expect(json_helper(before)).toEqual(after)
   })
 
   it("should group nested objects", () => {
-    const json = {
+    const before = {
       message: "Out of pets exception",
       "service.name": "petshop",
       "service.id": "ps001",
@@ -50,9 +50,7 @@ describe("json_helper", () => {
       timestamp: "2020-05-09T15:13:20.736Z"
     }
 
-    const converted = json_helper(json)
-
-    expect(converted).toEqual({
+    const after = {
       message: "Out of pets exception",
       service: {
         id: "ps001",
@@ -63,11 +61,13 @@ describe("json_helper", () => {
         level: "ERROR"
       },
       timestamp: "2020-05-09T15:13:20.736Z"
-    })
+    }
+
+    expect(json_helper(before)).toEqual(after)
   })
 
   it("should cope with more than two levels", () => {
-    const json = {
+    const before = {
       message: "Escaped pet situation",
       "service.name": "petshop",
       "log.level": "DEBUG",
@@ -78,9 +78,7 @@ describe("json_helper", () => {
       "http.response.status_code": 200
     }
 
-    const converted = json_helper(json)
-
-    expect(converted).toEqual({
+    const after = {
       message: "Escaped pet situation",
       service: {
         name: "petshop"
@@ -101,6 +99,8 @@ describe("json_helper", () => {
           status_code: 200
         }
       }
-    })
+    }
+
+    expect(json_helper(before)).toEqual(after)
   })
 })
