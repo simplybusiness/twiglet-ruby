@@ -9,7 +9,7 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
       timestamp: "2020-05-09T15:13:20.736Z"
     }
@@ -22,7 +22,7 @@ describe("json_helper", () => {
     const before = {
       message: "Out of pets exception",
       "service.name": "petshop",
-      "log.level": "ERROR",
+      "log.level": "error",
       timestamp: "2020-05-09T15:13:20.736Z"
     }
 
@@ -32,7 +32,7 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
       timestamp: "2020-05-09T15:13:20.736Z"
     }
@@ -46,7 +46,7 @@ describe("json_helper", () => {
       "service.name": "petshop",
       "service.id": "ps001",
       "service.version": "0.9.1",
-      "log.level": "ERROR",
+      "log.level": "error",
       timestamp: "2020-05-09T15:13:20.736Z"
     }
 
@@ -58,7 +58,7 @@ describe("json_helper", () => {
         version: "0.9.1"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
       timestamp: "2020-05-09T15:13:20.736Z"
     }

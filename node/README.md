@@ -21,7 +21,7 @@ To use, simply invoke like most other loggers:
 
 This will write to STDOUT a JSON string:
 
-    {"@timestamp":"2020-05-07T09:06:52.409Z","service":{"name":"petshop"},"event":{"action":"startup"},"log":{"level":"ERROR"},"message":"Emergency! There's an Emergency going on"}
+    {"@timestamp":"2020-05-07T09:06:52.409Z","service":{"name":"petshop"},"event":{"action":"startup"},"log":{"level":"error"},"message":"Emergency! There's an Emergency going on"}
 
 Obviously the timestamp will be different.
 
@@ -54,7 +54,7 @@ This can be used like any other Logger instance:
 
 will print:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"ERROR"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"POST","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"error"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"POST","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
 
 ## Use dotted keys
 

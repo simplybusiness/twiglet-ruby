@@ -19,7 +19,7 @@ class Logger
   end
 
   def error(message)
-    log(level: "ERROR", message: message)
+    log(level: "error", message: message)
   end
 
   def critical(message)
