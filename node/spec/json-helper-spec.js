@@ -70,7 +70,7 @@ describe("json_helper", () => {
     const before = {
       message: "Escaped pet situation",
       "service.name": "petshop",
-      "log.level": "DEBUG",
+      "log.level": "debug",
       timestamp: "2020-05-09T15:13:20.736Z",
       "http.request.method": "GET",
       "http.request.body.bytes": 112,
@@ -84,7 +84,7 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "DEBUG"
+        level: "debug"
       },
       timestamp: "2020-05-09T15:13:20.736Z",
       http: {

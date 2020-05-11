@@ -30,9 +30,9 @@ const Logger = (conf, scoped_properties) => {
                "configuration output.log must be a function")
 
   const { now, output, service } = conf
-  
+
   const is_valid_string = (message) => {
-    return message.trim().length > 0 
+    return message.trim().length > 0
   }
 
   const log = (severity, message) => {
@@ -62,7 +62,7 @@ const Logger = (conf, scoped_properties) => {
     output: output,
     service: service,
     scoped_properties: scoped_properties,
-    debug: log.bind(null, 'DEBUG'),
+    debug: log.bind(null, 'debug'),
     info: log.bind(null, 'INFO'),
     warning: log.bind(null, 'WARNING'),
     error: log.bind(null, 'ERROR'),
