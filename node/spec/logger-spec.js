@@ -35,7 +35,7 @@ describe("logging", () => {
   it("should log mandatory attributes", () => {
     this.log.error({ message: "Out of pets exception" })
     const contents = this.log.output.printed
-    expect(contents.timestamp).toBe("2016-02-15T12:34:56.789Z")
+    expect(contents["@timestamp"]).toBe("2016-02-15T12:34:56.789Z")
     expect(contents.service.name).toBe("petshop")
     expect(contents.log.level).toBe("error")
     expect(contents.message).toBe("Out of pets exception")

@@ -49,7 +49,7 @@ const Logger = (conf, scoped_properties) => {
       throw new Error("Message must be either an object or a string")
     }
     const total_message = { ...{ log: { level: severity },
-                                 "timestamp": now(),
+                                 "@timestamp": now(),
                                  service: { name: service }},
                             ...scoped_properties,
                             ...message }
