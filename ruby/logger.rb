@@ -23,7 +23,7 @@ class Logger
   end
 
   def critical(message)
-    log(level: "CRITICAL", message: message)
+    log(level: "critical", message: message)
   end
 
   def with(scoped_properties)
