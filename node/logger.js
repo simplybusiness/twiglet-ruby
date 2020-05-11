@@ -30,21 +30,29 @@ const Logger = (conf, scoped_properties) => {
                "configuration output.log must be a function")
 
   const { now, output, service } = conf
+  
+  const is_valid_string = (message) => {
+    return message.trim().length > 0 
+  }
 
-  const log = (severity, message = "") => {
-    // Message is _either_ a string, or an object, in which case it
-    // MUST include a message property
-    if (typeof(message) === "string") { // Normally an object
+  const log = (severity, message) => {
+    if (typeof(message) === "string") {
+      assert(is_valid_string(message),
+             "There must be a non-empty message")
       message = { message: message }
     } else if (typeof(message) === "object") {
       assert(message.hasOwnProperty("message"),
              "Log object must have a 'message' property")
+      assert(is_valid_string(message.message),
+             "The 'message' property of log object must not be empty")
+    } else {
+      throw new Error("Message must be either an object or a string")
     }
-    var total_message = Object.assign({ log: { level: severity },
-                                        "timestamp": now(),
-                                        service: { name: service }},
-                                      scoped_properties,
-                                      message)
+    const total_message = { ...{ log: { level: severity },
+                                 "timestamp": now(),
+                                 service: { name: service }},
+                            ...scoped_properties,
+                            ...message }
     const nested_message = json_helper(total_message)
     output.log(nested_message)
   }
@@ -61,9 +69,8 @@ const Logger = (conf, scoped_properties) => {
     critical: log.bind(null, 'CRITICAL'),
     with: (more_properties) => {
       return Logger(conf,
-                    Object.assign({},
-                                  scoped_properties,
-                                  more_properties))
+                    {...scoped_properties,
+                     ...more_properties})
     } // end .with
   } // end return
 } // end Logger

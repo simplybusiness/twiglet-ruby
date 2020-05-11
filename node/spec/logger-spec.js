@@ -1,5 +1,4 @@
 // Dependencies
-const jasmine = require("jasmine")
 const Logger = require("../logger")
 
 // Constants
@@ -27,22 +26,19 @@ describe("logging", () => {
     })
   })
 
-  it("should log an empty message", () => {
-    this.log.info()
-    const contents = this.log.output.printed
-
-    expect(contents.log.level).toBe("INFO")
-    expect(contents.message).toBeDefined()
-    expect(contents.message).toBe("")
+  it("should throw an error without a message", () => {
+    expect(() => {
+      this.log.info()
+    }).toThrow()
   })
 
   it("should log mandatory attributes", () => {
-    this.log.error({ message: "" })
+    this.log.error({ message: "Out of pets exception" })
     const contents = this.log.output.printed
     expect(contents.timestamp).toBe("2016-02-15T12:34:56.789Z")
     expect(contents.service.name).toBe("petshop")
     expect(contents.log.level).toBe("ERROR")
-    expect(contents.message).toBe("")
+    expect(contents.message).toBe("Out of pets exception")
   })
 
   it("should log the provided message", () => {
@@ -58,7 +54,7 @@ describe("logging", () => {
       trace: {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
-      message: "",
+      message: "GET /cats",
       request: { method: "GET" },
       response: { status_code: 200 }
     }
@@ -74,6 +70,7 @@ describe("logging", () => {
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.request.method).toBe("GET")
     expect(contents.response.status_code).toBe(200)
+    expect(contents.message).toBe("GET /cats")
   })
 
   it("should be able to add properties with '.with'", () => {
@@ -136,5 +133,62 @@ describe("logging", () => {
     expect(contents.pet.name).toBe("Barker")
     expect(contents.pet.species).toBe("dog")
     expect(contents.pet.breed).toBe("Bitsa")
+  })
+
+  describe("enforcing non-empty message", () => {
+
+    it("should throw an error on an empty message", () => {
+      expect(() => {
+        this.log.info("")
+      }).toThrow()
+    })
+
+    it("should throw an error on a message of blank spaces", () => {
+      expect(() => {
+        this.log.info("     ")
+      }).toThrow()
+    })
+
+    it("should throw an error on a null message", () => {
+      expect(() => {
+        this.log.info(null)
+      }).toThrow()
+    })
+
+    it("should throw an error on an undefined message", () => {
+      expect(() => {
+        this.log.info(undefined)
+      }).toThrow()
+    })
+
+    it("should throw an error if message property is missing", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }})
+      }).toThrow()
+    })
+
+    it("should throw an error on an undefined message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: undefined })
+      }).toThrow()
+    })
+
+    it("should throw an error on an null message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: null })
+      }).toThrow()
+    })
+
+    it("should throw an error on an empty message as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: "" })
+      }).toThrow()
+    })
+
+    it("should throw an error on an message of blank spaces as a property", () => {
+      expect(() => {
+        this.log.debug({ event: { action: "pet purchase" }, message: "   " })
+      }).toThrow()
+    })
   })
 })
