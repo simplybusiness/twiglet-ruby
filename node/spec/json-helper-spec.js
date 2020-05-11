@@ -11,7 +11,7 @@ describe("json_helper", () => {
       log: {
         level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = json_helper(before)
@@ -23,7 +23,7 @@ describe("json_helper", () => {
       message: "Out of pets exception",
       "service.name": "petshop",
       "log.level": "error",
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = {
@@ -34,7 +34,7 @@ describe("json_helper", () => {
       log: {
         level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     expect(json_helper(before)).toEqual(after)
@@ -47,7 +47,7 @@ describe("json_helper", () => {
       "service.id": "ps001",
       "service.version": "0.9.1",
       "log.level": "error",
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = {
@@ -60,7 +60,7 @@ describe("json_helper", () => {
       log: {
         level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     expect(json_helper(before)).toEqual(after)
@@ -71,7 +71,7 @@ describe("json_helper", () => {
       message: "Escaped pet situation",
       "service.name": "petshop",
       "log.level": "debug",
-      timestamp: "2020-05-09T15:13:20.736Z",
+      "@timestamp": "2020-05-09T15:13:20.736Z",
       "http.request.method": "GET",
       "http.request.body.bytes": 112,
       "http.response.bytes": 1564,
@@ -86,7 +86,7 @@ describe("json_helper", () => {
       log: {
         level: "debug"
       },
-      timestamp: "2020-05-09T15:13:20.736Z",
+      "@timestamp": "2020-05-09T15:13:20.736Z",
       http: {
         request: {
           method: "GET",
