@@ -1,5 +1,5 @@
 // Dependencies
-const Logger = require("./logger")
+const Logger = require("../logger")
 
 // Constants
 const DEBUG = false
@@ -24,6 +24,12 @@ describe("logging", () => {
       output: new FakeConsole(),
       service: "petshop"
     })
+  })
+
+  it("should throw an error without a message", () => {
+    expect(() => {
+      this.log.info()
+    }).toThrow()
   })
 
   it("should log mandatory attributes", () => {
@@ -64,7 +70,7 @@ describe("logging", () => {
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.request.method).toBe("GET")
     expect(contents.response.status_code).toBe(200)
-    expect(contents.message).toBe("Cats department visited")
+    expect(contents.message).toBe("GET /cats")
   })
 
   it("should be able to add properties with '.with'", () => {
@@ -88,12 +94,48 @@ describe("logging", () => {
     expect(contents.pet.name).toBe("Barker")
   })
 
-  describe("enforcing non-empty message", () => {
-    it("should throw an error without a message", () => {
-      expect(() => {
-        this.log.info()
-      }).toThrow()
+  it("should be able to convert dotted keys to nested objects", () => {
+    this.log.debug({
+      "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb",
+      "customer.full_name": "Freda Bloggs",
+      "event.action": "pet purchase",
+      message: "customer bought a dog",
+      "pet.name": "Barker", 
+      "pet.species": "dog", 
+      "pet.breed": "Bitsa"
     })
+    const contents = this.log.output.printed
+    
+    expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
+    expect(contents.customer.full_name).toBe("Freda Bloggs")
+    expect(contents.event.action).toBe("pet purchase")
+    expect(contents.message).toBe("customer bought a dog")
+    expect(contents.pet.name).toBe("Barker")
+    expect(contents.pet.species).toBe("dog")
+    expect(contents.pet.breed).toBe("Bitsa")
+  })
+
+  it("should be able to mix dotted keys and nested objects", () => {
+    this.log.debug({
+      "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb",
+      "customer.full_name": "Freda Bloggs",
+      "event.action": "pet purchase",
+      message: "customer bought a dog",
+      pet: { name: "Barker", breed: "Bitsa" }, 
+      "pet.species": "dog"
+    })
+    const contents = this.log.output.printed
+    
+    expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
+    expect(contents.customer.full_name).toBe("Freda Bloggs")
+    expect(contents.event.action).toBe("pet purchase")
+    expect(contents.message).toBe("customer bought a dog")
+    expect(contents.pet.name).toBe("Barker")
+    expect(contents.pet.species).toBe("dog")
+    expect(contents.pet.breed).toBe("Bitsa")
+  })
+
+  describe("enforcing non-empty message", () => {
 
     it("should throw an error on an empty message", () => {
       expect(() => {

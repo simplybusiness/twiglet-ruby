@@ -17,6 +17,7 @@
 // those properties.
 
 const assert = require("assert")
+const json_helper = require("./json-helper")
 
 const Logger = (conf, scoped_properties) => {
   assert.equal(typeof(conf.now), "function",
@@ -47,13 +48,13 @@ const Logger = (conf, scoped_properties) => {
     } else {
       throw new Error("Message must be either an object or a string")
     }
-
     const total_message = { ...{ log: { level: severity },
                                  "timestamp": now(),
                                  service: { name: service }},
                             ...scoped_properties,
                             ...message }
-    output.log(total_message)
+    const nested_message = json_helper(total_message)
+    output.log(nested_message)
   }
 
   return {
