@@ -9,9 +9,9 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = json_helper(before)
@@ -22,8 +22,8 @@ describe("json_helper", () => {
     const before = {
       message: "Out of pets exception",
       "service.name": "petshop",
-      "log.level": "ERROR",
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "log.level": "error",
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = {
@@ -32,9 +32,9 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     expect(json_helper(before)).toEqual(after)
@@ -46,8 +46,8 @@ describe("json_helper", () => {
       "service.name": "petshop",
       "service.id": "ps001",
       "service.version": "0.9.1",
-      "log.level": "ERROR",
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "log.level": "error",
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     const after = {
@@ -58,9 +58,9 @@ describe("json_helper", () => {
         version: "0.9.1"
       },
       log: {
-        level: "ERROR"
+        level: "error"
       },
-      timestamp: "2020-05-09T15:13:20.736Z"
+      "@timestamp": "2020-05-09T15:13:20.736Z"
     }
 
     expect(json_helper(before)).toEqual(after)
@@ -70,9 +70,9 @@ describe("json_helper", () => {
     const before = {
       message: "Escaped pet situation",
       "service.name": "petshop",
-      "log.level": "DEBUG",
-      timestamp: "2020-05-09T15:13:20.736Z",
-      "http.request.method": "GET",
+      "log.level": "debug",
+      "@timestamp": "2020-05-09T15:13:20.736Z",
+      "http.request.method": "get",
       "http.request.body.bytes": 112,
       "http.response.bytes": 1564,
       "http.response.status_code": 200
@@ -84,12 +84,12 @@ describe("json_helper", () => {
         name: "petshop"
       },
       log: {
-        level: "DEBUG"
+        level: "debug"
       },
-      timestamp: "2020-05-09T15:13:20.736Z",
+      "@timestamp": "2020-05-09T15:13:20.736Z",
       http: {
         request: {
-          method: "GET",
+          method: "get",
           body: {
             bytes: 112
           }

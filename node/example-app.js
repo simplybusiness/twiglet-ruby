@@ -29,7 +29,7 @@ if (db_err) {
 }
 
 // We return an error to the requester
-request_log.info({ message: "Internal Server Error", http: { request: { method: 'GET'}, response: { status_code: 500 }}})
+request_log.info({ message: "Internal Server Error", http: { request: { method: 'get'}, response: { status_code: 500 }}})
 
 // Logging with a non-empty message is an anti-pattern and is therefore forbidden
 // Both of the following lines would throw an error

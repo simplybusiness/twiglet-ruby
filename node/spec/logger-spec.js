@@ -35,9 +35,9 @@ describe("logging", () => {
   it("should log mandatory attributes", () => {
     this.log.error({ message: "Out of pets exception" })
     const contents = this.log.output.printed
-    expect(contents.timestamp).toBe("2016-02-15T12:34:56.789Z")
+    expect(contents["@timestamp"]).toBe("2016-02-15T12:34:56.789Z")
     expect(contents.service.name).toBe("petshop")
-    expect(contents.log.level).toBe("ERROR")
+    expect(contents.log.level).toBe("error")
     expect(contents.message).toBe("Out of pets exception")
   })
 
@@ -55,7 +55,7 @@ describe("logging", () => {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
       message: "GET /cats",
-      request: { method: "GET" },
+      request: { method: "get" },
       response: { status_code: 200 }
     }
     const my_logger = Logger({
@@ -68,7 +68,7 @@ describe("logging", () => {
     const contents = my_logger.output.printed
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
-    expect(contents.request.method).toBe("GET")
+    expect(contents.request.method).toBe("get")
     expect(contents.response.status_code).toBe(200)
     expect(contents.message).toBe("GET /cats")
   })
@@ -100,12 +100,12 @@ describe("logging", () => {
       "customer.full_name": "Freda Bloggs",
       "event.action": "pet purchase",
       message: "customer bought a dog",
-      "pet.name": "Barker", 
-      "pet.species": "dog", 
+      "pet.name": "Barker",
+      "pet.species": "dog",
       "pet.breed": "Bitsa"
     })
     const contents = this.log.output.printed
-    
+
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")
     expect(contents.event.action).toBe("pet purchase")
@@ -121,11 +121,11 @@ describe("logging", () => {
       "customer.full_name": "Freda Bloggs",
       "event.action": "pet purchase",
       message: "customer bought a dog",
-      pet: { name: "Barker", breed: "Bitsa" }, 
+      pet: { name: "Barker", breed: "Bitsa" },
       "pet.species": "dog"
     })
     const contents = this.log.output.printed
-    
+
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")
     expect(contents.event.action).toBe("pet purchase")

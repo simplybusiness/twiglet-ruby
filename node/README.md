@@ -21,7 +21,7 @@ To use, simply invoke like most other loggers:
 
 This will write to STDOUT a JSON string:
 
-    {"@timestamp":"2020-05-07T09:06:52.409Z","service":{"name":"petshop"},"event":{"action":"startup"},"log":{"level":"ERROR"},"message":"Emergency! There's an Emergency going on"}
+    {"@timestamp":"2020-05-07T09:06:52.409Z","service":{"name":"petshop"},"event":{"action":"startup"},"log":{"level":"error"},"message":"Emergency! There's an Emergency going on"}
 
 Obviously the timestamp will be different.
 
@@ -40,7 +40,7 @@ Add log event specific information simply as attributes in a POJO (Plain Old Jav
 
 This writes:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get"},"response":{status_code:200}},"url.path":"/pets"}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"info"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get"},"response":{status_code:200}},"url.path":"/pets"}
 
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
@@ -49,12 +49,12 @@ It may be that when making a series of logs that write information about a singl
 This can be used like any other Logger instance:
 
     request_log.error({ message: "Error 500 in /pets/buy",
-                        http: { request: { method: "POST", "url.path": "/pet/buy" },
+                        http: { request: { method: "post", "url.path": "/pet/buy" },
                         response: { status_code: 500 }})
 
 will print:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"ERROR"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"POST","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"error"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"post","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
 
 ## Use dotted keys
 
@@ -82,7 +82,7 @@ or mix between dotted keys and nested objects:
 
 Both cases would print out exact the same log item:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"info"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
 
 ## How to contribute
 
