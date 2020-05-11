@@ -55,7 +55,7 @@ describe("logging", () => {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
       message: "GET /cats",
-      request: { method: "GET" },
+      request: { method: "get" },
       response: { status_code: 200 }
     }
     const my_logger = Logger({
@@ -68,7 +68,7 @@ describe("logging", () => {
     const contents = my_logger.output.printed
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
-    expect(contents.request.method).toBe("GET")
+    expect(contents.request.method).toBe("get")
     expect(contents.response.status_code).toBe(200)
     expect(contents.message).toBe("GET /cats")
   })

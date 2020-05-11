@@ -49,12 +49,12 @@ It may be that when making a series of logs that write information about a singl
 This can be used like any other Logger instance:
 
     request_log.error({ message: "Error 500 in /pets/buy",
-                        http: { request: { method: "POST", "url.path": "/pet/buy" },
+                        http: { request: { method: "post", "url.path": "/pet/buy" },
                         response: { status_code: 500 }})
 
 will print:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"error"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"POST","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"error"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"post","url.path":"/pet/buy"},"response":{"status_code":500}},"message":"Error 500 in /pets/buy"}
 
 ## Use dotted keys
 

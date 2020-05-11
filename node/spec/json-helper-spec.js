@@ -72,7 +72,7 @@ describe("json_helper", () => {
       "service.name": "petshop",
       "log.level": "debug",
       "@timestamp": "2020-05-09T15:13:20.736Z",
-      "http.request.method": "GET",
+      "http.request.method": "get",
       "http.request.body.bytes": 112,
       "http.response.bytes": 1564,
       "http.response.status_code": 200
@@ -89,7 +89,7 @@ describe("json_helper", () => {
       "@timestamp": "2020-05-09T15:13:20.736Z",
       http: {
         request: {
-          method: "GET",
+          method: "get",
           body: {
             bytes: 112
           }
