@@ -15,7 +15,7 @@ class Logger
   end
 
   def warning(message)
-    log(level: "WARNING", message: message)
+    log(level: "warning", message: message)
   end
 
   def error(message)
