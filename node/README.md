@@ -40,7 +40,7 @@ Add log event specific information simply as attributes in a POJO (Plain Old Jav
 
 This writes:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get"},"response":{status_code:200}},"url.path":"/pets"}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"info"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get"},"response":{status_code:200}},"url.path":"/pets"}
 
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
@@ -82,7 +82,7 @@ or mix between dotted keys and nested objects:
 
 Both cases would print out exact the same log item:
 
-    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"INFO"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
+    {"service":{"name":"petstore"},"@timestamp":"2020-05-07T09:06:52.409Z","event":{"action":"HTTP request"},"log":{"level":"info"},"trace":{"id":"1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"},"http":{"request":{"method":"get","url.path":"/pets"},"response":{status_code:200}}}
 
 ## How to contribute
 

@@ -63,7 +63,7 @@ const Logger = (conf, scoped_properties) => {
     service: service,
     scoped_properties: scoped_properties,
     debug: log.bind(null, 'debug'),
-    info: log.bind(null, 'INFO'),
+    info: log.bind(null, 'info'),
     warning: log.bind(null, 'WARNING'),
     error: log.bind(null, 'ERROR'),
     critical: log.bind(null, 'CRITICAL'),
