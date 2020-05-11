@@ -17,6 +17,7 @@
 // those properties.
 
 const assert = require("assert")
+const json_helper = require("./json-helper")
 
 const Logger = (conf, scoped_properties) => {
   assert.equal(typeof(conf.now), "function",
@@ -44,7 +45,8 @@ const Logger = (conf, scoped_properties) => {
                                         service: { name: service }},
                                       scoped_properties,
                                       message)
-    output.log(total_message)
+    const nested_message = json_helper(total_message)
+    output.log(nested_message)
   }
 
   return {

@@ -57,6 +57,11 @@
       "integrity": "sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=",
       "dev": true
     },
+    "deepmerge": {
+      "version": "4.2.2",
+      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-4.2.2.tgz",
+      "integrity": "sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg=="
+    },
     "dom-serializer": {
       "version": "0.2.2",
       "resolved": "https://registry.npmjs.org/dom-serializer/-/dom-serializer-0.2.2.tgz",
