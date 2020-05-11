@@ -48,7 +48,7 @@ describe("logging", () => {
       trace: {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
-      message: "Cats department visited",
+      message: "GET /cats",
       request: { method: "GET" },
       response: { status_code: 200 }
     }
@@ -103,7 +103,7 @@ describe("logging", () => {
 
     it("should throw an error on a message of blank spaces", () => {
       expect(() => {
-        this.log.info("")
+        this.log.info("     ")
       }).toThrow()
     })
 
