@@ -103,7 +103,7 @@ describe("logging", () => {
 
     it("should throw an error on a message of blank spaces", () => {
       expect(() => {
-        this.log.info("")
+        this.log.info("     ")
       }).toThrow()
     })
 
