@@ -31,7 +31,7 @@ const Logger = (conf, scoped_properties) => {
   const { now, output, service } = conf
   
   const is_valid = (message) => {
-    return !(message === undefined || 
+    return (message.trim().length > 0)
              message === null || 
              (typeof(message) === "string" && 
               message.trim().length === 0)) 
