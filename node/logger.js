@@ -16,45 +16,41 @@
 // takes more properties and returns another logger that incorporates
 // those properties.
 
-const assert = require("assert")
-const json_helper = require("./json-helper")
+const assert = require('assert')
+const json_helper = require('./json-helper')
 
 const Logger = (conf, scoped_properties) => {
-  assert.equal(typeof(conf.now), "function",
-               "configuration must have a now function")
-  assert.equal(typeof(conf.service), "string",
-               "configuration must have a service name")
-  assert.equal(typeof(conf.output), "object",
-               "configuration must have an output object")
-  assert.equal(typeof(conf.output.log), "function",
-               "configuration output.log must be a function")
+  assert.equal(typeof(conf.service), 'string',
+               'configuration must have a service name')
 
-  const { now, output, service } = conf
-
-  const is_valid_string = (message) => {
-    return message.trim().length > 0
+  var { now, output, service } = conf
+  if (typeof(now) != 'function') { now = (new Date()).toISOString }
+  if (typeof(output) != 'object' || typeof(output.log) != 'function') {
+    output = console
   }
 
+  const is_valid_string = (message) => message.trim().length > 0
+
   const log = (severity, message) => {
-    if (typeof(message) === "string") {
+    if (typeof(message) === 'string') {
       assert(is_valid_string(message),
-             "There must be a non-empty message")
+             'There must be a non-empty message')
       message = { message: message }
-    } else if (typeof(message) === "object") {
-      assert(message.hasOwnProperty("message"),
-             "Log object must have a 'message' property")
+    } else if (typeof(message) === 'object') {
+      assert(message.hasOwnProperty('message'),
+             'Log object must have a message property')
       assert(is_valid_string(message.message),
-             "The 'message' property of log object must not be empty")
+             'The message property of log object must not be empty')
     } else {
-      throw new Error("Message must be either an object or a string")
+      throw new Error('Message must be either an object or a string')
     }
     const total_message = { ...{ log: { level: severity },
-                                 "@timestamp": now(),
+                                 '@timestamp': now(),
                                  service: { name: service }},
                             ...scoped_properties,
                             ...message }
     const nested_message = json_helper(total_message)
-    output.log(nested_message)
+    output.log(JSON.stringify(nested_message))
   }
 
   return {

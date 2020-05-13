@@ -2,7 +2,7 @@
 const Logger = require("../logger")
 
 // Constants
-const DEBUG = false
+const DEBUG = process.env.DEBUG
 
 // Helpers
 class FakeConsole {
@@ -34,7 +34,7 @@ describe("logging", () => {
 
   it("should log mandatory attributes", () => {
     this.log.error({ message: "Out of pets exception" })
-    const contents = this.log.output.printed
+    const contents = JSON.parse(this.log.output.printed)
     expect(contents["@timestamp"]).toBe("2016-02-15T12:34:56.789Z")
     expect(contents.service.name).toBe("petshop")
     expect(contents.log.level).toBe("error")
@@ -43,7 +43,7 @@ describe("logging", () => {
 
   it("should log the provided message", () => {
     this.log.error({ event: { action: "exception" }, message: "Emergency! Emergency!" })
-    const contents = this.log.output.printed
+    const contents = JSON.parse(this.log.output.printed)
 
     expect(contents.event.action).toBe("exception")
     expect(contents.message).toBe("Emergency! Emergency!")
@@ -65,7 +65,7 @@ describe("logging", () => {
     }, extra_properties)
 
     my_logger.error(extra_properties)
-    const contents = my_logger.output.printed
+    const contents = JSON.parse(my_logger.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.request.method).toBe("get")
@@ -85,7 +85,7 @@ describe("logging", () => {
       message: "customer bought a dog",
       pet: { name: "Barker", species: "dog", breed: "Bitsa" }
     })
-    const contents = purchase_log.output.printed
+    const contents = JSON.parse(purchase_log.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")
@@ -104,7 +104,7 @@ describe("logging", () => {
       "pet.species": "dog",
       "pet.breed": "Bitsa"
     })
-    const contents = this.log.output.printed
+    const contents = JSON.parse(this.log.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")
@@ -124,7 +124,7 @@ describe("logging", () => {
       pet: { name: "Barker", breed: "Bitsa" },
       "pet.species": "dog"
     })
-    const contents = this.log.output.printed
+    const contents = JSON.parse(this.log.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")
@@ -136,7 +136,6 @@ describe("logging", () => {
   })
 
   describe("enforcing non-empty message", () => {
-
     it("should throw an error on an empty message", () => {
       expect(() => {
         this.log.info("")
