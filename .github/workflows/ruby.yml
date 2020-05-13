@@ -26,5 +26,6 @@ jobs:
         ruby-version: ${{ matrix.ruby-version }}
     - name: Install dependencies
       run: bundle install
-    - name: Run tests
-      run: bundle exec ruby test/*
+    - name: Run all tests
+      run: for file in test/*test.rb; do ruby $file; done
+      shell: bash

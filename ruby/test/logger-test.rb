@@ -95,13 +95,69 @@ describe Logger do
     assert_equal "Barker", log[:pet][:name]
   end
 
-  it "should log 'message' property" do
+  it "should log 'message' string property" do
     message = {}
-    message["message"] = "Guinea pig arrived"
+    message["message"] = "Guinea pigs arrived"
     @logger.debug(message)
     log = read_json(@buffer)
 
-    assert_equal "Guinea pig arrived", log[:message]
+    assert_equal "Guinea pigs arrived", log[:message]
+  end
+
+  it "should be able to convert dotted keys to nested objects" do
+    @logger.debug({
+      "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb",
+      message: "customer bought a dog",
+      "pet.name": "Barker",
+      "pet.species": "dog",
+      "pet.breed": "Bitsa"
+    })
+    log = read_json(@buffer)
+
+    assert_equal "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb", log[:trace][:id]
+    assert_equal "customer bought a dog", log[:message]
+    assert_equal "Barker", log[:pet][:name]
+    assert_equal "dog", log[:pet][:species]
+    assert_equal "Bitsa", log[:pet][:breed]
+  end
+
+  it "should be able to mix dotted keys and nested objects" do
+    @logger.debug({
+      "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb",
+      message: "customer bought a dog",
+      pet: { name: "Barker", breed: "Bitsa" },
+      "pet.species": "dog"
+    })
+    log = read_json(@buffer)
+
+    assert_equal "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb", log[:trace][:id]
+    assert_equal "customer bought a dog", log[:message]
+    assert_equal "Barker", log[:pet][:name]
+    assert_equal "dog", log[:pet][:species]
+    assert_equal "Bitsa", log[:pet][:breed]
+  end
+
+  it "should work with mixed string and symbol properties" do
+    log = {
+      "trace.id": "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
+    }
+    event = {}
+    log["event"] = event
+    log["message"] = "customer bought a dog"
+    pet = {}
+    pet["name"] = "Barker"
+    pet["breed"] = "Bitsa"
+    pet[:species] = "dog"
+    log[:pet] = pet
+
+    @logger.debug(log)
+    actual_log = read_json(@buffer)
+
+    assert_equal "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb", actual_log[:trace][:id]
+    assert_equal "customer bought a dog", actual_log[:message]
+    assert_equal "Barker", actual_log[:pet][:name]
+    assert_equal "dog", actual_log[:pet][:species]
+    assert_equal "Bitsa", actual_log[:pet][:breed]
   end
 
   private

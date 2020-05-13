@@ -1,7 +1,10 @@
 require 'date'
 require 'json'
+require_relative 'elastic_common_schema'
 
 class Logger
+  include ElasticCommonSchema
+
   def initialize(service:, now:, output:, scoped_properties: {})
     @service = service
     @now = now
@@ -66,6 +69,9 @@ class Logger
       })
       .merge(@scoped_properties)
       .merge(message)
+      .then { |log_entry| to_nested(log_entry) }
+
     @output.puts total_message.to_json
   end
+  
 end
