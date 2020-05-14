@@ -12,6 +12,12 @@ describe Logger do
     })
   end
 
+  it "should throw an error with an empty service name" do
+    assert_raises RuntimeError do
+      logger = Logger.new(conf: { service: "  " })
+    end
+  end
+
   it "should throw an error with an empty message" do
     assert_raises RuntimeError do
       @logger.info("")
