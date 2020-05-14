@@ -1,11 +1,11 @@
-require 'date'
+require 'time'
 require 'json'
 require_relative 'elastic_common_schema'
 
 class Logger
   include ElasticCommonSchema
 
-  def initialize(service:, now:, output:, scoped_properties: {})
+  def initialize(service:, now: Time.now.utc, output: $stdout, scoped_properties: {})
     @service = service
     @now = now
     @output = output
@@ -73,5 +73,5 @@ class Logger
 
     @output.puts total_message.to_json
   end
-  
+
 end
