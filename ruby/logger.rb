@@ -13,7 +13,7 @@ class Logger
     raise "configuration must have a service name" \
       unless String === @service && @service.strip.length > 0
 
-    @now = Time.now.utc unless Time === conf[:now]
+    @now = Time.now.utc unless Time === @now
 
     @output = $stdout \
       unless @output.class.method_defined?(:puts)
