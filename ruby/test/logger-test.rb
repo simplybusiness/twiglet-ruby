@@ -5,11 +5,11 @@ describe Logger do
   before do
     @now = Time.utc(2020, 5, 11, 15, 1, 1)
     @buffer = StringIO.new
-    @logger = Logger.new(
+    @logger = Logger.new(conf: {
       service: "petshop",
       now: @now,
       output: @buffer
-    )
+    })
   end
 
   it "should throw an error with an empty message" do
@@ -57,12 +57,12 @@ describe Logger do
     }
 
     output = StringIO.new
-    logger = Logger.new(
-      service: "petshop",
-      now: @now,
-      output: output,
-      scoped_properties: extra_properties
-    )
+    logger = Logger.new(conf: {
+                               service: "petshop",
+                               now: @now,
+                               output: output
+                              },
+                        scoped_properties: extra_properties)
 
     logger.error("GET /cats")
     log = read_json output

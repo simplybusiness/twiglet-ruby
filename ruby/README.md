@@ -14,10 +14,10 @@ Create a new logger like so:
 
 ```ruby
 require 'logger'
-logger = Logger.new(service: 'petshop')
+logger = Logger.new(conf: { service: 'petshop' })
 ```
 
-The logger may be passed in the configuration object an optional `output` attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional `now` attribute, which should be an object with a function named `iso8601` that returns an ISO 8601 compliant datetimestamp, like `Time.now`. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](./test/logger-test.rb).
+The logger may be passed in the configuration object an optional `output` attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional `now` attribute, which should be a `Time` object. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](./test/logger-test.rb).
 
 To use, simply invoke like most other loggers:
 

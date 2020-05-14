@@ -2,7 +2,7 @@ require_relative 'logger'
 
 PORT = 8080
 
-logger = Logger.new(service: 'petshop')
+logger = Logger.new(conf: { service: 'petshop' })
 
 # Start our petshop
 logger.info({
@@ -29,7 +29,6 @@ request_logger = logger.with({
 db_err = true # this time!
 
 request_logger.error({ message: "DB connection failed." }) if db_err
-
 
 # We return an error to the requester
 request_logger.info({

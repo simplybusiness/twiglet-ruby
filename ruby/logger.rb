@@ -5,10 +5,19 @@ require_relative 'elastic_common_schema'
 class Logger
   include ElasticCommonSchema
 
-  def initialize(service:, now: Time.now.utc, output: $stdout, scoped_properties: {})
-    @service = service
-    @now = now
-    @output = output
+  def initialize(conf:, scoped_properties: {})
+    @service = conf[:service]
+    @now = conf[:now]
+    @output = conf[:output]
+
+    raise "configuration must have a service name" \
+      unless String === @service && @service.strip.length > 0
+
+    @now = Time.now.utc unless Time === conf[:now]
+
+    @output = $stdout \
+      unless @output.class.method_defined?(:puts)
+
     @scoped_properties = scoped_properties
   end
 
@@ -33,9 +42,9 @@ class Logger
   end
 
   def with(scoped_properties)
-    Logger.new(service: @service,
-               now: @now,
-               output: @output,
+    Logger.new(conf: { service: @service,
+                       now: @now,
+                       output: @output },
                scoped_properties: scoped_properties)
   end
 
