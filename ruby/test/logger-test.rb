@@ -3,7 +3,7 @@ require_relative "../logger"
 
 describe Logger do
   before do
-    @now = Time.utc(2020, 5, 11, 15, 1, 1).to_datetime
+    @now = Time.utc(2020, 5, 11, 15, 1, 1)
     @buffer = StringIO.new
     @logger = Logger.new(
       service: "petshop",
@@ -24,7 +24,7 @@ describe Logger do
 
     expected_log = {
       message: "Out of pets exception",
-      "@timestamp": "2020-05-11T15:01:01.000+00:00",
+      "@timestamp": "2020-05-11T15:01:01.000Z",
       service: {
         name: "petshop"
       },

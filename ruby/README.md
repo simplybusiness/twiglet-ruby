@@ -14,10 +14,10 @@ Create a new logger like so:
 
 ```ruby
 require 'logger'
-logger = Logger.new(service: 'petshop', now: DateTime.now, output: $stdout)
+logger = Logger.new(service: 'petshop')
 ```
 
-The logger may be passed in the configuration object an optional output attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional now atttribute, which should be a function that returns an ISO 8601 compliant datetimestamp. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](./test/logger-test.rb).
+The logger may be passed in the configuration object an optional `output` attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional `now` attribute, which should be an object with a function named `iso8601` that returns an ISO 8601 compliant datetimestamp. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](./test/logger-test.rb).
 
 To use, simply invoke like most other loggers:
 
@@ -83,7 +83,7 @@ which will print:
 Writing nested json objects could be confusing. This library has a built-in feature to convert dotted keys into nested objects, so if you log like this:
 
 ```ruby
-logger.info({ 
+logger.info({
     'event.action': 'HTTP request',
     message: 'GET /pets success',
     'trace.id': '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
