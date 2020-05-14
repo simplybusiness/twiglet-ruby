@@ -48,4 +48,3 @@ request_logger.info({
 # Both of the following lines would throw an error
 # request_logger.error("")
 # logger.debug(" ")
-
