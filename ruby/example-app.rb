@@ -26,9 +26,9 @@ request_logger = logger.with({
 })
 
 # Oh noes!
-db_err = true # this time!
+db_err = StandardError.new("Connection timed-out")
 
-request_logger.error({ message: "DB connection failed." }) if db_err
+request_logger.error({ message: "DB connection failed." }, db_err) if db_err
 
 # We return an error to the requester
 request_logger.info({

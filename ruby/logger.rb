@@ -29,7 +29,11 @@ class Logger
   end
 
   def error(message, error = nil)
-    message = message.merge()
+    message = message.merge({
+      error_name: error.message,
+      backtrace: error.backtrace
+    }) if error
+
     log(level: "error", message: message)
   end
 
