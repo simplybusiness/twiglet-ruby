@@ -8,7 +8,7 @@ class Logger
   def initialize(conf:, scoped_properties: {})
     @service = conf[:service]
     @now = conf[:now] || -> { Time.now.utc }
-    @output = conf[:output]
+    @output = conf[:output] || $stdout
 
     raise "configuration must have a service name" \
       unless @service.is_a?(String) && @service.strip.length > 0
