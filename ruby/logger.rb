@@ -11,7 +11,7 @@ class Logger
     @output = conf[:output]
 
     raise "configuration must have a service name" \
-      unless String === @service && @service.strip.length > 0
+      unless @service.is_a?(String) && @service.strip.length > 0
 
     @now = Time.now.utc unless Time === @now
 
