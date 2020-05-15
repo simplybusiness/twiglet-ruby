@@ -1,14 +1,18 @@
-require 'date'
+require 'time'
 require 'json'
 require_relative 'elastic_common_schema'
 
 class Logger
   include ElasticCommonSchema
 
-  def initialize(service:, now:, output:, scoped_properties: {})
-    @service = service
-    @now = now
-    @output = output
+  def initialize(conf:, scoped_properties: {})
+    @service = conf[:service]
+    @now = conf[:now] || -> { Time.now.utc }
+    @output = conf[:output] || $stdout
+
+    raise "configuration must have a service name" \
+      unless @service.is_a?(String) && @service.strip.length > 0
+
     @scoped_properties = scoped_properties
   end
 
@@ -24,7 +28,12 @@ class Logger
     log(level: "warning", message: message)
   end
 
-  def error(message)
+  def error(message, error = nil)
+    message = message.merge({
+      error_name: error.message,
+      backtrace: error.backtrace
+    }) if error
+
     log(level: "error", message: message)
   end
 
@@ -33,36 +42,27 @@ class Logger
   end
 
   def with(scoped_properties)
-    Logger.new(service: @service,
-               now: @now,
-               output: @output,
+    Logger.new(conf: { service: @service,
+                       now: @now,
+                       output: @output },
                scoped_properties: scoped_properties)
   end
 
   private
 
-  def valid_string?(message)
-    message.strip.length > 0
-  end
-
   def log(level:, message:)
-    case message
-    when String
-      raise "There must be a non-empty message" unless valid_string?(message)
-      message = { message: message }
-    when Hash
-      message = message.transform_keys(&:to_sym)
-      raise "Log object must have a 'message' property" unless message.key?(:message)
-      raise "The 'message' property of log object must not be empty" unless valid_string?(message[:message])
-    else
-      raise "Message must be either an object or a string"
-    end
+    raise "Message must be a Hash" unless message.is_a?(Hash)
+
+    message = message.transform_keys(&:to_sym)
+    raise "Log object must have a 'message' property" unless message.key?(:message)
+    raise "The 'message' property of log object must not be empty" \
+      unless message[:message].strip.length > 0
 
     total_message = ({
         service: {
           name: @service
         },
-        "@timestamp": @now.iso8601(3),
+        "@timestamp": @now.call.iso8601(3),
         log: {
           level: level
         }
@@ -73,5 +73,5 @@ class Logger
 
     @output.puts total_message.to_json
   end
-  
+
 end

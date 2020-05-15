@@ -3,13 +3,19 @@ require_relative "../logger"
 
 describe Logger do
   before do
-    @now = Time.utc(2020, 5, 11, 15, 1, 1).to_datetime
+    @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
     @buffer = StringIO.new
-    @logger = Logger.new(
+    @logger = Logger.new(conf: {
       service: "petshop",
       now: @now,
       output: @buffer
-    )
+    })
+  end
+
+  it "should throw an error with an empty service name" do
+    assert_raises RuntimeError do
+      logger = Logger.new(conf: { service: "  " })
+    end
   end
 
   it "should throw an error with an empty message" do
@@ -19,12 +25,12 @@ describe Logger do
   end
 
   it "should log mandatory attributes" do
-    @logger.error("Out of pets exception")
+    @logger.error({ message: "Out of pets exception" })
     actual_log = read_json(@buffer)
 
     expected_log = {
       message: "Out of pets exception",
-      "@timestamp": "2020-05-11T15:01:01.000+00:00",
+      "@timestamp": "2020-05-11T15:01:01.000Z",
       service: {
         name: "petshop"
       },
@@ -57,14 +63,14 @@ describe Logger do
     }
 
     output = StringIO.new
-    logger = Logger.new(
-      service: "petshop",
-      now: @now,
-      output: output,
-      scoped_properties: extra_properties
-    )
+    logger = Logger.new(conf: {
+                               service: "petshop",
+                               now: @now,
+                               output: output
+                              },
+                        scoped_properties: extra_properties)
 
-    logger.error("GET /cats")
+    logger.error({ message: "GET /cats" })
     log = read_json output
 
     assert_equal "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb", log[:trace][:id]
@@ -158,6 +164,20 @@ describe Logger do
     assert_equal "Barker", actual_log[:pet][:name]
     assert_equal "dog", actual_log[:pet][:species]
     assert_equal "Bitsa", actual_log[:pet][:breed]
+  end
+
+  it "should log an error with backtrace" do
+    begin
+      x = 1/0
+    rescue StandardError => err
+      @logger.error({ message: "Artificially raised exception"}, err)
+    end
+
+    actual_log = read_json(@buffer)
+
+    assert_equal "Artificially raised exception", actual_log[:message]
+    assert_equal "divided by 0", actual_log[:error_name]
+    assert_match "logger-test.rb", actual_log[:backtrace].first
   end
 
   private
