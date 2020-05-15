@@ -49,6 +49,19 @@ describe("logging", () => {
     expect(contents.message).toBe("Emergency! Emergency!")
   })
 
+  it("should log a stack trace if provided", () => {
+    try {
+      console.thing()
+    } catch (err) {
+      this.log.error({ message: "An error!" }, err)
+    }
+    const contents = JSON.parse(this.log.output.printed)
+
+    expect(contents.message).toBe("An error!")
+    expect(contents.error.message).toBe("console.thing is not a function")
+    expect(contents.error.stacktrace[1]).toContain("logger-spec")
+  })
+
   it("should log scoped properties defined at creation", () => {
     const extra_properties = {
       trace: {
