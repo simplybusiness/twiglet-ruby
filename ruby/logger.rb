@@ -15,9 +15,6 @@ class Logger
 
     @now = Time.now.utc unless Time === @now
 
-    @output = $stdout \
-      unless @output.class.method_defined?(:puts)
-
     @scoped_properties = scoped_properties
   end
 
