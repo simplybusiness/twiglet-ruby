@@ -45,5 +45,5 @@ request_logger.info({
 
 # Logging with a non-empty message is an anti-pattern and is therefore forbidden
 # Both of the following lines would throw an error
-# request_logger.error("")
-# logger.debug(" ")
+# request_logger.error({ message: "" })
+# logger.debug({ message: " " })

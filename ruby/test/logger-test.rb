@@ -25,7 +25,7 @@ describe Logger do
   end
 
   it "should log mandatory attributes" do
-    @logger.error("Out of pets exception")
+    @logger.error({ message: "Out of pets exception" })
     actual_log = read_json(@buffer)
 
     expected_log = {
@@ -70,7 +70,7 @@ describe Logger do
                               },
                         scoped_properties: extra_properties)
 
-    logger.error("GET /cats")
+    logger.error({ message: "GET /cats" })
     log = read_json output
 
     assert_equal "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb", log[:trace][:id]

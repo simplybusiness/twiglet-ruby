@@ -28,7 +28,8 @@ class Logger
     log(level: "warning", message: message)
   end
 
-  def error(message)
+  def error(message, error = nil)
+    message = message.merge()
     log(level: "error", message: message)
   end
 
@@ -45,22 +46,13 @@ class Logger
 
   private
 
-  def valid_string?(message)
-    message.strip.length > 0
-  end
-
   def log(level:, message:)
-    case message
-    when String
-      raise "There must be a non-empty message" unless valid_string?(message)
-      message = { message: message }
-    when Hash
-      message = message.transform_keys(&:to_sym)
-      raise "Log object must have a 'message' property" unless message.key?(:message)
-      raise "The 'message' property of log object must not be empty" unless valid_string?(message[:message])
-    else
-      raise "Message must be either an object or a string"
-    end
+    raise "Message must be a Hash" unless message.is_a?(Hash)
+
+    message = message.transform_keys(&:to_sym)
+    raise "Log object must have a 'message' property" unless message.key?(:message)
+    raise "The 'message' property of log object must not be empty" \
+      unless message[:message].strip.length > 0
 
     total_message = ({
         service: {
