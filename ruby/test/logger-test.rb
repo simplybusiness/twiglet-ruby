@@ -3,7 +3,7 @@ require_relative "../logger"
 
 describe Logger do
   before do
-    @now = Time.utc(2020, 5, 11, 15, 1, 1)
+    @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
     @buffer = StringIO.new
     @logger = Logger.new(conf: {
       service: "petshop",

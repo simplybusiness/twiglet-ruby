@@ -13,8 +13,6 @@ class Logger
     raise "configuration must have a service name" \
       unless @service.is_a?(String) && @service.strip.length > 0
 
-    @now = Time.now.utc unless Time === @now
-
     @scoped_properties = scoped_properties
   end
 
@@ -68,7 +66,7 @@ class Logger
         service: {
           name: @service
         },
-        "@timestamp": @now.iso8601(3),
+        "@timestamp": @now.call.iso8601(3),
         log: {
           level: level
         }
