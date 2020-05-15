@@ -166,6 +166,20 @@ describe Logger do
     assert_equal "Bitsa", actual_log[:pet][:breed]
   end
 
+  it "should log an error with backtrace" do
+    begin
+      x = 1/0
+    rescue StandardError => err
+      @logger.error({ message: "Artificially raised exception"}, err)
+    end
+
+    actual_log = read_json(@buffer)
+
+    assert_equal "Artificially raised exception", actual_log[:message]
+    assert_equal "divided by 0", actual_log[:error_name]
+    assert_match "logger-test.rb", actual_log[:backtrace].first
+  end
+
   private
 
   def read_json(buffer)
