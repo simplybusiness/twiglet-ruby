@@ -31,7 +31,7 @@ const Logger = (conf, scoped_properties) => {
 
   const is_valid_string = (message) => message.trim().length > 0
 
-  const log = (severity, message) => {
+  const log = (severity, message, err) => {
     if (typeof(message) === 'string') {
       assert(is_valid_string(message),
              'There must be a non-empty message')
@@ -44,10 +44,16 @@ const Logger = (conf, scoped_properties) => {
     } else {
       throw new Error('Message must be either an object or a string')
     }
+
+    var error_message = {}
+    if (err) {
+      error_message = { error: { message: err.message,
+                                 stacktrace: err.stack.split('\n') }}}
     const total_message = { ...{ log: { level: severity },
                                  '@timestamp': now(),
                                  service: { name: service }},
                             ...scoped_properties,
+                            ...error_message,
                             ...message }
     const nested_message = json_helper(total_message)
     output.log(JSON.stringify(nested_message))
