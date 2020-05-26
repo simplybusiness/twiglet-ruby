@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.files                 = `git ls-files`.split("\n")
   gem.test_files            = `git ls-files -- {test}/*`.split("\n")
 
-  gem.require_paths         = ['.']
+  gem.require_paths         = ['lib']
   gem.required_ruby_version = '>= 2.0'
 
   gem.license               = 'Copyright SimplyBusiness'
