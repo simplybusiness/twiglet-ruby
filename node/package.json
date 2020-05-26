@@ -32,7 +32,6 @@
     "jshint": "2.x"
   },
   "jshintConfig": {
-    "camelcase": false,
     "esversion": 10,
     "asi": true
   },

@@ -20,16 +20,16 @@ log.info({
 })
 
 // We get a request
-const request_log = log.with({ event: { action: "HTTP request" }, trace: { id: "126bb6fa-28a2-470f-b013-eefbf9182b2d" }})
+const requestLog = log.with({ event: { action: "HTTP request" }, trace: { id: "126bb6fa-28a2-470f-b013-eefbf9182b2d" }})
 
 // Oh noes!
-db_err = true // this time!
-if (db_err) {
-  request_log.error({ message: "DB connection failed." })
+dbErr = true // this time!
+if (dbErr) {
+  requestLog.error({ message: "DB connection failed." })
 }
 
 // We return an error to the requester
-request_log.info({ message: "Internal Server Error", http: { request: { method: 'get'}, response: { status_code: 500 }}})
+requestLog.info({ message: "Internal Server Error", http: { request: { method: 'get'}, response: { status_code: 500 }}})
 
 // Logging with a non-empty message is an anti-pattern and is therefore forbidden
 // Both of the following lines would throw an error

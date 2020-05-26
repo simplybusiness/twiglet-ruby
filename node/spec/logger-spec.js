@@ -63,7 +63,7 @@ describe("logging", () => {
   })
 
   it("should log scoped properties defined at creation", () => {
-    const extra_properties = {
+    const extraProperties = {
       trace: {
         id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb"
       },
@@ -71,14 +71,14 @@ describe("logging", () => {
       request: { method: "get" },
       response: { status_code: 200 }
     }
-    const my_logger = Logger({
+    const myLogger = Logger({
       now: () => "2016-02-15T12:34:56.789Z",
       output: new FakeConsole(),
       service: "petshop"
-    }, extra_properties)
+    }, extraProperties)
 
-    my_logger.error(extra_properties)
-    const contents = JSON.parse(my_logger.output.printed)
+    myLogger.error(extraProperties)
+    const contents = JSON.parse(myLogger.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.request.method).toBe("get")
@@ -88,17 +88,17 @@ describe("logging", () => {
 
   it("should be able to add properties with '.with'", () => {
     // Let's add some context to this customer journey
-    const purchase_log = this.log.with({
+    const purchaseLog = this.log.with({
       trace: { id: "1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb" },
       customer: { full_name: "Freda Bloggs" },
       event: { action: "pet purchase" }
     })
     // do stuff
-    purchase_log.info({
+    purchaseLog.info({
       message: "customer bought a dog",
       pet: { name: "Barker", species: "dog", breed: "Bitsa" }
     })
-    const contents = JSON.parse(purchase_log.output.printed)
+    const contents = JSON.parse(purchaseLog.output.printed)
 
     expect(contents.trace.id).toBe("1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb")
     expect(contents.customer.full_name).toBe("Freda Bloggs")

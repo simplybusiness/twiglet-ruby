@@ -57,13 +57,13 @@ This writes:
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
 ```javascript
-const request_log = log.with({ event: { action: 'HTTP request'}, trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }})
+const requestLog = log.with({ event: { action: 'HTTP request'}, trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }})
 ```
 
 This can be used like any other Logger instance:
 
 ```javascript
-request_log.error({
+requestLog.error({
     message: 'Error 500 in /pets/buy',
     http: {
         request: { method: 'post', 'url.path': '/pet/buy' },

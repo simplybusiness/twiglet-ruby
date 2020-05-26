@@ -17,9 +17,9 @@
 // those properties.
 
 const assert = require('assert')
-const json_helper = require('./json-helper')
+const jsonHelper = require('./json-helper')
 
-const Logger = (conf, scoped_properties) => {
+const Logger = (conf, scopedProperties) => {
   assert.equal(typeof(conf.service), 'string',
                'configuration must have a service name')
 
@@ -29,50 +29,50 @@ const Logger = (conf, scoped_properties) => {
     output = console
   }
 
-  const is_valid_string = (message) => message.trim().length > 0
+  const isValidString = (message) => message.trim().length > 0
 
   const log = (severity, message, err) => {
     if (typeof(message) === 'string') {
-      assert(is_valid_string(message),
+      assert(isValidString(message),
              'There must be a non-empty message')
       message = { message: message }
     } else if (typeof(message) === 'object') {
       assert(message.hasOwnProperty('message'),
              'Log object must have a message property')
-      assert(is_valid_string(message.message),
+      assert(isValidString(message.message),
              'The message property of log object must not be empty')
     } else {
       throw new Error('Message must be either an object or a string')
     }
 
-    var error_message = {}
+    var errorMessage = {}
     if (err) {
-      error_message = { error: { message: err.message,
+      errorMessage = { error: { message: err.message,
                                  stacktrace: err.stack.split('\n') }}}
-    const total_message = { ...{ log: { level: severity },
+    const totalMessage = { ...{ log: { level: severity },
                                  '@timestamp': now(),
                                  service: { name: service }},
-                            ...scoped_properties,
-                            ...error_message,
+                            ...scopedProperties,
+                            ...errorMessage,
                             ...message }
-    const nested_message = json_helper(total_message)
-    output.log(JSON.stringify(nested_message))
+    const nestedMessage = jsonHelper(totalMessage)
+    output.log(JSON.stringify(nestedMessage))
   }
 
   return {
     now: now,
     output: output,
     service: service,
-    scoped_properties: scoped_properties,
+    scopedProperties: scopedProperties,
     debug: log.bind(null, 'debug'),
     info: log.bind(null, 'info'),
     warning: log.bind(null, 'warning'),
     error: log.bind(null, 'error'),
     critical: log.bind(null, 'critical'),
-    with: (more_properties) => {
+    with: (moreProperties) => {
       return Logger(conf,
-                    {...scoped_properties,
-                     ...more_properties})
+                    {...scopedProperties,
+                     ...moreProperties})
     } // end .with
   } // end return
 } // end Logger
