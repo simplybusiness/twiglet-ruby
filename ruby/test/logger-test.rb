@@ -1,5 +1,5 @@
 require "minitest/autorun"
-require_relative "../logger"
+require_relative "../twiglet/logger"
 
 describe Logger do
   before do
