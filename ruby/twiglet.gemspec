@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   end
 
   gem.name                  = 'twiglet'
-  gem.version               = '1.0.1'
+  gem.version               = '2.0.0'
   gem.authors               = ['Simply Business']
   gem.email                 = ['tech@simplybusiness.co.uk']
   gem.homepage              = 'https://github.com/simplybusiness/twiglet'
