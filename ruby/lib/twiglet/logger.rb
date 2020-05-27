@@ -1,8 +1,7 @@
 require 'time'
 require 'json'
-require_relative '../../stic_common_schema'
+require_relative '../elastic_common_schema'
 
-# Not Twilight ;)
 module Twiglet
   class Logger
     include ElasticCommonSchema
