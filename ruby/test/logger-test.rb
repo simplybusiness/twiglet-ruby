@@ -1,11 +1,11 @@
 require "minitest/autorun"
 require_relative "../lib/twiglet/logger"
 
-describe Logger do
+describe Twiglet::Logger do
   before do
     @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
     @buffer = StringIO.new
-    @logger = Logger.new(conf: {
+    @logger = Twiglet::Logger.new(conf: {
       service: "petshop",
       now: @now,
       output: @buffer
@@ -14,7 +14,7 @@ describe Logger do
 
   it "should throw an error with an empty service name" do
     assert_raises RuntimeError do
-      logger = Logger.new(conf: { service: "  " })
+      logger = Twiglet::Logger.new(conf: { service: "  " })
     end
   end
 
@@ -63,7 +63,7 @@ describe Logger do
     }
 
     output = StringIO.new
-    logger = Logger.new(conf: {
+    logger = Twiglet::Logger.new(conf: {
                                service: "petshop",
                                now: @now,
                                output: output
