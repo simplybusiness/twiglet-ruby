@@ -1,3 +1,5 @@
+$:.push File.expand_path('../lib', __FILE__)
+
 Gem::Specification.new do |gem|
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the
   # 'allowed_push_host' to allow pushing to a single host or delete this section
@@ -9,7 +11,7 @@ Gem::Specification.new do |gem|
   end
 
   gem.name                  = 'twiglet'
-  gem.version               = '1.0.0'
+  gem.version               = '1.0.1'
   gem.authors               = ['Simply Business']
   gem.email                 = ['tech@simplybusiness.co.uk']
   gem.homepage              = 'https://github.com/simplybusiness/twiglet'
