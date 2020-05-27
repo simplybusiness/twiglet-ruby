@@ -1,5 +1,5 @@
 require "minitest/autorun"
-require_relative "../elastic_common_schema"
+require_relative "../lib/elastic_common_schema"
 
 describe ElasticCommonSchema do
   before do
@@ -44,7 +44,7 @@ describe ElasticCommonSchema do
     }
 
     nested = @ecs.to_nested(actual)
-    
+
     assert_equal "petshop", nested[:service][:name]
     assert_equal "ps001", nested[:service][:id]
     assert_equal "0.9.1", nested[:service][:version]
@@ -58,7 +58,7 @@ describe ElasticCommonSchema do
       "http.response.bytes": 1564,
       "http.response.status_code": 200
     }
-    
+
     nested = @ecs.to_nested(actual)
 
     assert_equal "get", nested[:http][:request][:method]
@@ -70,7 +70,7 @@ describe ElasticCommonSchema do
   it "#deep_merge() should work with two hashes without common keys" do
     first = { id: 1, name: "petshop" }
     second = { level: "debug", code: 5 }
-    
+
     actual = @ecs.deep_merge(first, second)
 
     assert_equal 1, actual[:id]
@@ -94,7 +94,7 @@ describe ElasticCommonSchema do
   it "#deep_merge() should merge two sub-keys" do
     first = { service: { name: "petshop" }  }
     second = { service: { id: "ps001" } }
-    
+
     actual = @ecs.deep_merge(first, second)
     assert_equal "petshop", actual[:service][:name]
     assert_equal "ps001", actual[:service][:id]
@@ -115,7 +115,7 @@ describe ElasticCommonSchema do
   it "#deep_merge() should work when the first key is empty" do
     first = {}
     second = { id: 1 }
-    
+
     actual = @ecs.deep_merge(first, second)
 
     assert_equal 1, actual[:id]
@@ -124,7 +124,7 @@ describe ElasticCommonSchema do
   it "#deep_merge() should work when the second key is empty" do
     first = { id: 1 }
     second = {}
-    
+
     actual = @ecs.deep_merge(first, second)
 
     assert_equal 1, actual[:id]

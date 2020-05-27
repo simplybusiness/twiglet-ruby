@@ -1,4 +1,4 @@
-require_relative 'logger'
+require_relative 'lib/twiglet/logger'
 
 PORT = 8080
 
