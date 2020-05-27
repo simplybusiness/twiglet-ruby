@@ -32,8 +32,8 @@ module Twiglet
     def error(message, error = nil)
       if error
         message = message.merge({
-                                    error_name: error.message,
-                                    backtrace: error.backtrace
+                                  error_name: error.message,
+                                  backtrace: error.backtrace
                                 })
       end
 
@@ -60,18 +60,18 @@ module Twiglet
       raise "Log object must have a 'message' property" unless message.key?(:message)
       raise "The 'message' property of log object must not be empty" unless message[:message].strip.length > 0
 
-      total_message = ({
-          service: {
-              name: @service
-          },
-          "@timestamp": @now.call.iso8601(3),
-          log: {
-              level: level
-          }
-      })
-                          .merge(@scoped_properties)
-                          .merge(message)
-                          .then { |log_entry| to_nested(log_entry) }
+      total_message = {
+        service: {
+          name: @service
+        },
+        "@timestamp": @now.call.iso8601(3),
+        log: {
+          level: level
+        }
+      }
+      total_message = total_message.merge(@scoped_properties)
+                                   .merge!(message)
+                                   .then { |log_entry| to_nested(log_entry) }
 
       @output.puts total_message.to_json
     end
