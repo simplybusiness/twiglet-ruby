@@ -24,7 +24,7 @@ const Logger = (conf, scopedProperties) => {
                'configuration must have a service name')
 
   var { now, output, service } = conf
-  if (typeof(now) != 'function') { now = (new Date()).toISOString }
+  if (typeof(now) != 'function') { now = () => (new Date()).toISOString() }
   if (typeof(output) != 'object' || typeof(output.log) != 'function') {
     output = console
   }
