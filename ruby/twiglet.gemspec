@@ -1,4 +1,6 @@
-$:.push File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+$LOAD_PATH.push File.expand_path('lib', __dir__)
 
 Gem::Specification.new do |gem|
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the
@@ -16,8 +18,8 @@ Gem::Specification.new do |gem|
   gem.email                 = ['tech@simplybusiness.co.uk']
   gem.homepage              = 'https://github.com/simplybusiness/twiglet'
 
-  gem.summary               = %q{Twiglet}
-  gem.description           = %q{Like a log, only smaller.}
+  gem.summary               = 'Twiglet'
+  gem.description           = 'Like a log, only smaller.'
 
   gem.files                 = `git ls-files`.split("\n")
   gem.test_files            = `git ls-files -- {test}/*`.split("\n")

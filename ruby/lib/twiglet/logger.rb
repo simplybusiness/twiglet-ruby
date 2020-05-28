@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'time'
 require 'json'
 require_relative '../elastic_common_schema'
@@ -12,7 +14,7 @@ module Twiglet
       @output = conf[:output] || $stdout
 
       raise 'configuration must have a service name' \
-        unless @service.is_a?(String) && @service.strip.length > 0
+        unless @service.is_a?(String) && !@service.strip.empty?
 
       @scoped_properties = scoped_properties
     end
@@ -45,9 +47,9 @@ module Twiglet
     end
 
     def with(scoped_properties)
-      Logger.new(conf: {service: @service,
-                        now: @now,
-                        output: @output},
+      Logger.new(conf: { service: @service,
+                         now: @now,
+                         output: @output },
                  scoped_properties: scoped_properties)
     end
 
@@ -57,8 +59,12 @@ module Twiglet
       raise 'Message must be a Hash' unless message.is_a?(Hash)
 
       message = message.transform_keys(&:to_sym)
-      raise "Log object must have a 'message' property" unless message.key?(:message)
-      raise "The 'message' property of log object must not be empty" unless message[:message].strip.length > 0
+      unless message.key?(:message)
+        raise "Log object must have a 'message' property"
+      end
+      if message[:message].strip.empty?
+        raise "The 'message' property of log object must not be empty"
+      end
 
       total_message = {
         service: {
