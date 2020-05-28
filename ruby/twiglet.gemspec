@@ -9,7 +9,9 @@ Gem::Specification.new do |gem|
   if gem.respond_to?(:metadata)
     gem.metadata['allowed_push_host'] = 'https://gemstash.simplybusiness.io/private'
   else
-    raise 'RubyGems 2.2 or newer is required to protect against public gem pushes.'
+    raise(
+      'RubyGems 2.2 or newer is required to protect against public gem pushes.'
+    )
   end
 
   gem.name                  = 'twiglet'
@@ -25,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.test_files            = `git ls-files -- {test}/*`.split("\n")
 
   gem.require_paths         = ['lib']
-  gem.required_ruby_version = '>= 2.0'
+  gem.required_ruby_version = '>= 2.6'
 
   gem.license               = 'Copyright SimplyBusiness'
 end

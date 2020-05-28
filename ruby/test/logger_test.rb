@@ -16,7 +16,7 @@ describe Twiglet::Logger do
 
   it 'should throw an error with an empty service name' do
     assert_raises RuntimeError do
-      logger = Twiglet::Logger.new(conf: { service: '  ' })
+      Twiglet::Logger.new(conf: { service: '  ' })
     end
   end
 
@@ -169,7 +169,7 @@ describe Twiglet::Logger do
 
   it 'should log an error with backtrace' do
     begin
-      x = 1 / 0
+      1 / 0
     rescue StandardError => e
       @logger.error({ message: 'Artificially raised exception' }, e)
     end
@@ -178,7 +178,7 @@ describe Twiglet::Logger do
 
     assert_equal 'Artificially raised exception', actual_log[:message]
     assert_equal 'divided by 0', actual_log[:error_name]
-    assert_match 'logger-test.rb', actual_log[:backtrace].first
+    assert_match 'logger_test.rb', actual_log[:backtrace].first
   end
 
   private
