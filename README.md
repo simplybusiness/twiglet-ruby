@@ -1,7 +1,5 @@
 # Twiglet
 
-![Node.js CI](https://github.com/simplybusiness/twiglet/workflows/Node.js%20CI/badge.svg?branch=master)
-
 ![Ruby CI](https://github.com/simplybusiness/twiglet/workflows/Ruby%20CI/badge.svg?branch=master)
 
 Why Twiglet? Because it's a log, only micro-sized.
@@ -13,8 +11,8 @@ This logging library is available in a cornucopia of languages:
   - TBC
 * [Python](python)
   - TBC
-* [Node.js](node)
-  - For more details see the Node-specific [README](node/README.md)
+* [Node.js](https://github.com/simplybusiness/twiglet-node)
+  - For more details see the Node-specific [README](https://github.com/simplybusiness/twiglet-node/README.md)
 
 ## Design considerations
 
