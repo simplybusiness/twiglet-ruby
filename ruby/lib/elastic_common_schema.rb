@@ -10,7 +10,7 @@ module ElasticCommonSchema
   end
 
   def deep_merge(hash1, hash2)
-    merger = proc { |_, val1, val2| Hash === val1 && Hash === val2 ? val1.merge(val2, &merger) : val2 }
+    merger = proc { |_, val1, val2| Hash == val1 && Hash == val2 ? val1.merge(val2, &merger) : val2 }
     hash1.merge(hash2, &merger)
   end
 
