@@ -1,0 +1,4 @@
+inherit_gem:
+  simplycop: .simplycop.yml
+Rails:
+  Enabled: false
