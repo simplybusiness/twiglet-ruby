@@ -1,5 +1,5 @@
 GIT
-  remote: git@github.com:simplybusiness/simplycop.git
+  remote: https://github.com/simplybusiness/simplycop.git
   revision: 02b417277e3ff9eeab34d6b7c30a95a17d876731
   specs:
     simplycop (0.5.4)
