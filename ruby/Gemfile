@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-source "https://rubygems.org"
-
+source 'https://rubygems.org'
+gem 'simplycop', git: 'git@github.com:simplybusiness/simplycop.git'
 group :development, :test do
   gem 'minitest'
 end
