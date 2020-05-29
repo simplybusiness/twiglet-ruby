@@ -7,8 +7,8 @@ Why Twiglet? Because it's a log, only micro-sized.
 This is a machine-readable first, human-readable second, JSON-based logging micro-library suitable for a wide variety of microservice uses.
 
 This logging library is available in a cornucopia of languages:
-* [Ruby](https://github.com/simplybusiness/twiglet-ruby)
-  
+* [Ruby](ruby)
+  - TBC
 * [Python](python)
   - TBC
 * [Node.js](https://github.com/simplybusiness/twiglet-node)
