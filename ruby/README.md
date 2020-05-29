@@ -17,7 +17,7 @@ require 'logger'
 logger = Logger.new(conf: { service: 'petshop' })
 ```
 
-The logger may be passed in the configuration object an optional `output` attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional `now` attribute, which should be a function returning a `Time` object. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](./test/logger-test.rb).
+The logger may be passed in the configuration object an optional `output` attribute which should be an object with a `puts` method - like `$stdout`. The configuration object may also have an optional `now` attribute, which should be a function returning a `Time` object. The defaults should serve for most uses, though you may want to override them for testing as we have done [here](test/logger_test.rb).
 
 To use, simply invoke like most other loggers:
 
