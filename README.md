@@ -1,17 +1,13 @@
 # Twiglet
 
-![Ruby CI](https://github.com/simplybusiness/twiglet/workflows/Ruby%20CI/badge.svg?branch=master)
-
 Why Twiglet? Because it's a log, only micro-sized.
 
 This is a machine-readable first, human-readable second, JSON-based logging micro-library suitable for a wide variety of microservice uses.
 
 This logging library is available in a cornucopia of languages:
 * [Ruby](https://github.com/simplybusiness/twiglet-ruby)
-* [Python](python)
-  - TBC
+* Python - TBC
 * [Node.js](https://github.com/simplybusiness/twiglet-node)
-  - For more details see the Node-specific [README](https://github.com/simplybusiness/twiglet-node/README.md)
 
 ## Design considerations
 
