@@ -49,6 +49,9 @@ describe Twiglet::Logger do
 
       expected_log = {
         message: 'Out of pets exception',
+        ecs: {
+          version: '1.5.0'
+        },
         "@timestamp": '2020-05-11T15:01:01.000Z',
         service: {
           name: 'petshop'
@@ -136,10 +139,10 @@ describe Twiglet::Logger do
       @logger.info({message: 'there'})
 
       expected_output =
-        '{"@timestamp":"2020-05-11T15:01:01.000Z",'\
+        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",'\
         '"service":{"name":"petshop"},"log":{"level":"debug"},"message":"hi"}'\
         "\n"\
-        '{"@timestamp":"2020-05-11T15:01:01.000Z",'\
+        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",'\
         '"service":{"name":"petshop"},"log":{"level":"info"},"message":"there"}'\
         "\n"\
 
@@ -251,6 +254,9 @@ describe Twiglet::Logger do
 
       expected_log = {
         message: 'Out of pets exception',
+        ecs: {
+          version: '1.5.0'
+        },
         "@timestamp": '2020-05-11T15:01:01.000Z',
         service: {
           name: 'petshop'

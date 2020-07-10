@@ -50,6 +50,9 @@ module Twiglet
 
     def log_message(level, message:)
       base_message = {
+        ecs: {
+          version: '1.5.0'
+        },
         "@timestamp": @now.call.iso8601(3),
         service: {
           name: @service_name
