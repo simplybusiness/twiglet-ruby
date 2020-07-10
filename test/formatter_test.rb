@@ -17,6 +17,9 @@ describe Twiglet::Formatter do
   it 'returns a formatted log from a string message' do
     msg = @formatter.call('warn', nil, nil, 'shop is running low on dog food')
     expected_log = {
+      "ecs" => {
+        "version" => '1.5.0'
+      },
       "@timestamp" => '2020-05-11T15:01:01.000Z',
       "service" => {
         "name" => 'petshop'
