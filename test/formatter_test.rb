@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'test_helper'
+require 'minitest/autorun'
 require 'json'
 require_relative '../lib/twiglet/formatter'
 
