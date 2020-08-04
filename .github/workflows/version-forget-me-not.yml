@@ -17,7 +17,7 @@ jobs:
           repository: simplybusiness/version-forget-me-not
           ref: refs/tags/v1.0
           # Do not put the actual secret here- only the name of the secret in your repo
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.BOT_TOKEN }}
           path: './twiglet-ruby'
       - uses: ./
         env:
