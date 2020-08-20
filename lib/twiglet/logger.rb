@@ -37,7 +37,8 @@ module Twiglet
           }
         }
         add_stack_trace(error_fields, error)
-        message.is_a?(Hash) ? message.merge!(error_fields) : error_fields.merge!(message: message)
+        message = Twiglet::Formatter::MessageStrToLogObj.call(message) if message.is_a?(String)
+        message.merge!(error_fields)
       end
 
       super(message, &block)

@@ -5,6 +5,12 @@ module Twiglet
   class Formatter < ::Logger::Formatter
     Hash.include HashExtensions
 
+    MessageStrToLogObj = lambda do |message_str|
+      raise('The \'message\' property of log object must not be empty') if message_str.strip.empty?
+
+      { message: message_str }
+    end
+
     def initialize(service_name,
                    default_properties: {},
                    now: -> { Time.now.utc })
@@ -34,9 +40,7 @@ module Twiglet
     end
 
     def log_text(level, message:)
-      raise('The \'message\' property of log object must not be empty') if message.strip.empty?
-
-      message = { message: message }
+      message = MessageStrToLogObj.call(message)
       log_message(level, message: message)
     end
 

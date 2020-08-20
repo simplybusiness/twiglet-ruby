@@ -31,4 +31,25 @@ describe Twiglet::Formatter do
     }
     assert_equal JSON.parse(msg), expected_log
   end
+
+  describe Twiglet::Formatter::MessageStrToLogObj do
+    it 'converts string message to hash representation' do
+      msg = 'desired message string'
+      assert_equal Twiglet::Formatter::MessageStrToLogObj.call(msg), {message: 'desired message string'}
+    end
+
+    it 'raises an error when empty message is given' do
+      err = assert_raises RuntimeError, 'aa' do
+        Twiglet::Formatter::MessageStrToLogObj.call('')
+      end
+      assert_equal err.message, 'The \'message\' property of log object must not be empty'
+    end
+
+    it 'raises an error when given message contains whitespaces only' do
+      err = assert_raises RuntimeError, 'aa' do
+        Twiglet::Formatter::MessageStrToLogObj.call(" \n\t ")
+      end
+      assert_equal err.message, 'The \'message\' property of log object must not be empty'
+    end
+  end
 end
