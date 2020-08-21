@@ -45,7 +45,7 @@ Obviously the timestamp will be different.
 Alternatively, if you just want to log some error string:
 
 ```ruby
-logger.error( "Emergency! There's an Emergency going on")
+logger.error("Emergency! There's an Emergency going on")
 ```
 
 This will write to STDOUT a JSON string:
