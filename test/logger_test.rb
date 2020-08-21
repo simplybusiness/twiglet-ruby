@@ -230,6 +230,16 @@ describe Twiglet::Logger do
       refute actual_log[:error].key?(:stack_trace)
     end
 
+    it 'should log an error with string message' do
+      e = StandardError.new('Unknown error')
+      @logger.error('Artificially raised exception with string message', e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'Artificially raised exception with string message', actual_log[:message]
+      assert_equal 'Unknown error', actual_log[:error][:message]
+    end
+
     LEVELS.each do |attrs|
       it "should correctly log level when calling #{attrs[:method]}" do
         @logger.public_send(attrs[:method], {message: 'a log message'})
