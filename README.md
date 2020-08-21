@@ -53,11 +53,21 @@ This will write to STDOUT a JSON string:
 {"service":{"name":"service name"},"@timestamp":"2020-05-14T10:54:59.164+01:00","log":{"level":"error"}, "message":"Emergency! There's an Emergency going on"}
 ```
 
-Errors can be logged as well, and this will log the error message and backtrace in the relevant ECS compliant fields:
+A message is always required unless a block is provided. The message can be an object or a string.
+
+An optional error can also be provided, in which case the error message and backtrace will be logged in the relevant ECS compliant fields:
 
 ```ruby
 db_err = StandardError.new('Connection timed-out')
 logger.error({ message: 'DB connection failed.' }, db_err)
+
+# this is also valid
+logger.error('DB connection failed.', db_err)
+```
+
+These will both result in the same JSON string written to STDOUT:
+```json
+{"ecs":{"version":"1.5.0"},"@timestamp":"2020-08-21T15:44:37.890Z","service":{"name":"service name"},"log":{"level":"error"},"message":"DB connection failed.","error":{"message":"Connection timed-out"}}
 ```
 
 Add log event specific information simply as attributes in a hash:
