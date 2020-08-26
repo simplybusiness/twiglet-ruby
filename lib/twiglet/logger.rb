@@ -29,7 +29,7 @@ module Twiglet
       super(output, formatter: formatter, level: level)
     end
 
-    def error(message = {}, error = nil, &block)
+    def error(message = nil, error = nil, &block)
       if error
         error_fields = {
           'error': {
@@ -37,7 +37,7 @@ module Twiglet
           }
         }
         add_stack_trace(error_fields, error)
-        message.is_a?(Hash) ? message.merge!(error_fields) : error_fields.merge!(message: message)
+        message = message.is_a?(Hash) ? message.merge(error_fields) : error_fields.merge(message: message)
       end
 
       super(message, &block)
