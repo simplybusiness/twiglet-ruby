@@ -5,6 +5,7 @@ require 'time'
 require 'json'
 require_relative 'formatter'
 require_relative '../hash_extensions'
+require_relative 'message'
 
 module Twiglet
   class Logger < ::Logger
@@ -37,7 +38,7 @@ module Twiglet
           }
         }
         add_stack_trace(error_fields, error)
-        message = message.is_a?(Hash) ? message.merge(error_fields) : error_fields.merge(message: message)
+        message = Message.format(message).merge(error_fields)
       end
 
       super(message, &block)
