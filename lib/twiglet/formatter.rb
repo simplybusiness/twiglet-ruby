@@ -1,5 +1,6 @@
 require 'logger'
 require_relative '../hash_extensions'
+require_relative 'message'
 
 module Twiglet
   class Formatter < ::Logger::Formatter
@@ -17,38 +18,12 @@ module Twiglet
 
     def call(severity, _time, _progname, msg)
       level = severity.downcase
-      log(level: level, message: msg)
+      log(level: level, message: Message.format(msg))
     end
 
     private
 
     def log(level:, message:)
-      case message
-      when String
-        log_text(level, message: message)
-      when Hash
-        log_object(level, message: message)
-      else
-        raise('Message must be String or Hash')
-      end
-    end
-
-    def log_text(level, message:)
-      raise('The \'message\' property of log object must not be empty') if message.strip.empty?
-
-      message = { message: message }
-      log_message(level, message: message)
-    end
-
-    def log_object(level, message:)
-      message = message.transform_keys(&:to_sym)
-      message.key?(:message) || raise('Log object must have a \'message\' property')
-      message[:message].strip.empty? && raise('The \'message\' property of log object must not be empty')
-
-      log_message(level, message: message)
-    end
-
-    def log_message(level, message:)
       base_message = {
         ecs: {
           version: '1.5.0'
