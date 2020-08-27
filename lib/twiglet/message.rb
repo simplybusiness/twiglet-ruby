@@ -16,8 +16,9 @@ module Twiglet
     def validate!
       raise 'Message must be initialized with a String or a non-empty Hash' if empty?
 
-      message = fetch(:message) { raise('Log object must have a \'message\' property') }
-      raise('The \'message\' property of the log object must not be empty') if message.strip.empty?
+      raise 'Log object must have a \'message\' property' unless self[:message]
+
+      raise 'The \'message\' property of the log object must not be empty' if self[:message].strip.empty?
     end
   end
 end
