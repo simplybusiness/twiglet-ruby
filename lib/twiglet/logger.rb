@@ -38,7 +38,7 @@ module Twiglet
           }
         }
         add_stack_trace(error_fields, error)
-        message = Message.format(message).merge(error_fields)
+        message = Message.new(message).merge(error_fields)
       end
 
       super(message, &block)

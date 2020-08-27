@@ -18,7 +18,7 @@ module Twiglet
 
     def call(severity, _time, _progname, msg)
       level = severity.downcase
-      log(level: level, message: Message.format(msg))
+      log(level: level, message: Message.new(msg))
     end
 
     private
