@@ -149,39 +149,6 @@ describe Twiglet::Logger do
       assert_equal expected_output, @buffer.string
     end
 
-    it 'should be able to convert dotted keys to nested objects' do
-      @logger.debug({
-                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-                      message: 'customer bought a dog',
-                      "pet.name": 'Barker',
-                      "pet.species": 'dog',
-                      "pet.breed": 'Bitsa'
-                    })
-      log = read_json(@buffer)
-
-      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
-      assert_equal 'customer bought a dog', log[:message]
-      assert_equal 'Barker', log[:pet][:name]
-      assert_equal 'dog', log[:pet][:species]
-      assert_equal 'Bitsa', log[:pet][:breed]
-    end
-
-    it 'should be able to mix dotted keys and nested objects' do
-      @logger.debug({
-                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-                      message: 'customer bought a dog',
-                      pet: {name: 'Barker', breed: 'Bitsa'},
-                      "pet.species": 'dog'
-                    })
-      log = read_json(@buffer)
-
-      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
-      assert_equal 'customer bought a dog', log[:message]
-      assert_equal 'Barker', log[:pet][:name]
-      assert_equal 'dog', log[:pet][:species]
-      assert_equal 'Bitsa', log[:pet][:breed]
-    end
-
     it 'should work with mixed string and symbol properties' do
       log = {
         "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'
@@ -205,6 +172,18 @@ describe Twiglet::Logger do
       assert_equal 'Bitsa', actual_log[:pet][:breed]
     end
 
+    LEVELS.each do |attrs|
+      it "should correctly log level when calling #{attrs[:method]}" do
+        @logger.public_send(attrs[:method], {message: 'a log message'})
+        actual_log = read_json(@buffer)
+
+        assert_equal attrs[:level], actual_log[:log][:level]
+        assert_equal 'a log message', actual_log[:message]
+      end
+    end
+  end
+
+  describe 'logging an exception' do
     it 'should log an error with backtrace' do
       begin
         1 / 0
@@ -216,6 +195,7 @@ describe Twiglet::Logger do
 
       assert_equal 'Artificially raised exception', actual_log[:message]
       assert_equal 'divided by 0', actual_log[:error][:message]
+      assert_equal 'ZeroDivisionError', actual_log[:error][:type]
       assert_match 'logger_test.rb', actual_log[:error][:stack_trace].lines.first
     end
 
@@ -226,6 +206,7 @@ describe Twiglet::Logger do
       actual_log = read_json(@buffer)
 
       assert_equal 'Artificially raised exception', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
       assert_equal 'Connection timed-out', actual_log[:error][:message]
       refute actual_log[:error].key?(:stack_trace)
     end
@@ -237,17 +218,8 @@ describe Twiglet::Logger do
       actual_log = read_json(@buffer)
 
       assert_equal 'Artificially raised exception with string message', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
       assert_equal 'Unknown error', actual_log[:error][:message]
-    end
-
-    LEVELS.each do |attrs|
-      it "should correctly log level when calling #{attrs[:method]}" do
-        @logger.public_send(attrs[:method], {message: 'a log message'})
-        actual_log = read_json(@buffer)
-
-        assert_equal attrs[:level], actual_log[:log][:level]
-        assert_equal 'a log message', actual_log[:message]
-      end
     end
   end
 
@@ -307,6 +279,41 @@ describe Twiglet::Logger do
         assert_equal attrs[:level], actual_log[:log][:level]
         assert_equal 'a block log message', actual_log[:message]
       end
+    end
+  end
+
+  describe 'dotted keys' do
+    it 'should be able to convert dotted keys to nested objects' do
+      @logger.debug({
+                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+                      message: 'customer bought a dog',
+                      "pet.name": 'Barker',
+                      "pet.species": 'dog',
+                      "pet.breed": 'Bitsa'
+                    })
+      log = read_json(@buffer)
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'dog', log[:pet][:species]
+      assert_equal 'Bitsa', log[:pet][:breed]
+    end
+
+    it 'should be able to mix dotted keys and nested objects' do
+      @logger.debug({
+                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+                      message: 'customer bought a dog',
+                      pet: {name: 'Barker', breed: 'Bitsa'},
+                      "pet.species": 'dog'
+                    })
+      log = read_json(@buffer)
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'dog', log[:pet][:species]
+      assert_equal 'Bitsa', log[:pet][:breed]
     end
   end
 
