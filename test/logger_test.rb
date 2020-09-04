@@ -36,7 +36,6 @@ describe Twiglet::Logger do
     end
   end
 
-
   describe 'JSON logging' do
     it 'should throw an error with an empty message' do
       assert_raises RuntimeError do
@@ -184,7 +183,6 @@ describe Twiglet::Logger do
     end
   end
 
-
   describe 'logging an exception' do
     it 'should log an error with backtrace' do
       begin
@@ -224,7 +222,6 @@ describe Twiglet::Logger do
       assert_equal 'Unknown error', actual_log[:error][:message]
     end
   end
-
 
   describe 'text logging' do
     it 'should throw an error with an empty message' do
@@ -272,7 +269,6 @@ describe Twiglet::Logger do
     end
   end
 
-
   describe 'logging with a block' do
     LEVELS.each do |attrs|
       it "should correctly log the block when calling #{attrs[:method]}" do
@@ -285,7 +281,6 @@ describe Twiglet::Logger do
       end
     end
   end
-
 
   describe 'dotted keys' do
     it 'should be able to convert dotted keys to nested objects' do
@@ -321,7 +316,6 @@ describe Twiglet::Logger do
       assert_equal 'Bitsa', log[:pet][:breed]
     end
   end
-
 
   describe 'logger level' do
     [
