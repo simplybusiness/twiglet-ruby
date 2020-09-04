@@ -34,6 +34,7 @@ module Twiglet
       if error
         error_fields = {
           'error': {
+            'type': error.class,
             'message': error.message
           }
         }
