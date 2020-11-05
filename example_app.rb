@@ -2,7 +2,7 @@
 
 require_relative 'lib/twiglet/logger'
 
-PORT = 8081
+PORT = 8080
 
 logger = Twiglet::Logger.new('petshop')
 
