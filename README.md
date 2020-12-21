@@ -131,6 +131,18 @@ which will print:
 {"service":{"name":"service name"},"@timestamp":"2020-05-14T10:58:30.780+01:00","log":{"level":"error"},"event":{"action":"HTTP request"},"trace":{"id":"126bb6fa-28a2-470f-b013-eefbf9182b2d"},"message":"Error 500 in /pets/buy","http":{"request":{"method":"post","url.path":"/pet/buy"},"response":{"status_code":500}}}
 ```
 
+### Log formatting
+Some third party applications will allow you to optionally specify a [log formatter](https://ruby-doc.org/stdlib-2.4.0/libdoc/logger/rdoc/Logger/Formatter.html).
+Supplying a Twiglet log formatter will ensure that those third party logs are ECS compliant.
+
+```ruby
+logger = Twiglet::Logger.new('service name')
+
+ThirdPartyGem.configure do |config|
+  config.log_formatter = logger.formatter
+end
+```
+
 ## Use of dotted keys (DEPRECATED)
 
 Writing nested json objects could be confusing. This library has a built-in feature to convert dotted keys into nested objects, so if you log like this:
