@@ -133,14 +133,11 @@ which will print:
 
 ### Log formatting
 Some third party applications will allow you to optionally specify a [log formatter](https://ruby-doc.org/stdlib-2.4.0/libdoc/logger/rdoc/Logger/Formatter.html).
-Supplying a Twiglet log formatter will ensure that those third party logs are ECS compliant.
+Supplying a Twiglet log formatter will format those third party logs so that they are ECS compliant and have the same default parameters as your application's internal logs.
 
+To access the formatter:
 ```ruby
-logger = Twiglet::Logger.new('service name')
-
-ThirdPartyGem.configure do |config|
-  config.log_formatter = logger.formatter
-end
+logger.formatter
 ```
 
 ## Use of dotted keys (DEPRECATED)
