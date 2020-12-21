@@ -3,6 +3,16 @@
 require 'minitest/autorun'
 require_relative '../lib/twiglet/logger'
 
+LEVELS = [
+  { method: :debug, level: 'debug' },
+  { method: :info, level: 'info' },
+  { method: :warning, level: 'warn' },
+  { method: :warn, level: 'warn' },
+  { method: :critical, level: 'fatal' },
+  { method: :fatal, level: 'fatal' },
+  { method: :error, level: 'error' }
+].freeze
+
 # rubocop:disable Metrics/BlockLength
 describe Twiglet::Logger do
   before do
@@ -12,16 +22,6 @@ describe Twiglet::Logger do
                                   now: @now,
                                   output: @buffer)
   end
-
-  LEVELS = [
-    { method: :debug, level: 'debug' },
-    { method: :info, level: 'info' },
-    { method: :warning, level: 'warn' },
-    { method: :warn, level: 'warn' },
-    { method: :critical, level: 'fatal' },
-    { method: :fatal, level: 'fatal' },
-    { method: :error, level: 'error' }
-  ].freeze
 
   it 'should throw an error with an empty service name' do
     assert_raises RuntimeError do
@@ -105,16 +105,16 @@ describe Twiglet::Logger do
     it "should be able to add properties with '.with'" do
       # Let's add some context to this customer journey
       purchase_logger = @logger.with({
-                                       trace: {id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'},
-                                       customer: {full_name: 'Freda Bloggs'},
-                                       event: {action: 'pet purchase'}
-                                     })
+        trace: {id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'},
+        customer: {full_name: 'Freda Bloggs'},
+        event: {action: 'pet purchase'}
+      })
 
       # do stuff
       purchase_logger.info({
-                             message: 'customer bought a dog',
-                             pet: {name: 'Barker', species: 'dog', breed: 'Bitsa'}
-                           })
+        message: 'customer bought a dog',
+        pet: {name: 'Barker', species: 'dog', breed: 'Bitsa'}
+      })
 
       log = read_json @buffer
 
@@ -285,12 +285,12 @@ describe Twiglet::Logger do
   describe 'dotted keys' do
     it 'should be able to convert dotted keys to nested objects' do
       @logger.debug({
-                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-                      message: 'customer bought a dog',
-                      "pet.name": 'Barker',
-                      "pet.species": 'dog',
-                      "pet.breed": 'Bitsa'
-                    })
+        "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+        message: 'customer bought a dog',
+        "pet.name": 'Barker',
+        "pet.species": 'dog',
+        "pet.breed": 'Bitsa'
+      })
       log = read_json(@buffer)
 
       assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
@@ -302,11 +302,11 @@ describe Twiglet::Logger do
 
     it 'should be able to mix dotted keys and nested objects' do
       @logger.debug({
-                      "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-                      message: 'customer bought a dog',
-                      pet: {name: 'Barker', breed: 'Bitsa'},
-                      "pet.species": 'dog'
-                    })
+        "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+        message: 'customer bought a dog',
+        pet: {name: 'Barker', breed: 'Bitsa'},
+        "pet.species": 'dog'
+      })
       log = read_json(@buffer)
 
       assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
