@@ -11,13 +11,13 @@ gem install twiglet
 
 ## How to use
 
-Create a new logger like so:
+### Instantiate the logger
 
 ```ruby
 require 'twiglet/logger'
 logger = Twiglet::Logger.new('service name')
 ```
-
+#### Optional initialization parameters
 A hash can optionally be passed in as a keyword argument for `default_properties`. This hash must be in the Elastic Common Schema format and will be present in every log message created by this Twiglet logger object.
 
 You may also provide an optional `output` keyword argument which should be an object with a `puts` method - like `$stdout`.
@@ -28,7 +28,7 @@ Lastly, you may provide the optional keyword argument `level` to initialize the 
 
 The defaults for both `output` and `now` should serve for most uses, though you may want to override them for testing as we have done [here](test/logger_test.rb).
 
-To use, simply invoke like most other loggers:
+### Invoke the Logger
 
 ```ruby
 logger.error({ event: { action: 'startup' }, message: "Emergency! There's an Emergency going on" })
@@ -56,6 +56,7 @@ This will write to STDOUT a JSON string:
 
 A message is always required unless a block is provided. The message can be an object or a string.
 
+#### Error logging
 An optional error can also be provided, in which case the error message and backtrace will be logged in the relevant ECS compliant fields:
 
 ```ruby
@@ -72,7 +73,8 @@ These will both result in the same JSON string written to STDOUT:
 {"ecs":{"version":"1.5.0"},"@timestamp":"2020-08-21T15:44:37.890Z","service":{"name":"service name"},"log":{"level":"error"},"message":"DB connection failed.","error":{"message":"Connection timed-out"}}
 ```
 
-Add log event specific information simply as attributes in a hash:
+#### Custom fields
+Log custom event-specific information simply as attributes in a hash:
 
 ```ruby
 logger.info({
@@ -127,6 +129,15 @@ which will print:
 
 ```json
 {"service":{"name":"service name"},"@timestamp":"2020-05-14T10:58:30.780+01:00","log":{"level":"error"},"event":{"action":"HTTP request"},"trace":{"id":"126bb6fa-28a2-470f-b013-eefbf9182b2d"},"message":"Error 500 in /pets/buy","http":{"request":{"method":"post","url.path":"/pet/buy"},"response":{"status_code":500}}}
+```
+
+### Log formatting
+Some third party applications will allow you to optionally specify a [log formatter](https://ruby-doc.org/stdlib-2.4.0/libdoc/logger/rdoc/Logger/Formatter.html).
+Supplying a Twiglet log formatter will format those third party logs so that they are ECS compliant and have the same default parameters as your application's internal logs.
+
+To access the formatter:
+```ruby
+logger.formatter
 ```
 
 ## Use of dotted keys (DEPRECATED)
