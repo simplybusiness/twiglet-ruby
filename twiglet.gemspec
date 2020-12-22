@@ -18,7 +18,7 @@ Gem::Specification.new do |gem|
   gem.test_files            = `git ls-files -- {test}/*`.split("\n")
 
   gem.require_paths         = ['lib']
-  gem.required_ruby_version = '>= 2.5'
+  gem.required_ruby_version = '>= 2.6'
 
   gem.license               = 'Copyright SimplyBusiness'
 end

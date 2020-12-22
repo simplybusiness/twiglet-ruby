@@ -22,8 +22,8 @@ module HashExtensions
 
   def build_nested_object(key, val)
     key.to_s
-      .split('.')
-      .reverse
-      .reduce(val) { |nested, key_part| Hash[key_part.to_sym, nested] }
+       .split('.')
+       .reverse
+       .reduce(val) { |nested, key_part| Hash[key_part.to_sym, nested] }
   end
 end
