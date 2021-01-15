@@ -1,4 +1,5 @@
 require 'minitest/autorun'
+require_relative '../../lib/twiglet/logger'
 require_relative './request_logger'
 require 'rack'
 
@@ -14,23 +15,43 @@ describe RequestLogger do
   end
 
   it 'logs the request data' do
-    request.get("/some/path?some_var=1")
+    request.get("/some/path?some_var=1", 'HTTP_ACCEPT' => 'application/json',
+                                         'REMOTE_ADDR' => '0.0.0.0',
+                                         'HTTP_VERSION' => 'HTTP/1.1',
+                                         'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh)')
     log = JSON.parse(output.string)
-    http_body = {
-      "request" => {
-        "https_enabled" => "off",
-        "method" => "GET",
+
+    expected_log = {
+      "log" => { "level" => "info" },
+      "http" => {
+        "request" => {
+          "method" => "GET",
+          "mime_type" => 'application/json'
+        },
+        "response" => {
+          "status" => 200
+        },
+        "version" => 'HTTP/1.1'
+      },
+      "url" => {
         "path" => "/some/path",
         "query" => "some_var=1",
-        "server" => "example.org"
+        "domain" => "example.org"
       },
-      "response" => {
-        "status" => 200,
-        "body" => { "bytes" => "0" }
-      }
+      "client" => {
+        'ip' => '0.0.0.0'
+      },
+      "user_agent" => {
+        "original" => 'Mozilla/5.0 (Macintosh)'
+      },
+      "message" => "GET: /some/path"
     }
-    assert_equal http_body, log["http"]
-    assert_equal "GET: /some/path", log["message"]
+
+    assert_equal(log['log'], expected_log['log'])
+    assert_equal(log['http'], expected_log['http'])
+    assert_equal(log['url'], expected_log['url'])
+    assert_equal(log['user_agent'], expected_log['user_agent'])
+    assert_equal(log['message'], expected_log['message'])
   end
 
   it 'does not log PII' do
@@ -42,10 +63,12 @@ describe RequestLogger do
   end
 
   it 'logs an error message when a request is bad' do
-    bad_request.get("/some/path")
+    -> { bad_request.get("/some/path") }.must_raise StandardError
     log = JSON.parse(output.string)
-    assert_equal 'error', log['log']['level']
-    assert_equal 'some exception', log['error']['message']
+    assert_equal log['log']['level'], 'error'
+    assert_equal log['error']['message'], 'some exception'
+    assert_equal log['error']['type'], 'StandardError'
+    assert_includes log['error']['stack_trace'], 'request_logger_test.rb'
   end
 end
 
