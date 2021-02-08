@@ -18,8 +18,6 @@ module Twiglet
       output: $stdout,
       level: Logger::DEBUG
     )
-      @service_name = service_name
-      @now = now
       @output = output
       @level = level
 
@@ -46,9 +44,9 @@ module Twiglet
     end
 
     def with(default_properties)
-      Logger.new(@service_name,
+      Logger.new(formatter.service_name,
                  default_properties: default_properties,
-                 now: @now,
+                 now: formatter.now,
                  output: @output,
                  level: @level)
     end

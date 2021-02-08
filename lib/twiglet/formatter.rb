@@ -5,6 +5,7 @@ require_relative 'message'
 module Twiglet
   class Formatter < ::Logger::Formatter
     Hash.include HashExtensions
+    attr_reader :now, :service_name
 
     def initialize(service_name,
                    **args)
