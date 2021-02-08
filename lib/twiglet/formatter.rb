@@ -7,11 +7,10 @@ module Twiglet
     Hash.include HashExtensions
 
     def initialize(service_name,
-                   default_properties: {},
-                   now: -> { Time.now.utc })
+                   **args)
       @service_name = service_name
-      @now = now
-      @default_properties = default_properties
+      @now = args[:now]
+      @default_properties = args[:default_properties]
 
       super()
     end

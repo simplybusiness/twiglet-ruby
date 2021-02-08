@@ -7,7 +7,7 @@ require_relative '../lib/twiglet/formatter'
 describe Twiglet::Formatter do
   before do
     @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
-    @formatter = Twiglet::Formatter.new('petshop', now: @now)
+    @formatter = Twiglet::Formatter.new('petshop', now: @now, default_properties: {})
   end
 
   it 'initializes an instance of a Ruby Logger Formatter' do
