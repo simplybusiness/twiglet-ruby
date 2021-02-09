@@ -47,6 +47,12 @@ describe Twiglet::Logger do
       end
     end
 
+    it 'should throw an error if message is missing' do
+      assert_raises RuntimeError do
+        @logger.info({ foo: 'bar' })
+      end
+    end
+
     it 'should log mandatory attributes' do
       @logger.error({ message: 'Out of pets exception' })
       actual_log = read_json(@buffer)
