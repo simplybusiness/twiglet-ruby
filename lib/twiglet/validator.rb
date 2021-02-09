@@ -13,10 +13,10 @@ module Twiglet
       new(JSON.parse(File.read(file_path)))
     end
 
-    def validate(message, &block)
+    def validate(message)
       return unless block_given?
 
-      yield unless JSON::Validator.validate(@schema, message)
+      yield message unless JSON::Validator.validate(@schema, message)
     end
   end
 end

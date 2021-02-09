@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
+require 'minitest/mock'
 require_relative '../lib/twiglet/logger'
 
 LEVELS = [
@@ -355,6 +356,25 @@ describe Twiglet::Logger do
 
     it 'initializes the logger with the provided level' do
       assert_equal Logger::WARN, Twiglet::Logger.new('petshop', level: :warn).level
+    end
+  end
+
+  describe 'configuring error response' do
+    it 'blows up by default' do
+      assert_raises RuntimeError do
+        @logger.debug(message: true)
+      end
+    end
+
+    it 'silently swallows errors when configured to do so' do
+      apm = Minitest::Mock.new
+      apm.expect(:notify_error, nil, ["Logging schema validation error for {:message=>true}"])
+
+      @logger.configure_validation_error_response do |msg|
+        apm.notify_error("Logging schema validation error for #{msg}")
+      end
+
+      @logger.debug({ message: true })
     end
   end
 

@@ -22,7 +22,7 @@ describe Twiglet::Validator do
 
   it 'is a no-op when validation passes' do
     assert_nil(
-      @validator.validate({ message: 'this is my message' }) do
+      @validator.validate({ message: 'this is my message', foo: 'bar' }) do
         raise 'I will throw this error if validation fails'
       end
     )

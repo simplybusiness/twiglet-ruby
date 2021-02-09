@@ -5,6 +5,8 @@ require_relative 'validator'
 
 module Twiglet
   class Formatter < ::Logger::Formatter
+    attr_accessor :validation_error_response
+
     Hash.include HashExtensions
 
     def initialize(service_name,
@@ -13,6 +15,7 @@ module Twiglet
       @service_name = service_name
       @now = now
       @default_properties = default_properties
+      @validation_error_response = ->(msg) { raise "Schema validation error for #{msg}" }
 
       @validator = Validator.from_file('lib/twiglet/validation_schema.json')
 
@@ -23,7 +26,7 @@ module Twiglet
       level = severity.downcase
       message = Message.new(msg)
       @validator.validate(message) do
-        raise 'Schema validation error'
+        @validation_error_response.call(message)
       end
       log(level: level, message: message)
     end
