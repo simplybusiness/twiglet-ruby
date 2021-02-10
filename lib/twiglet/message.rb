@@ -6,6 +6,8 @@ module Twiglet
         self[:message] = msg
       when Hash
         replace(msg.transform_keys!(&:to_sym))
+      else
+        super(msg)
       end
 
       validate!
