@@ -33,9 +33,9 @@ module Twiglet
     def error(message = nil, error = nil, &block)
       if error
         error_fields = {
-          'error': {
-            'type': error.class,
-            'message': error.message
+          error: {
+            type: error.class,
+            message: error.message
           }
         }
         add_stack_trace(error_fields, error)
@@ -46,11 +46,13 @@ module Twiglet
     end
 
     def with(default_properties)
-      Logger.new(@service_name,
-                 default_properties: default_properties,
-                 now: @now,
-                 output: @output,
-                 level: @level)
+      Logger.new(
+        @service_name,
+        default_properties: default_properties,
+        now: @now,
+        output: @output,
+        level: @level
+      )
     end
 
     alias_method :warning, :warn
