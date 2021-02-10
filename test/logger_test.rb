@@ -375,7 +375,8 @@ describe Twiglet::Logger do
       end
 
       mock.expect(:notify_error, nil, ["Logging schema validation error"])
-      @logger.debug({ message: true })
+      nonconformant_log = { message: true }
+      @logger.debug(nonconformant_log)
     end
   end
 

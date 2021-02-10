@@ -5,8 +5,6 @@ require_relative 'validator'
 
 module Twiglet
   class Formatter < ::Logger::Formatter
-    attr_accessor :validation_error_response
-
     Hash.include HashExtensions
 
     def initialize(service_name,
