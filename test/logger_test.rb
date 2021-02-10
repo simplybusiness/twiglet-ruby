@@ -368,13 +368,13 @@ describe Twiglet::Logger do
     end
 
     it 'silently swallows errors when configured to do so' do
-      apm = Minitest::Mock.new
-      apm.expect(:notify_error, nil, ["Logging schema validation error"])
+      mock = Minitest::Mock.new
 
       @logger.configure_validation_error_response do |_e|
-        apm.notify_error("Logging schema validation error")
+        mock.notify_error("Logging schema validation error")
       end
 
+      mock.expect(:notify_error, nil, ["Logging schema validation error"])
       @logger.debug({ message: true })
     end
   end
