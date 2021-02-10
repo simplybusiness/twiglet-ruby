@@ -43,13 +43,13 @@ describe Twiglet::Logger do
 
   describe 'JSON logging' do
     it 'should throw an error with an empty message' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
         @logger.info({ message: '' })
       end
     end
 
     it 'should throw an error if message is missing' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
         @logger.info({ foo: 'bar' })
       end
     end
@@ -246,7 +246,7 @@ describe Twiglet::Logger do
 
   describe 'text logging' do
     it 'should throw an error with an empty message' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
         @logger.info('')
       end
     end
@@ -361,17 +361,17 @@ describe Twiglet::Logger do
 
   describe 'configuring error response' do
     it 'blows up by default' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' of type boolean did not match the following type: string" do
         @logger.debug(message: true)
       end
     end
 
     it 'silently swallows errors when configured to do so' do
       apm = Minitest::Mock.new
-      apm.expect(:notify_error, nil, ["Logging schema validation error for {:message=>true}"])
+      apm.expect(:notify_error, nil, ["Logging schema validation error"])
 
-      @logger.configure_validation_error_response do |msg|
-        apm.notify_error("Logging schema validation error for #{msg}")
+      @logger.configure_validation_error_response do |e|
+        apm.notify_error("Logging schema validation error")
       end
 
       @logger.debug({ message: true })

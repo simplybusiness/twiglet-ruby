@@ -11,13 +11,12 @@ module Twiglet
 
     def initialize(service_name,
                    default_properties: {},
-                   now: -> { Time.now.utc })
+                   now: -> { Time.now.utc },
+                   validator:)
       @service_name = service_name
       @now = now
       @default_properties = default_properties
-      @validation_error_response = ->(msg) { raise "Schema validation error for #{msg}" }
-
-      @validator = Validator.from_file('lib/twiglet/validation_schema.json')
+      @validator = validator
 
       super()
     end
@@ -25,9 +24,7 @@ module Twiglet
     def call(severity, _time, _progname, msg)
       level = severity.downcase
       message = Message.new(msg)
-      @validator.validate(message) do
-        @validation_error_response.call(message)
-      end
+      @validator.validate(message)
       log(level: level, message: message)
     end
 
