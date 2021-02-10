@@ -10,9 +10,8 @@ module Twiglet
     Hash.include HashExtensions
 
     def initialize(service_name,
-                   default_properties: {},
-                   now: -> { Time.now.utc },
-                   validator:)
+                   validator:, default_properties: {},
+                   now: -> { Time.now.utc })
       @service_name = service_name
       @now = now
       @default_properties = default_properties

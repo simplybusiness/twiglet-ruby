@@ -361,7 +361,8 @@ describe Twiglet::Logger do
 
   describe 'configuring error response' do
     it 'blows up by default' do
-      assert_raises JSON::Schema::ValidationError, "The property '#/message' of type boolean did not match the following type: string" do
+      assert_raises JSON::Schema::ValidationError,
+                    "The property '#/message' of type boolean did not match the following type: string" do
         @logger.debug(message: true)
       end
     end
@@ -370,7 +371,7 @@ describe Twiglet::Logger do
       apm = Minitest::Mock.new
       apm.expect(:notify_error, nil, ["Logging schema validation error"])
 
-      @logger.configure_validation_error_response do |e|
+      @logger.configure_validation_error_response do |_e|
         apm.notify_error("Logging schema validation error")
       end
 

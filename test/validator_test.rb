@@ -8,7 +8,7 @@ describe Twiglet::Validator do
 
   before do
     schema = {
-      "type"=>"object",
+      "type" => "object",
       "required" => ["message"],
       "properties" => {
         "message" => {

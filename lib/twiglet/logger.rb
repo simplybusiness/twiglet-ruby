@@ -28,10 +28,12 @@ module Twiglet
 
       @validator = Validator.from_file('lib/twiglet/validation_schema.json')
 
-      @formatter = Twiglet::Formatter.new(service_name,
-                                          default_properties: default_properties,
-                                          now: now,
-                                          validator: @validator)
+      @formatter = Twiglet::Formatter.new(
+        service_name,
+        default_properties: default_properties,
+        now: now,
+        validator: @validator
+      )
       super(output, formatter: @formatter, level: level)
     end
 
