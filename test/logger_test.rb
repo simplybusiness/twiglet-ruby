@@ -18,9 +18,11 @@ describe Twiglet::Logger do
   before do
     @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
     @buffer = StringIO.new
-    @logger = Twiglet::Logger.new('petshop',
-                                  now: @now,
-                                  output: @buffer)
+    @logger = Twiglet::Logger.new(
+      'petshop',
+      now: @now,
+      output: @buffer
+    )
   end
 
   it 'should throw an error with an empty service name' do
@@ -30,8 +32,10 @@ describe Twiglet::Logger do
   end
 
   it 'conforms to the standard Ruby Logger API' do
-    [:debug, :debug?, :info, :info?, :warn, :warn?, :fatal, :fatal?, :error, :error?,
-     :level, :level=, :sev_threshold=].each do |call|
+    [
+      :debug, :debug?, :info, :info?, :warn, :warn?, :fatal, :fatal?, :error, :error?,
+      :level, :level=, :sev_threshold=
+    ].each do |call|
       assert @logger.respond_to?(call), "Logger does not respond to #{call}"
     end
   end
@@ -39,12 +43,12 @@ describe Twiglet::Logger do
   describe 'JSON logging' do
     it 'should throw an error with an empty message' do
       assert_raises RuntimeError do
-        @logger.info({message: ''})
+        @logger.info({ message: '' })
       end
     end
 
     it 'should log mandatory attributes' do
-      @logger.error({message: 'Out of pets exception'})
+      @logger.error({ message: 'Out of pets exception' })
       actual_log = read_json(@buffer)
 
       expected_log = {
@@ -65,9 +69,13 @@ describe Twiglet::Logger do
     end
 
     it 'should log the provided message' do
-      @logger.error({event:
-                       {action: 'exception'},
-                     message: 'Emergency! Emergency!'})
+      @logger.error(
+        {
+          event:
+                                 { action: 'exception' },
+          message: 'Emergency! Emergency!'
+        }
+      )
       log = read_json(@buffer)
 
       assert_equal 'exception', log[:event][:action]
@@ -82,17 +90,19 @@ describe Twiglet::Logger do
         service: {
           type: 'shop'
         },
-        request: {method: 'get'},
-        response: {status_code: 200}
+        request: { method: 'get' },
+        response: { status_code: 200 }
       }
 
       output = StringIO.new
-      logger = Twiglet::Logger.new('petshop',
-                                   now: @now,
-                                   output: output,
-                                   default_properties: extra_properties)
+      logger = Twiglet::Logger.new(
+        'petshop',
+        now: @now,
+        output: output,
+        default_properties: extra_properties
+      )
 
-      logger.error({message: 'GET /cats'})
+      logger.error({ message: 'GET /cats' })
       log = read_json output
 
       assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
@@ -104,17 +114,21 @@ describe Twiglet::Logger do
 
     it "should be able to add properties with '.with'" do
       # Let's add some context to this customer journey
-      purchase_logger = @logger.with({
-        trace: {id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'},
-        customer: {full_name: 'Freda Bloggs'},
-        event: {action: 'pet purchase'}
-      })
+      purchase_logger = @logger.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      )
 
       # do stuff
-      purchase_logger.info({
-        message: 'customer bought a dog',
-        pet: {name: 'Barker', species: 'dog', breed: 'Bitsa'}
-      })
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
 
       log = read_json @buffer
 
@@ -135,8 +149,8 @@ describe Twiglet::Logger do
     end
 
     it "should log multiple messages properly" do
-      @logger.debug({message: 'hi'})
-      @logger.info({message: 'there'})
+      @logger.debug({ message: 'hi' })
+      @logger.info({ message: 'there' })
 
       expected_output =
         '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",'\
@@ -174,7 +188,7 @@ describe Twiglet::Logger do
 
     LEVELS.each do |attrs|
       it "should correctly log level when calling #{attrs[:method]}" do
-        @logger.public_send(attrs[:method], {message: 'a log message'})
+        @logger.public_send(attrs[:method], { message: 'a log message' })
         actual_log = read_json(@buffer)
 
         assert_equal attrs[:level], actual_log[:log][:level]
@@ -188,7 +202,7 @@ describe Twiglet::Logger do
       begin
         1 / 0
       rescue StandardError => e
-        @logger.error({message: 'Artificially raised exception'}, e)
+        @logger.error({ message: 'Artificially raised exception' }, e)
       end
 
       actual_log = read_json(@buffer)
@@ -201,7 +215,7 @@ describe Twiglet::Logger do
 
     it 'should log an error without backtrace' do
       e = StandardError.new('Connection timed-out')
-      @logger.error({message: 'Artificially raised exception'}, e)
+      @logger.error({ message: 'Artificially raised exception' }, e)
 
       actual_log = read_json(@buffer)
 
@@ -284,13 +298,15 @@ describe Twiglet::Logger do
 
   describe 'dotted keys' do
     it 'should be able to convert dotted keys to nested objects' do
-      @logger.debug({
-        "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-        message: 'customer bought a dog',
-        "pet.name": 'Barker',
-        "pet.species": 'dog',
-        "pet.breed": 'Bitsa'
-      })
+      @logger.debug(
+        {
+          "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+          message: 'customer bought a dog',
+          "pet.name": 'Barker',
+          "pet.species": 'dog',
+          "pet.breed": 'Bitsa'
+        }
+      )
       log = read_json(@buffer)
 
       assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
@@ -301,12 +317,14 @@ describe Twiglet::Logger do
     end
 
     it 'should be able to mix dotted keys and nested objects' do
-      @logger.debug({
-        "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
-        message: 'customer bought a dog',
-        pet: {name: 'Barker', breed: 'Bitsa'},
-        "pet.species": 'dog'
-      })
+      @logger.debug(
+        {
+          "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', breed: 'Bitsa' },
+          "pet.species": 'dog'
+        }
+      )
       log = read_json(@buffer)
 
       assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]

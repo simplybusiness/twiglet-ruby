@@ -15,10 +15,12 @@ describe RequestLogger do
   end
 
   it 'logs the request data' do
-    request.get("/some/path?some_var=1", 'HTTP_ACCEPT' => 'application/json',
-                                         'REMOTE_ADDR' => '0.0.0.0',
-                                         'HTTP_VERSION' => 'HTTP/1.1',
-                                         'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh)')
+    request.get(
+      "/some/path?some_var=1", 'HTTP_ACCEPT' => 'application/json',
+                               'REMOTE_ADDR' => '0.0.0.0',
+                               'HTTP_VERSION' => 'HTTP/1.1',
+                               'HTTP_USER_AGENT' => 'Mozilla/5.0 (Macintosh)'
+    )
     log = JSON.parse(output.string)
 
     expected_log = {
@@ -55,7 +57,7 @@ describe RequestLogger do
   end
 
   it 'does not log PII' do
-    request.post("/user/info", input_data: {credit_card_no: '1234'})
+    request.post("/user/info", input_data: { credit_card_no: '1234' })
     log = output.string
     assert_includes log, "POST: /user/info"
     refute_includes log, 'credit_card_no'
