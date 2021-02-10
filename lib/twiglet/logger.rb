@@ -38,7 +38,7 @@ module Twiglet
     end
 
     def configure_validation_error_response(&block)
-      @validator.configure_validation_error(&block)
+      @validator.custom_error_handler = block
     end
 
     def error(message = nil, error = nil, &block)

@@ -5,6 +5,8 @@ require 'json'
 
 module Twiglet
   class Validator
+    attr_accessor :custom_error_handler
+
     def initialize(schema)
       @schema = schema
       @custom_error_handler = ->(e) { raise e }
@@ -14,14 +16,10 @@ module Twiglet
       new(JSON.parse(File.read(file_path)))
     end
 
-    def configure_validation_error(&block)
-      @custom_error_handler = block
-    end
-
     def validate(message)
       JSON::Validator.validate!(@schema, message)
     rescue JSON::Schema::ValidationError => e
-      @custom_error_handler.call(e)
+      custom_error_handler.call(e)
     end
   end
 end

@@ -31,7 +31,7 @@ describe Twiglet::Validator do
   end
 
   it 'is a no-op when validator is configured to swallow errors' do
-    @validator.configure_validation_error { |e| puts e }
+    @validator.custom_error_handler = ->(e) { puts e }
 
     assert_nil(@validator.validate({ message: true }))
   end
