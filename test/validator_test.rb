@@ -20,25 +20,19 @@ describe Twiglet::Validator do
     @validator = Twiglet::Validator.new(schema)
   end
 
-  it 'is a no-op when validation passes' do
-    assert_nil(
-      @validator.validate({ message: 'this is my message', foo: 'bar' }) do
-        raise 'I will throw this error if validation fails'
-      end
-    )
+  it 'does not raise when validation passes' do
+    assert_equal(@validator.validate({ message: 'this is my message', foo: 'bar' }), true)
   end
 
-  it 'executes the block provided when validation fails' do
-    assert_raises 'I will throw this error if validation fails' do
-      @validator.validate({ message: true }) do
-        raise 'I will throw this error if validation fails'
-      end
+  it 'raises when validation fails' do
+    assert_raises JSON::Schema::ValidationError do
+      @validator.validate({ message: true })
     end
   end
 
-  it 'is a no-op when validation fails but no block is provided' do
-    assert_nil(
-      @validator.validate({ message: true })
-    )
+  it 'is a no-op when validator is configured to swallow errors' do
+    @validator.configure_validation_error { |e| puts e }
+
+    assert_nil(@validator.validate({ message: true }))
   end
 end

@@ -7,16 +7,21 @@ module Twiglet
   class Validator
     def initialize(schema)
       @schema = schema
+      @custom_error_handler = ->(e) { raise e }
     end
 
     def self.from_file(file_path)
       new(JSON.parse(File.read(file_path)))
     end
 
-    def validate(message)
-      return unless block_given?
+    def configure_validation_error(&block)
+      @custom_error_handler = block
+    end
 
-      yield message unless JSON::Validator.validate(@schema, message)
+    def validate(message)
+      JSON::Validator.validate!(@schema, message)
+    rescue JSON::Schema::ValidationError => e
+      @custom_error_handler.call(e)
     end
   end
 end
