@@ -110,7 +110,7 @@ This writes:
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
 ```ruby
-request_log = logger.with({ event: { action: 'HTTP request'}, trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }})
+request_logger = logger.with({ event: { action: 'HTTP request'}, trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }})
 ```
 
 This can be used like any other Logger instance:
@@ -139,6 +139,10 @@ To access the formatter:
 ```ruby
 logger.formatter
 ```
+
+### HTTP Request Logging
+Take a look at this sample [Rack application](examples/rack/example_rack_app.rb#L15) with an ECS compliant
+[request logger](/examples/rack/request_logger.rb) as a template when configuring your own request logging middleware with Twiglet.
 
 ## Use of dotted keys (DEPRECATED)
 
