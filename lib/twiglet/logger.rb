@@ -26,8 +26,19 @@ module Twiglet
       raise 'Service name is mandatory' \
         unless service_name.is_a?(String) && !service_name.strip.empty?
 
-      formatter = Twiglet::Formatter.new(service_name, default_properties: default_properties, now: now)
-      super(output, formatter: formatter, level: level)
+      @validator = Validator.from_file('lib/twiglet/validation_schema.json')
+
+      @formatter = Twiglet::Formatter.new(
+        service_name,
+        default_properties: default_properties,
+        now: now,
+        validator: @validator
+      )
+      super(output, formatter: @formatter, level: level)
+    end
+
+    def configure_validation_error_response(&block)
+      @validator.custom_error_handler = block
     end
 
     def error(message = nil, error = nil, &block)

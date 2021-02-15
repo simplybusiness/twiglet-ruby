@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 source 'https://rubygems.org'
+
+gem 'json-schema'
+
 group :development, :test do
   gem 'minitest'
   gem 'rake'

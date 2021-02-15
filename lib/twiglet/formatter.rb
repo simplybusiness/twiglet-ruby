@@ -1,24 +1,28 @@
 require 'logger'
 require_relative '../hash_extensions'
 require_relative 'message'
+require_relative 'validator'
 
 module Twiglet
   class Formatter < ::Logger::Formatter
     Hash.include HashExtensions
 
     def initialize(service_name,
-                   default_properties: {},
+                   validator:, default_properties: {},
                    now: -> { Time.now.utc })
       @service_name = service_name
       @now = now
       @default_properties = default_properties
+      @validator = validator
 
       super()
     end
 
     def call(severity, _time, _progname, msg)
       level = severity.downcase
-      log(level: level, message: Message.new(msg))
+      message = Message.new(msg)
+      @validator.validate(message)
+      log(level: level, message: message)
     end
 
     private

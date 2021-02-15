@@ -3,11 +3,12 @@
 require 'minitest/autorun'
 require 'json'
 require_relative '../lib/twiglet/formatter'
+require_relative '../lib/twiglet/validator'
 
 describe Twiglet::Formatter do
   before do
     @now = -> { Time.utc(2020, 5, 11, 15, 1, 1) }
-    @formatter = Twiglet::Formatter.new('petshop', now: @now)
+    @formatter = Twiglet::Formatter.new('petshop', now: @now, validator: Twiglet::Validator.new({}))
   end
 
   it 'initializes an instance of a Ruby Logger Formatter' do

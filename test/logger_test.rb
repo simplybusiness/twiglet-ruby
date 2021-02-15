@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
+require 'minitest/mock'
 require_relative '../lib/twiglet/logger'
 
 LEVELS = [
@@ -42,8 +43,14 @@ describe Twiglet::Logger do
 
   describe 'JSON logging' do
     it 'should throw an error with an empty message' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
         @logger.info({ message: '' })
+      end
+    end
+
+    it 'should throw an error if message is missing' do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
+        @logger.info({ foo: 'bar' })
       end
     end
 
@@ -239,7 +246,7 @@ describe Twiglet::Logger do
 
   describe 'text logging' do
     it 'should throw an error with an empty message' do
-      assert_raises RuntimeError do
+      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
         @logger.info('')
       end
     end
@@ -349,6 +356,27 @@ describe Twiglet::Logger do
 
     it 'initializes the logger with the provided level' do
       assert_equal Logger::WARN, Twiglet::Logger.new('petshop', level: :warn).level
+    end
+  end
+
+  describe 'configuring error response' do
+    it 'blows up by default' do
+      assert_raises JSON::Schema::ValidationError,
+                    "The property '#/message' of type boolean did not match the following type: string" do
+        @logger.debug(message: true)
+      end
+    end
+
+    it 'silently swallows errors when configured to do so' do
+      mock = Minitest::Mock.new
+
+      @logger.configure_validation_error_response do |_e|
+        mock.notify_error("Logging schema validation error")
+      end
+
+      mock.expect(:notify_error, nil, ["Logging schema validation error"])
+      nonconformant_log = { message: true }
+      @logger.debug(nonconformant_log)
     end
   end
 
