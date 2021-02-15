@@ -13,28 +13,28 @@ module Twiglet
 
     def initialize(
       service_name,
-      default_properties: {},
-      now: -> { Time.now.utc },
-      output: $stdout,
-      level: Logger::DEBUG
+      **args
     )
       @service_name = service_name
-      @now = now
-      @output = output
-      @level = level
+      default_properties = args.delete(:default_properties) || {}
+      @args = args
+
+      now = args.fetch(:now, -> { Time.now.utc })
+      output = args.fetch(:output, $stdout)
+      level = args.fetch(:level, Logger::DEBUG)
 
       raise 'Service name is mandatory' \
         unless service_name.is_a?(String) && !service_name.strip.empty?
 
       @validator = Validator.from_file("#{__dir__}/validation_schema.json")
 
-      @formatter = Twiglet::Formatter.new(
+      formatter = Twiglet::Formatter.new(
         service_name,
         default_properties: default_properties,
         now: now,
         validator: @validator
       )
-      super(output, formatter: @formatter, level: level)
+      super(output, formatter: formatter, level: level)
     end
 
     def configure_validation_error_response(&block)
@@ -59,10 +59,7 @@ module Twiglet
     def with(default_properties)
       Logger.new(
         @service_name,
-        default_properties: default_properties,
-        now: @now,
-        output: @output,
-        level: @level
+        @args.merge(default_properties: default_properties)
       )
     end
 
