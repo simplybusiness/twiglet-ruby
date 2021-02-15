@@ -380,6 +380,41 @@ describe Twiglet::Logger do
     end
   end
 
+  describe 'validation schema' do
+    before do
+      @logger = Twiglet::Logger.new(
+        'petshop',
+        now: @now,
+        output: @buffer,
+        validation_schema: 'test/test_validation_schema.json'
+      )
+    end
+
+    it 'allows for the configuration of custom validation rules' do
+      @logger.debug(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Davis', best_boy_or_girl?: true, species: 'dog' }
+        }
+      )
+      log = read_json(@buffer)
+
+      assert_equal true, log[:pet][:best_boy_or_girl?]
+    end
+
+    it 'raises when custom validation rules are broken' do
+      nonconformant = {
+        message: 'customer bought a dog',
+        pet: { name: 'Davis' }
+      }
+
+      assert_raises JSON::Schema::ValidationError,
+                    "The property '#/pet' did not contain a required property of 'best_boy_or_girl?'" do
+        @logger.debug(nonconformant)
+      end
+    end
+  end
+
   private
 
   def read_json(buffer)

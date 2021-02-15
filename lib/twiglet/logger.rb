@@ -22,11 +22,12 @@ module Twiglet
       now = args.fetch(:now, -> { Time.now.utc })
       output = args.fetch(:output, $stdout)
       level = args.fetch(:level, Logger::DEBUG)
+      validation_schema = args.fetch(:validation_schema, "#{__dir__}/validation_schema.json")
 
       raise 'Service name is mandatory' \
         unless service_name.is_a?(String) && !service_name.strip.empty?
 
-      @validator = Validator.from_file("#{__dir__}/validation_schema.json")
+      @validator = Validator.from_file(validation_schema)
 
       formatter = Twiglet::Formatter.new(
         service_name,
