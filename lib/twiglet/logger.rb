@@ -26,7 +26,7 @@ module Twiglet
       raise 'Service name is mandatory' \
         unless service_name.is_a?(String) && !service_name.strip.empty?
 
-      @validator = Validator.from_file('lib/twiglet/validation_schema.json')
+      @validator = Validator.from_file("#{__dir__}/validation_schema.json")
 
       @formatter = Twiglet::Formatter.new(
         service_name,
