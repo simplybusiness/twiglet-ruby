@@ -21,4 +21,10 @@ Gem::Specification.new do |gem|
   gem.required_ruby_version = '>= 2.6'
 
   gem.license               = 'Copyright SimplyBusiness'
+
+  gem.add_runtime_dependency     'json-schema'
+  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'simplecov', '0.17.1'
+  gem.add_development_dependency 'simplycop'
 end
