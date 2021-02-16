@@ -60,7 +60,7 @@ module Twiglet
     def with(default_properties)
       Logger.new(
         @service_name,
-        @args.merge(default_properties: default_properties)
+        **@args.merge(default_properties: default_properties)
       )
     end
 
