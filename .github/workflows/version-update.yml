@@ -9,7 +9,7 @@ jobs:
 
     steps:
       - name: 'bump version'
-        uses: simplybusiness/dobby@v1.0.0
+        uses: simplybusiness/dobby@v2.0.0
         env:
           ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERSION_FILE_PATH: lib/twiglet/version.rb
