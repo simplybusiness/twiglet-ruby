@@ -2,10 +2,10 @@
 
 require 'logger'
 require 'time'
-require 'json'
 require_relative 'formatter'
 require_relative '../hash_extensions'
 require_relative 'message'
+require_relative 'validator'
 
 module Twiglet
   class Logger < ::Logger

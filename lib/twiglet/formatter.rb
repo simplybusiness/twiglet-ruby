@@ -1,7 +1,6 @@
 require 'logger'
 require_relative '../hash_extensions'
 require_relative 'message'
-require_relative 'validator'
 
 module Twiglet
   class Formatter < ::Logger::Formatter
