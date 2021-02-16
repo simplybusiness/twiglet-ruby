@@ -8,12 +8,8 @@ module Twiglet
     attr_accessor :custom_error_handler
 
     def initialize(schema)
-      @schema = schema
+      @schema = JSON.parse(schema)
       @custom_error_handler = ->(e) { raise e }
-    end
-
-    def self.from_file(file_path)
-      new(JSON.parse(File.read(file_path)))
     end
 
     def validate(message)

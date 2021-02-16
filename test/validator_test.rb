@@ -17,7 +17,7 @@ describe Twiglet::Validator do
       }
     }
 
-    @validator = Twiglet::Validator.new(schema)
+    @validator = Twiglet::Validator.new(schema.to_json)
   end
 
   it 'does not raise when validation passes' do
