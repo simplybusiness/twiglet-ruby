@@ -144,7 +144,72 @@ logger.formatter
 Take a look at this sample [Rack application](examples/rack/example_rack_app.rb#L15) with an ECS compliant
 [request logger](/examples/rack/request_logger.rb) as a template when configuring your own request logging middleware with Twiglet.
 
-## Use of dotted keys (DEPRECATED)
+### Log format validation
+Twiglet allows for the configuration of a custom validation schema. The validation schema must be [JSON Schema](https://json-schema.org/) compliant. Any fields not explicitly included in the provided schema are permitted by default.
+
+For example, given the following JSON Schema:
+```ruby
+validation_schema = <<-JSON
+    {
+      "type": "object",
+      "required": ["pet"],
+      "properties": {
+        "pet": {
+          "type": "object",
+          "required": ["name", "best_boy_or_girl?"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "good_boy?": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+JSON
+```
+
+The logger can be instantiated with the custom schema
+```ruby
+custom_logger = Twiglet::Logger.new('service name', validation_schema: validation_schema)
+```
+
+Compliant log messages will log as normal.
+```ruby
+# this is compliant
+custom_logger.debug(pet: { name: 'Davis', good_boy?: true })
+
+# the result
+{:ecs=>{:version=>"1.5.0"}, :@timestamp=>"2020-05-11T15:01:01.000Z", :service=>{:name=>"petshop"}, :log=>{:level=>"debug"}, :pet=>{:name=>"Davis", :good_boy?=>true}}
+```
+
+Non compliant messages will raise an error.
+```ruby
+begin
+  custom_logger.debug(pet: { name: 'Davis' })
+rescue JSON::Schema::ValidationError
+  # we forgot to specify that he's a good boy!
+  puts 'uh-oh'
+end
+```
+
+#### Customizing error responses
+Depending on the application, it may not be desirable for the logger to raise Runtime errors. Twiglet allows you to configure a custom response for handling validation errors.
+
+Configure error handling by writing a block
+```ruby
+logger.configure_validation_error_response do |error|
+  # validation error handling goes here
+  # for example:
+  {YOUR APPLICATION BUG TRACKING SERVICE}.notify_error(error)
+end
+
+```
+
+### Use of dotted keys (DEPRECATED)
 
 Writing nested json objects could be confusing. This library has a built-in feature to convert dotted keys into nested objects, so if you log like this:
 
