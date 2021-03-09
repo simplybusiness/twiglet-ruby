@@ -65,7 +65,7 @@ describe RequestLogger do
   end
 
   it 'logs an error message when a request is bad' do
-    -> { bad_request.get("/some/path") }.must_raise StandardError
+    expect { bad_request.get("/some/path") }.must_raise StandardError
     log = JSON.parse(output.string)
     assert_equal log['log']['level'], 'error'
     assert_equal log['error']['message'], 'some exception'

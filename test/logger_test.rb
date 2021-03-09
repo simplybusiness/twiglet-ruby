@@ -357,6 +357,17 @@ describe Twiglet::Logger do
     it 'initializes the logger with the provided level' do
       assert_equal Logger::WARN, Twiglet::Logger.new('petshop', level: :warn).level
     end
+
+    it 'does not log lower level' do
+      logger = Twiglet::Logger.new(
+        'petshop',
+        now: @now,
+        output: @buffer,
+        level: Logger::INFO
+      )
+      logger.debug({ name: 'Davis', best_boy_or_girl?: true, species: 'dog' })
+      assert_empty @buffer.read
+    end
   end
 
   describe 'configuring error response' do
