@@ -363,7 +363,8 @@ describe Twiglet::Logger do
       logger = Twiglet::Logger.new(
         'petshop',
         now: @now,
-        output: @buffer
+        output: @buffer,
+        level: Logger::INFO
       )
       logger.debug({ name: 'Davis', best_boy_or_girl?: true, species: 'dog' })
       assert_empty @buffer.read
