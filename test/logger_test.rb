@@ -22,8 +22,7 @@ describe Twiglet::Logger do
     @logger = Twiglet::Logger.new(
       'petshop',
       now: @now,
-      output: @buffer,
-      level: Twiglet::Logger::DEBUG
+      output: @buffer
     )
   end
 
@@ -430,7 +429,6 @@ describe Twiglet::Logger do
           pet: { name: 'Davis', best_boy_or_girl?: true, species: 'dog' }
         }
       )
-
       log = read_json(@buffer)
 
       assert_equal true, log[:pet][:best_boy_or_girl?]
