@@ -1,6 +1,10 @@
 # Twiglet: Ruby version
 Like a log, only smaller.
 
+[comment]: <> ( name: twiglet-ruby )
+[comment]: <> ( description: A minimal ECS-compliant JSON logging interface for Ruby applications)
+[comment]: <> ( keywords: ruby logging JSON ECS)
+
 This library provides a minimal JSON logging interface suitable for use in (micro)services.  See the [RATIONALE](RATIONALE.md) for design rationale and an explantion of the Elastic Common Schema that we are using for log attribute naming.
 
 ## Installation
