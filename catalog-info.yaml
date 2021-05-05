@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: twiglet-ruby
+  description: A Ruby logger
+  # Example for optional annotations
+  # annotations:
+  # github.com/project-slug: backstage/backstage
+  # backstage.io/techdocs-ref: url:https://github.com/backstage/backstage
+spec:
+  type: library
+  owner: team-a
+  lifecycle: experimental
