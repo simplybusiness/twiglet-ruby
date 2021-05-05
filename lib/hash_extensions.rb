@@ -24,6 +24,6 @@ module HashExtensions
     key.to_s
        .split('.')
        .reverse
-       .reduce(val) { |nested, key_part| Hash[key_part.to_sym, nested] }
+       .reduce(val) { |nested, key_part| { key_part.to_sym => nested } }
   end
 end
