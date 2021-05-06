@@ -11,3 +11,5 @@ spec:
   type: library
   owner: team-a
   lifecycle: experimental
+  dependencyOf:
+    - Kiln
