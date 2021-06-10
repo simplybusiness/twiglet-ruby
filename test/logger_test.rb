@@ -217,7 +217,7 @@ describe Twiglet::Logger do
       assert_equal 'Artificially raised exception', actual_log[:message]
       assert_equal 'divided by 0', actual_log[:error][:message]
       assert_equal 'ZeroDivisionError', actual_log[:error][:type]
-      assert_match 'logger_test.rb', actual_log[:error][:stack_trace].first
+      assert_match 'test/logger_test.rb', actual_log[:error][:stack_trace].first
     end
 
     it 'should log an error without backtrace' do
