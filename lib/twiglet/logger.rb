@@ -70,7 +70,7 @@ module Twiglet
     private
 
     def add_stack_trace(hash_to_add_to, error)
-      hash_to_add_to[:error][:stack_trace] = error.backtrace.join("\n") if error.backtrace
+      hash_to_add_to[:error][:stack_trace] = error.backtrace if error.backtrace
     end
   end
 end

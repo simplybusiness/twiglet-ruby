@@ -70,7 +70,7 @@ describe RequestLogger do
     assert_equal log['log']['level'], 'error'
     assert_equal log['error']['message'], 'some exception'
     assert_equal log['error']['type'], 'StandardError'
-    assert_includes log['error']['stack_trace'], 'request_logger_test.rb'
+    assert_includes log['error']['stack_trace'].first, 'examples/rack/request_logger_test.rb'
   end
 end
 
