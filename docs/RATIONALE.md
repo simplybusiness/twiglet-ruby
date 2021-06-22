@@ -87,4 +87,4 @@ Please see the [code of conduct](CODE_OF_CONDUCT.md) for further info.
 
 # License
 
-This work is licensed under the MIT license - see the [LICENSE](LICENSE) file for further details.
+This work is licensed under the MIT license - see the [LICENSE](../LICENSE) file for further details.

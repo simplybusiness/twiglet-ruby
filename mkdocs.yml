@@ -1,7 +1,6 @@
-site_name: 'X-Rated Docs'
-docs_dir: '.'
+site_name: 'Twiglet Docs'
 nav:
-  - Home: README.md
+  - Home: index.md
   - Code of Conduct: CODE_OF_CONDUCT.md
   - "Why Twiglet?": RATIONALE.md
 
