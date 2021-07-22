@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: twiglet
+  description: simple logging
+  annotations:
+    github.com/project-slug: "simplybusiness/twiglet-ruby"
+    backstage.io/source-location: url:https://github.com/simplybusiness/twiglet-ruby/
+    backstage.io/techdocs-ref: url:https://github.com/simplybusiness/twiglet-ruby/
+spec:
+  type: library
+  lifecycle: production
+  owner: silversmiths
+  dependsOn:
+    - "Component:json-schema"
+    - "Component:simplycop"
