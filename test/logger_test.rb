@@ -242,6 +242,16 @@ describe Twiglet::Logger do
       assert_equal 'StandardError', actual_log[:error][:type]
       assert_equal 'Unknown error', actual_log[:error][:message]
     end
+
+    it 'should log error type properly even when active_support/json is required' do
+      require 'active_support/json'
+      e = StandardError.new('Unknown error')
+      @logger.error('Artificially raised exception with string message', e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'StandardError', actual_log[:error][:type]
+    end
   end
 
   describe 'text logging' do
