@@ -24,3 +24,20 @@ jobs:
           gem push *.gem
         env:
           GEM_HOST_API_KEY: ${{secrets.RUBYGEMS_API_KEY}}
+      - name: Get Ruby Version
+        id: get-ruby-version
+        run: echo "::set-output name=RUBY_VERSION::$(bundle exec ruby -e 'puts Twiglet::VERSION')"
+      - name: Create Release
+        uses: actions/github-script@v5
+        env:
+          RUBY_VERSION: ${{ steps.get-ruby-version.outputs.RUBY_VERSION }}
+        with:
+          result-encoding: string
+          script: |
+            const { RUBY_VERSION } = process.env
+            github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: RUBY_VERSION,
+              generate_release_notes: true,
+            })
