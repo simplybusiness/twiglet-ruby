@@ -6,6 +6,9 @@ on:
 permissions:
   contents: write
 
+permissions:
+  contents: write
+
 jobs:
   build:
     name: Build and Publish
