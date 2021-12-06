@@ -5,6 +5,9 @@ on:
     branches:
       - master
     types: [opened, synchronize]
+permissions:
+  contents: read
+  statuses: write
 jobs:
   build:
     runs-on: ubuntu-18.04
