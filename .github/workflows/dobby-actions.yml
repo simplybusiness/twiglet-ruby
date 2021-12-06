@@ -3,6 +3,8 @@ name: "Dobby action"
 on:
   issue_comment:
     types: [created]
+permissions:
+  contents: read
 jobs:
   pr_commented:
     runs-on: ubuntu-20.04
