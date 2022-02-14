@@ -33,7 +33,7 @@ jobs:
         id: get-gem-version
         run: echo "::set-output name=GEM_VERSION::$(bundle exec ruby -e 'puts Twiglet::VERSION')"
       - name: Create Release
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         env:
           GEM_VERSION: ${{ steps.get-gem-version.outputs.GEM_VERSION }}
         with:
