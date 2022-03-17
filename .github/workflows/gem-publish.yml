@@ -3,8 +3,6 @@ name: Publish Ruby Gem
 on:
   push:
     branches: [ master ]
-permissions:
-  contents: write
 
 permissions:
   contents: write
