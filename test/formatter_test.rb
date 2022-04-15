@@ -32,4 +32,30 @@ describe Twiglet::Formatter do
     }
     assert_equal JSON.parse(msg), expected_log
   end
+
+  it 'merges the outputs of the context provider into messages logs' do
+    provider = -> { { 'request' => { 'id' => '1234567890' } } }
+    formatter = Twiglet::Formatter.new(
+      'petshop', now: @now, validator: Twiglet::Validator.new({}.to_json),
+                 context_provider: provider
+    )
+    msg = formatter.call('warn', nil, nil, 'shop is running low on dog food')
+    expected_log = {
+      "ecs" => {
+        "version" => '1.5.0'
+      },
+      "@timestamp" => '2020-05-11T15:01:01.000Z',
+      "service" => {
+        "name" => 'petshop'
+      },
+      "log" => {
+        "level" => 'warn'
+      },
+      "message" => 'shop is running low on dog food',
+      "request" => {
+        'id' => '1234567890'
+      }
+    }
+    assert_equal JSON.parse(msg), expected_log
+  end
 end

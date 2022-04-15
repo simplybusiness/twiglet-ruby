@@ -17,6 +17,7 @@ module Twiglet
     )
       @service_name = service_name
       default_properties = args.delete(:default_properties) || {}
+      context_provider = args.delete(:context_provider)
       @args = args
 
       now = args.fetch(:now, -> { Time.now.utc })
@@ -32,6 +33,7 @@ module Twiglet
       formatter = Twiglet::Formatter.new(
         service_name,
         default_properties: default_properties,
+        context_provider: context_provider,
         now: now,
         validator: @validator
       )
@@ -61,6 +63,13 @@ module Twiglet
       Logger.new(
         @service_name,
         **@args.merge(default_properties: default_properties)
+      )
+    end
+
+    def context_provider(&blk)
+      Logger.new(
+        @service_name,
+        **@args.merge(context_provider: blk)
       )
     end
 

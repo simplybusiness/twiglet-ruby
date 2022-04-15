@@ -7,11 +7,14 @@ module Twiglet
     Hash.include HashExtensions
 
     def initialize(service_name,
-                   validator:, default_properties: {},
+                   validator:,
+                   default_properties: {},
+                   context_provider: nil,
                    now: -> { Time.now.utc })
       @service_name = service_name
       @now = now
       @default_properties = default_properties
+      @context_provider = context_provider
       @validator = validator
 
       super()
@@ -40,8 +43,11 @@ module Twiglet
         }
       }
 
+      context = @context_provider&.call || {}
+
       base_message
         .deep_merge(@default_properties.to_nested)
+        .deep_merge(context.to_nested)
         .deep_merge(message.to_nested)
         .to_json
         .concat("\n")

@@ -146,6 +146,25 @@ describe Twiglet::Logger do
       assert_equal 'Barker', log[:pet][:name]
     end
 
+    it "should be able to add contextual information to events with the context_provider" do
+      purchase_logger = @logger.context_provider do
+         { 'context' => {'id' => 'my-context-id' } }
+      end
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
     it "should log 'message' string property" do
       message = {}
       message['message'] = 'Guinea pigs arrived'
