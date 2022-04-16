@@ -146,9 +146,39 @@ describe Twiglet::Logger do
       assert_equal 'Barker', log[:pet][:name]
     end
 
+    it "isn't possible to chain .with methods to gradually add messages" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }
+        }
+      ).with(
+        {
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      )
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_nil log[:trace]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+    end
+
     it "should be able to add contextual information to events with the context_provider" do
       purchase_logger = @logger.context_provider do
-         { 'context' => {'id' => 'my-context-id' } }
+        { 'context' => { 'id' => 'my-context-id' } }
       end
 
       # do stuff
@@ -162,6 +192,66 @@ describe Twiglet::Logger do
       log = read_json @buffer
 
       assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
+    it "chaining .with and .context_provider is possible" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      ).context_provider do
+        { 'context' => { 'id' => 'my-context-id' } }
+      end
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
+    it "chaining .context_provider and .with is possible" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger
+                        .context_provider do
+        { 'context' => { 'id' => 'my-context-id' } }
+      end.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      )
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
       assert_equal 'my-context-id', log[:context][:id]
     end
 
