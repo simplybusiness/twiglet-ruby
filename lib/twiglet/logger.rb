@@ -58,14 +58,14 @@ module Twiglet
     end
 
     def with(default_properties)
-      Logger.new(
+      self.class.new(
         @service_name,
         **@args.merge(default_properties: default_properties)
       )
     end
 
     def context_provider(&blk)
-      Logger.new(
+      self.class.new(
         @service_name,
         **@args.merge(context_provider: blk)
       )
