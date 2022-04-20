@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Twiglet
-  VERSION = '3.4.9'
+  VERSION = '3.5.0'
 end
