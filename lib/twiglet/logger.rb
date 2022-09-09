@@ -42,6 +42,24 @@ module Twiglet
       @validator.custom_error_handler = block
     end
 
+    def debug(message_or_error = nil, &block)
+      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+
+      super(message_or_error, &block)
+    end
+
+    def info(message_or_error = nil, &block)
+      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+
+      super(message_or_error, &block)
+    end
+
+    def warn(message_or_error = nil, &block)
+      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+
+      super(message_or_error, &block)
+    end
+
     def error(message = nil, error = nil, &block)
       message = error_message(error, message) if error
 
@@ -75,7 +93,8 @@ module Twiglet
         }
       }
       add_stack_trace(error_fields, error)
-      Message.new(message || error.message).merge(error_fields)
+      message = error.message if message.nil? || message.empty?
+      Message.new(message).merge(error_fields)
     end
 
     def add_stack_trace(hash_to_add_to, error)

@@ -362,7 +362,7 @@ describe Twiglet::Logger do
       assert_equal 'StandardError', actual_log[:error][:type]
     end
 
-    it 'does not require a message to be sent' do
+    it 'can log just an error as "error", if no message is given' do
       e = StandardError.new('some error')
       @logger.error(nil, e)
 
@@ -371,6 +371,20 @@ describe Twiglet::Logger do
       assert_equal 'some error', actual_log[:message]
       assert_equal 'StandardError', actual_log[:error][:type]
       assert_equal 'some error', actual_log[:error][:message]
+    end
+
+    [:debug, :info, :warn].each do |level|
+      it "can log an error with type, error message etc.. as '#{level}'" do
+        error_message = "error to be logged as #{level}"
+        e = StandardError.new(error_message)
+        @logger.public_send(level, e)
+
+        actual_log = read_json(@buffer)
+
+        assert_equal error_message, actual_log[:message]
+        assert_equal 'StandardError', actual_log[:error][:type]
+        assert_equal error_message, actual_log[:error][:message]
+      end
     end
   end
 
