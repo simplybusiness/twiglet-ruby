@@ -15,7 +15,6 @@ Gem::Specification.new do |gem|
   gem.description           = 'Like a log, only smaller.'
 
   gem.files                 = `git ls-files`.split("\n")
-  gem.test_files            = `git ls-files -- {test}/*`.split("\n")
 
   gem.require_paths         = ['lib']
   gem.required_ruby_version = '>= 2.6'
