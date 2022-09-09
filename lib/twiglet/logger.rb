@@ -43,16 +43,7 @@ module Twiglet
     end
 
     def error(message = nil, error = nil, &block)
-      if error
-        error_fields = {
-          error: {
-            type: error.class.to_s,
-            message: error.message
-          }
-        }
-        add_stack_trace(error_fields, error)
-        message = Message.new(message || error.message).merge(error_fields)
-      end
+      message = error_message(error, message) if error
 
       super(message, &block)
     end
@@ -75,6 +66,17 @@ module Twiglet
     alias_method :critical, :fatal
 
     private
+
+    def error_message(error, message)
+      error_fields = {
+        error: {
+          type: error.class.to_s,
+          message: error.message
+        }
+      }
+      add_stack_trace(error_fields, error)
+      Message.new(message || error.message).merge(error_fields)
+    end
 
     def add_stack_trace(hash_to_add_to, error)
       hash_to_add_to[:error][:stack_trace] = error.backtrace if error.backtrace
