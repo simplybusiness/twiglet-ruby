@@ -361,6 +361,17 @@ describe Twiglet::Logger do
 
       assert_equal 'StandardError', actual_log[:error][:type]
     end
+
+    it 'does not require a message to be sent' do
+      e = StandardError.new('some error')
+      @logger.error(nil, e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'some error', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
+      assert_equal 'some error', actual_log[:error][:message]
+    end
   end
 
   describe 'text logging' do
