@@ -445,6 +445,15 @@ describe Twiglet::Logger do
         assert_equal 'a block log message', actual_log[:message]
       end
     end
+
+    it 'should ignore the given progname if a block is also given' do
+      block = proc { 'a block log message' }
+      @logger.info('my-program-name', &block)
+      actual_log = read_json(@buffer)
+
+      assert_equal 'info', actual_log[:log][:level]
+      assert_equal 'a block log message', actual_log[:message]
+    end
   end
 
   describe 'dotted keys' do
