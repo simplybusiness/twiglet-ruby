@@ -43,21 +43,21 @@ module Twiglet
     end
 
     def debug(message_or_error = nil, &block)
-      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message_or_error, &block)
+      super(message, &block)
     end
 
     def info(message_or_error = nil, &block)
-      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message_or_error, &block)
+      super(message, &block)
     end
 
     def warn(message_or_error = nil, &block)
-      message_or_error = error_message(message_or_error, '') if message_or_error.is_a?(Exception)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message_or_error, &block)
+      super(message, &block)
     end
 
     def error(message = nil, error = nil, &block)
@@ -85,7 +85,7 @@ module Twiglet
 
     private
 
-    def error_message(error, message)
+    def error_message(error, message = nil)
       error_fields = {
         error: {
           type: error.class.to_s,
