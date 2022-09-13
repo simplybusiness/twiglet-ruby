@@ -361,6 +361,31 @@ describe Twiglet::Logger do
 
       assert_equal 'StandardError', actual_log[:error][:type]
     end
+
+    it 'can log just an error as "error", if no message is given' do
+      e = StandardError.new('some error')
+      @logger.error(nil, e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'some error', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
+      assert_equal 'some error', actual_log[:error][:message]
+    end
+
+    [:debug, :info, :warn].each do |level|
+      it "can log an error with type, error message etc.. as '#{level}'" do
+        error_message = "error to be logged as #{level}"
+        e = StandardError.new(error_message)
+        @logger.public_send(level, e)
+
+        actual_log = read_json(@buffer)
+
+        assert_equal error_message, actual_log[:message]
+        assert_equal 'StandardError', actual_log[:error][:type]
+        assert_equal error_message, actual_log[:error][:message]
+      end
+    end
   end
 
   describe 'text logging' do
@@ -419,6 +444,15 @@ describe Twiglet::Logger do
         assert_equal attrs[:level], actual_log[:log][:level]
         assert_equal 'a block log message', actual_log[:message]
       end
+    end
+
+    it 'should ignore the given progname if a block is also given' do
+      block = proc { 'a block log message' }
+      @logger.info('my-program-name', &block)
+      actual_log = read_json(@buffer)
+
+      assert_equal 'info', actual_log[:log][:level]
+      assert_equal 'a block log message', actual_log[:message]
     end
   end
 

@@ -42,17 +42,26 @@ module Twiglet
       @validator.custom_error_handler = block
     end
 
+    def debug(message_or_error = nil, &block)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
+
+      super(message, &block)
+    end
+
+    def info(message_or_error = nil, &block)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
+
+      super(message, &block)
+    end
+
+    def warn(message_or_error = nil, &block)
+      message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
+
+      super(message, &block)
+    end
+
     def error(message = nil, error = nil, &block)
-      if error
-        error_fields = {
-          error: {
-            type: error.class.to_s,
-            message: error.message
-          }
-        }
-        add_stack_trace(error_fields, error)
-        message = Message.new(message).merge(error_fields)
-      end
+      message = error_message(error, message) if error
 
       super(message, &block)
     end
@@ -75,6 +84,18 @@ module Twiglet
     alias_method :critical, :fatal
 
     private
+
+    def error_message(error, message = nil)
+      error_fields = {
+        error: {
+          type: error.class.to_s,
+          message: error.message
+        }
+      }
+      add_stack_trace(error_fields, error)
+      message = error.message if message.nil? || message.empty?
+      Message.new(message).merge(error_fields)
+    end
 
     def add_stack_trace(hash_to_add_to, error)
       hash_to_add_to[:error][:stack_trace] = error.backtrace if error.backtrace
