@@ -11,3 +11,4 @@ jobs:
       with:
         version_file_path: ./lib/twiglet/version.rb
       secrets: inherit
+
