@@ -146,6 +146,115 @@ describe Twiglet::Logger do
       assert_equal 'Barker', log[:pet][:name]
     end
 
+    it "isn't possible to chain .with methods to gradually add messages" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' }
+        }
+      ).with(
+        {
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      )
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_nil log[:trace]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+    end
+
+    it "should be able to add contextual information to events with the context_provider" do
+      purchase_logger = @logger.context_provider do
+        { 'context' => { 'id' => 'my-context-id' } }
+      end
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
+    it "chaining .with and .context_provider is possible" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      ).context_provider do
+        { 'context' => { 'id' => 'my-context-id' } }
+      end
+
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
+    it "chaining .context_provider and .with is possible" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger
+                        .context_provider do
+        { 'context' => { 'id' => 'my-context-id' } }
+      end.with(
+        {
+          trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
+          customer: { full_name: 'Freda Bloggs' },
+          event: { action: 'pet purchase' }
+        }
+      )
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb', log[:trace][:id]
+      assert_equal 'Freda Bloggs', log[:customer][:full_name]
+      assert_equal 'pet purchase', log[:event][:action]
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'my-context-id', log[:context][:id]
+    end
+
     it "should log 'message' string property" do
       message = {}
       message['message'] = 'Guinea pigs arrived'
@@ -252,6 +361,31 @@ describe Twiglet::Logger do
 
       assert_equal 'StandardError', actual_log[:error][:type]
     end
+
+    it 'can log just an error as "error", if no message is given' do
+      e = StandardError.new('some error')
+      @logger.error(nil, e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'some error', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
+      assert_equal 'some error', actual_log[:error][:message]
+    end
+
+    [:debug, :info, :warn].each do |level|
+      it "can log an error with type, error message etc.. as '#{level}'" do
+        error_message = "error to be logged as #{level}"
+        e = StandardError.new(error_message)
+        @logger.public_send(level, e)
+
+        actual_log = read_json(@buffer)
+
+        assert_equal error_message, actual_log[:message]
+        assert_equal 'StandardError', actual_log[:error][:type]
+        assert_equal error_message, actual_log[:error][:message]
+      end
+    end
   end
 
   describe 'text logging' do
@@ -310,6 +444,15 @@ describe Twiglet::Logger do
         assert_equal attrs[:level], actual_log[:log][:level]
         assert_equal 'a block log message', actual_log[:message]
       end
+    end
+
+    it 'should ignore the given progname if a block is also given' do
+      block = proc { 'a block log message' }
+      @logger.info('my-program-name', &block)
+      actual_log = read_json(@buffer)
+
+      assert_equal 'info', actual_log[:log][:level]
+      assert_equal 'a block log message', actual_log[:message]
     end
   end
 

@@ -3,6 +3,7 @@ name: Publish Ruby Gem
 on:
   push:
     branches: [ master ]
+
 permissions:
   contents: write
 
@@ -11,7 +12,7 @@ jobs:
     name: Build and Publish
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -30,7 +31,7 @@ jobs:
         id: get-gem-version
         run: echo "::set-output name=GEM_VERSION::$(bundle exec ruby -e 'puts Twiglet::VERSION')"
       - name: Create Release
-        uses: actions/github-script@v5
+        uses: actions/github-script@v6
         env:
           GEM_VERSION: ${{ steps.get-gem-version.outputs.GEM_VERSION }}
         with:
