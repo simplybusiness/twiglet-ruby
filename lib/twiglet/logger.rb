@@ -6,6 +6,7 @@ require_relative 'formatter'
 require_relative '../hash_extensions'
 require_relative 'message'
 require_relative 'validator'
+require_relative 'error_serialiser'
 
 module Twiglet
   class Logger < ::Logger
@@ -87,19 +88,9 @@ module Twiglet
     private
 
     def error_message(error, message = nil)
-      error_fields = {
-        error: {
-          type: error.class.to_s,
-          message: error.message
-        }
-      }
-      add_stack_trace(error_fields, error)
+      error_hash = Twiglet::ErrorSerialiser.new.serialise_error(error)
       message = error.message if message.nil? || message.empty?
-      Message.new(message).merge(error_fields)
-    end
-
-    def add_stack_trace(hash_to_add_to, error)
-      hash_to_add_to[:error][:stack_trace] = error.backtrace if error.backtrace
+      Message.new(message).merge(error_hash)
     end
   end
 end
