@@ -34,7 +34,7 @@ module Twiglet
         ecs: {
           version: '1.5.0'
         },
-        "@timestamp": @now.call.iso8601(3),
+        '@timestamp': @now.call.iso8601(3),
         service: {
           name: @service_name
         },
