@@ -63,7 +63,7 @@ describe Twiglet::Logger do
         ecs: {
           version: '1.5.0'
         },
-        "@timestamp": '2020-05-11T15:01:01.000Z',
+        '@timestamp': '2020-05-11T15:01:01.000Z',
         service: {
           name: 'petshop'
         },
@@ -269,19 +269,19 @@ describe Twiglet::Logger do
       @logger.info({ message: 'there' })
 
       expected_output =
-        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",'\
-        '"service":{"name":"petshop"},"log":{"level":"debug"},"message":"hi"}'\
-        "\n"\
-        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",'\
-        '"service":{"name":"petshop"},"log":{"level":"info"},"message":"there"}'\
-        "\n"\
+        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",' \
+        '"service":{"name":"petshop"},"log":{"level":"debug"},"message":"hi"}' \
+        "\n" \
+        '{"ecs":{"version":"1.5.0"},"@timestamp":"2020-05-11T15:01:01.000Z",' \
+        '"service":{"name":"petshop"},"log":{"level":"info"},"message":"there"}' \
+        "\n" \
 
       assert_equal expected_output, @buffer.string
     end
 
     it 'should work with mixed string and symbol properties' do
       log = {
-        "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'
+        'trace.id': '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb'
       }
       event = {}
       log['event'] = event
@@ -404,7 +404,7 @@ describe Twiglet::Logger do
         ecs: {
           version: '1.5.0'
         },
-        "@timestamp": '2020-05-11T15:01:01.000Z',
+        '@timestamp': '2020-05-11T15:01:01.000Z',
         service: {
           name: 'petshop'
         },
@@ -460,11 +460,11 @@ describe Twiglet::Logger do
     it 'should be able to convert dotted keys to nested objects' do
       @logger.debug(
         {
-          "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+          'trace.id': '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
           message: 'customer bought a dog',
-          "pet.name": 'Barker',
-          "pet.species": 'dog',
-          "pet.breed": 'Bitsa'
+          'pet.name': 'Barker',
+          'pet.species': 'dog',
+          'pet.breed': 'Bitsa'
         }
       )
       log = read_json(@buffer)
@@ -479,10 +479,10 @@ describe Twiglet::Logger do
     it 'should be able to mix dotted keys and nested objects' do
       @logger.debug(
         {
-          "trace.id": '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
+          'trace.id': '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb',
           message: 'customer bought a dog',
           pet: { name: 'Barker', breed: 'Bitsa' },
-          "pet.species": 'dog'
+          'pet.species': 'dog'
         }
       )
       log = read_json(@buffer)

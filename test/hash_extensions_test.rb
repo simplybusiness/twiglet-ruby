@@ -17,7 +17,7 @@ describe HashExtensions do
       log: {
         level: 'error'
       },
-      "@timestamp": '2020-05-09T15:13:20.736Z'
+      '@timestamp': '2020-05-09T15:13:20.736Z'
     }
 
     expected = actual.to_nested
@@ -26,8 +26,8 @@ describe HashExtensions do
 
   it 'should convert keys with . into nested objects' do
     actual = {
-      "service.name": 'petshop',
-      "log.level": 'error'
+      'service.name': 'petshop',
+      'log.level': 'error'
     }
 
     nested = actual.to_nested
@@ -38,10 +38,10 @@ describe HashExtensions do
 
   it 'should group nested objects' do
     actual = {
-      "service.name": 'petshop',
-      "service.id": 'ps001',
-      "service.version": '0.9.1',
-      "log.level": 'error'
+      'service.name': 'petshop',
+      'service.id': 'ps001',
+      'service.version': '0.9.1',
+      'log.level': 'error'
     }
 
     nested = actual.to_nested
@@ -54,10 +54,10 @@ describe HashExtensions do
 
   it 'should cope with more than two levels' do
     actual = {
-      "http.request.method": 'get',
-      "http.request.body.bytes": 112,
-      "http.response.bytes": 1564,
-      "http.response.status_code": 200
+      'http.request.method': 'get',
+      'http.request.body.bytes': 112,
+      'http.response.bytes': 1564,
+      'http.response.status_code': 200
     }
 
     nested = actual.to_nested
