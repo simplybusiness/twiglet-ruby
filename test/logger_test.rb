@@ -34,8 +34,19 @@ describe Twiglet::Logger do
 
   it 'conforms to the standard Ruby Logger API' do
     [
-      :debug, :debug?, :info, :info?, :warn, :warn?, :fatal, :fatal?, :error, :error?,
-      :level, :level=, :sev_threshold=
+      :debug,
+      :debug?,
+      :info,
+      :info?,
+      :warn,
+      :warn?,
+      :fatal,
+      :fatal?,
+      :error,
+      :error?,
+      :level,
+      :level=,
+      :sev_threshold=
     ].each do |call|
       assert @logger.respond_to?(call), "Logger does not respond to #{call}"
     end
