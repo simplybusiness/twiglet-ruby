@@ -10,7 +10,7 @@ module HashExtensions
   end
 
   def deep_merge(hash_to_merge)
-    merger = proc { |_, val1, val2| val1.is_a?(Hash) && val2.is_a?(Hash) ? val1.merge(val2, &merger) : val2 }
+    merger = proc { |_, val_1, val_2| val_1.is_a?(Hash) && val_2.is_a?(Hash) ? val_1.merge(val_2, &merger) : val_2 }
     merge(hash_to_merge, &merger)
   end
 

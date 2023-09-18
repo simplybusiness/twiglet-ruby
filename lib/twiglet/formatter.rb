@@ -6,11 +6,13 @@ module Twiglet
   class Formatter < ::Logger::Formatter
     Hash.include HashExtensions
 
-    def initialize(service_name,
-                   validator:,
-                   default_properties: {},
-                   context_provider: nil,
-                   now: -> { Time.now.utc })
+    def initialize(
+      service_name,
+      validator:,
+      default_properties: {},
+      context_provider: nil,
+      now: -> { Time.now.utc }
+    )
       @service_name = service_name
       @now = now
       @default_properties = default_properties
