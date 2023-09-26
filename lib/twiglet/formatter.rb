@@ -47,12 +47,12 @@ module Twiglet
 
       context = @context_provider&.call || {}
 
-      base_message
-        .deep_merge(@default_properties.to_nested)
-        .deep_merge(context.to_nested)
-        .deep_merge(message.to_nested)
-        .to_json
-        .concat("\n")
+      JSON.generate(
+        base_message
+          .deep_merge(@default_properties.to_nested)
+          .deep_merge(context.to_nested)
+          .deep_merge(message.to_nested)
+      ).concat("\n")
     end
   end
 end
