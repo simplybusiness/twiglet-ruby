@@ -62,8 +62,14 @@ module Twiglet
       super(message, &block)
     end
 
-    def error(message = nil, error = nil, &block)
-      message = error_message(error, message) if error
+    def error(message_or_error = nil, error = nil, &block)
+      if error 
+        message = error_message(error, message_or_error)
+      elsif message_or_error.is_a?(Exception)
+        message = error_message(message_or_error)
+      else
+        message = message_or_error
+      end
 
       super(message, &block)
     end
