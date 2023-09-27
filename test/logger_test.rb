@@ -373,7 +373,7 @@ describe Twiglet::Logger do
       assert_equal 'StandardError', actual_log[:error][:type]
       assert_equal 'Some error', actual_log[:error][:message]
     end
-    
+
     it 'should log an error if nil message is given' do
       e = StandardError.new('Some error')
       @logger.error(nil, e)

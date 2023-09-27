@@ -63,13 +63,13 @@ module Twiglet
     end
 
     def error(message_or_error = nil, error = nil, &block)
-      if error 
-        message = error_message(error, message_or_error)
-      elsif message_or_error.is_a?(Exception)
-        message = error_message(message_or_error)
-      else
-        message = message_or_error
-      end
+      message = if error
+                  error_message(error, message_or_error)
+                elsif message_or_error.is_a?(Exception)
+                  error_message(message_or_error)
+                else
+                  message_or_error
+                end
 
       super(message, &block)
     end
