@@ -335,8 +335,8 @@ describe Twiglet::Logger do
       actual_log = read_json(@buffer)
 
       assert_equal 'Artificially raised exception', actual_log[:message]
-      assert_equal 'divided by 0', actual_log[:error][:message]
       assert_equal 'ZeroDivisionError', actual_log[:error][:type]
+      assert_equal 'divided by 0', actual_log[:error][:message]
       assert_match 'test/logger_test.rb', actual_log[:error][:stack_trace].first
     end
 
@@ -353,14 +353,44 @@ describe Twiglet::Logger do
     end
 
     it 'should log an error with string message' do
-      e = StandardError.new('Unknown error')
+      e = StandardError.new('Some error')
       @logger.error('Artificially raised exception with string message', e)
 
       actual_log = read_json(@buffer)
 
       assert_equal 'Artificially raised exception with string message', actual_log[:message]
       assert_equal 'StandardError', actual_log[:error][:type]
-      assert_equal 'Unknown error', actual_log[:error][:message]
+      assert_equal 'Some error', actual_log[:error][:message]
+    end
+
+    it 'should log an error if no message is given' do
+      e = StandardError.new('Some error')
+      @logger.error(e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'Some error', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
+      assert_equal 'Some error', actual_log[:error][:message]
+    end
+
+    it 'should log an error if nil message is given' do
+      e = StandardError.new('Some error')
+      @logger.error(nil, e)
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'Some error', actual_log[:message]
+      assert_equal 'StandardError', actual_log[:error][:type]
+      assert_equal 'Some error', actual_log[:error][:message]
+    end
+
+    it 'should log a string if no error is given' do
+      @logger.error('Some error')
+
+      actual_log = read_json(@buffer)
+
+      assert_equal 'Some error', actual_log[:message]
     end
 
     it 'should log error type properly even when active_support/json is required' do
@@ -371,17 +401,6 @@ describe Twiglet::Logger do
       actual_log = read_json(@buffer)
 
       assert_equal 'StandardError', actual_log[:error][:type]
-    end
-
-    it 'can log just an error as "error", if no message is given' do
-      e = StandardError.new('some error')
-      @logger.error(nil, e)
-
-      actual_log = read_json(@buffer)
-
-      assert_equal 'some error', actual_log[:message]
-      assert_equal 'StandardError', actual_log[:error][:type]
-      assert_equal 'some error', actual_log[:error][:message]
     end
 
     [:debug, :info, :warn].each do |level|

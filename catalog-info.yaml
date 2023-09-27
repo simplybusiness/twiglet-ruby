@@ -1,8 +1,11 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: twiglet
+  name: twiglet-ruby
+  title: Twiglet
   description: simple logging
+  annotations:   
+    rubygems.org/name: "twiglet"
 spec:
   type: library
   lifecycle: production
