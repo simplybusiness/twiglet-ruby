@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require 'minitest/mock'
 require_relative '../lib/twiglet/logger'
+require 'active_support'
 
 LEVELS = [
   { method: :debug, level: 'debug' },
@@ -414,8 +415,7 @@ describe Twiglet::Logger do
       assert_equal 'Some error', actual_log[:message]
     end
 
-    it 'should log error type properly even when active_support/json is required' do
-      require 'active_support/json'
+    it 'should log error type properly even when active_support is required' do
       e = StandardError.new('Unknown error')
       @logger.error('Artificially raised exception with string message', e)
 
