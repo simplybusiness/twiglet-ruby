@@ -2,7 +2,7 @@
 
 module HashExtensions
   def to_nested
-    self unless contains_dotted_key?
+    return self unless contains_dotted_key?
 
     keys.reduce({}) do |nested, key|
       nested.deep_merge(build_nested_object(key, self[key]))

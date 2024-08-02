@@ -3,6 +3,7 @@
 require 'minitest/autorun'
 require 'minitest/mock'
 require_relative '../lib/twiglet/logger'
+require 'active_support'
 
 LEVELS = [
   { method: :debug, level: 'debug' },
@@ -266,6 +267,27 @@ describe Twiglet::Logger do
       assert_equal 'my-context-id', log[:context][:id]
     end
 
+    it "previously supplied context providers should be preserved" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger
+                        .context_provider { { 'first-context' => { 'first-id' => 'my-first-context-id' } } }
+                        .context_provider { { 'second-context' => { 'second-id' => 'my-second-context-id' } } }
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'my-first-context-id', log[:'first-context'][:'first-id']
+      assert_equal 'my-second-context-id', log[:'second-context'][:'second-id']
+    end
+
     it "should log 'message' string property" do
       message = {}
       message['message'] = 'Guinea pigs arrived'
@@ -393,8 +415,7 @@ describe Twiglet::Logger do
       assert_equal 'Some error', actual_log[:message]
     end
 
-    it 'should log error type properly even when active_support/json is required' do
-      require 'active_support/json'
+    it 'should log error type properly even when active_support is required' do
       e = StandardError.new('Unknown error')
       @logger.error('Artificially raised exception with string message', e)
 
