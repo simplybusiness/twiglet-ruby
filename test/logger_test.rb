@@ -266,6 +266,27 @@ describe Twiglet::Logger do
       assert_equal 'my-context-id', log[:context][:id]
     end
 
+    it "previously supplied context providers should be preserved" do
+      # Let's add some context to this customer journey
+      purchase_logger = @logger
+                        .context_provider { { 'first-context' => { 'first-id' => 'my-first-context-id' } } }
+                        .context_provider { { 'second-context' => { 'second-id' => 'my-second-context-id' } } }
+      # do stuff
+      purchase_logger.info(
+        {
+          message: 'customer bought a dog',
+          pet: { name: 'Barker', species: 'dog', breed: 'Bitsa' }
+        }
+      )
+
+      log = read_json @buffer
+
+      assert_equal 'customer bought a dog', log[:message]
+      assert_equal 'Barker', log[:pet][:name]
+      assert_equal 'my-first-context-id', log[:'first-context'][:'first-id']
+      assert_equal 'my-second-context-id', log[:'second-context'][:'second-id']
+    end
+
     it "should log 'message' string property" do
       message = {}
       message['message'] = 'Guinea pigs arrived'

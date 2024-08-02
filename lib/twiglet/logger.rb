@@ -82,9 +82,15 @@ module Twiglet
     end
 
     def context_provider(&blk)
+      new_context_provider = blk
+      if @args[:context_provider]
+        new_context_provider = lambda do
+          @args[:context_provider].call.merge(blk.call)
+        end
+      end
       self.class.new(
         @service_name,
-        **@args.merge(context_provider: blk)
+        **@args.merge(context_provider: new_context_provider)
       )
     end
 
