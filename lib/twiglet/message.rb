@@ -8,7 +8,7 @@ module Twiglet
       when Hash
         replace(msg.transform_keys!(&:to_sym))
       else
-        super(msg)
+        super
       end
     end
   end
