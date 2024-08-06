@@ -33,7 +33,7 @@ module Twiglet
       formatter = Twiglet::Formatter.new(
         service_name,
         default_properties: args.fetch(:default_properties, {}),
-        context_provider: args[:context_provider],
+        context_providers: Array(args[:context_provider] || args[:context_providers]),
         now: now,
         validator: @validator
       )
@@ -82,15 +82,12 @@ module Twiglet
     end
 
     def context_provider(&blk)
-      new_context_provider = blk
-      if @args[:context_provider]
-        new_context_provider = lambda do
-          @args[:context_provider].call.merge(blk.call)
-        end
-      end
+      new_context_providers = Array(@args[:context_providers])
+      new_context_providers << blk
+
       self.class.new(
         @service_name,
-        **@args.merge(context_provider: new_context_provider)
+        **@args.merge(context_providers: new_context_providers)
       )
     end
 

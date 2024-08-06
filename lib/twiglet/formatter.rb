@@ -11,12 +11,13 @@ module Twiglet
       validator:,
       default_properties: {},
       context_provider: nil,
+      context_providers: [],
       now: -> { Time.now.utc }
     )
       @service_name = service_name
       @now = now
       @default_properties = default_properties
-      @context_provider = context_provider
+      @context_providers = context_provider ? [context_provider] : context_providers
       @validator = validator
 
       super()
@@ -45,7 +46,9 @@ module Twiglet
         }
       }
 
-      context = @context_provider&.call || {}
+      context = @context_providers.reduce({}) do |c, context_provider|
+        c.deep_merge(context_provider.call)
+      end
 
       JSON.generate(
         base_message
