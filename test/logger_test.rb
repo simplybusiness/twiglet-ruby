@@ -189,9 +189,13 @@ describe Twiglet::Logger do
     end
 
     it "should be able to add contextual information to events with the context_provider" do
-      purchase_logger = @logger.context_provider do
-        { 'context' => { 'id' => 'my-context-id' } }
-      end
+      provider = -> { { 'context' => { 'id' => 'my-context-id' } } }
+      purchase_logger = Twiglet::Logger.new(
+        'petshop',
+        now: @now,
+        output: @buffer,
+        context_provider: provider
+      )
 
       # do stuff
       purchase_logger.info(
