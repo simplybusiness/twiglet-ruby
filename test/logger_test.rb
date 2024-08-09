@@ -679,11 +679,71 @@ describe Twiglet::Logger do
     end
   end
 
+  describe '#validation_schema' do
+    it 'allows for reconfiguring the validation_schema on new logger instances' do
+      validation_schema = <<-JSON
+        {
+          "type": "object",
+          "required": ["pet"],
+          "properties": {
+            "pet": {
+              "type": "object",
+              "required": ["name", "best_boy_or_girl?"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "best_boy_or_girl?": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      JSON
+
+      logger = Twiglet::Logger.new(
+        'petshop',
+        now: @now,
+        output: @buffer
+      )
+
+      message = { message: 'hi' }
+
+      pet_message = {
+        pet: { name: 'Davis', best_boy_or_girl?: true, species: 'dog' }
+      }
+
+      logger.info(message)
+      log = read_json(@buffer)
+      assert_equal 'hi', log[:message]
+
+      error = assert_raises JSON::Schema::ValidationError do
+        logger.info(pet_message)
+      end
+      assert_equal "The property '#/' did not contain a required property of 'message'", error.message
+
+      logger = logger.validation_schema(validation_schema)
+
+      error = assert_raises JSON::Schema::ValidationError do
+        logger.info(message)
+      end
+      assert_equal "The property '#/' did not contain a required property of 'pet'", error.message
+
+      logger.info(pet_message)
+      log = read_json(@buffer)
+      assert_equal 'Davis', log[:pet][:name]
+    end
+  end
+
   private
 
   def read_json(buffer)
     buffer.rewind
-    JSON.parse(buffer.read, symbolize_names: true)
+    string = buffer.read
+    buffer.rewind
+    JSON.parse(string, symbolize_names: true)
   end
 end
 # rubocop:enable Metrics/BlockLength
