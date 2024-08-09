@@ -23,7 +23,8 @@ describe Twiglet::Logger do
     @logger = Twiglet::Logger.new(
       'petshop',
       now: @now,
-      output: @buffer
+      output: @buffer,
+      level: Logger::DEBUG
     )
   end
 
@@ -652,7 +653,8 @@ describe Twiglet::Logger do
         'petshop',
         now: @now,
         output: @buffer,
-        validation_schema: validation_schema
+        validation_schema: validation_schema,
+        level: Logger::DEBUG
       )
     end
 
