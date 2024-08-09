@@ -22,7 +22,7 @@ module Twiglet
 
       now = args.fetch(:now, -> { Time.now.utc })
       output = args.fetch(:output, $stdout)
-      level = args.fetch(:level, DEBUG)
+      level = args.fetch(:level, INFO)
       validation_schema = args.fetch(:validation_schema, DEFAULT_VALIDATION_SCHEMA)
 
       raise 'Service name is mandatory' \
