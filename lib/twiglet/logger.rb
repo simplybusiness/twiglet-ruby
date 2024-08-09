@@ -81,6 +81,13 @@ module Twiglet
       )
     end
 
+    def validation_schema(validation_schema)
+      self.class.new(
+        @service_name,
+        **@args.merge(validation_schema: validation_schema)
+      )
+    end
+
     def context_provider(&blk)
       new_context_providers = Array(@args[:context_providers])
       new_context_providers << blk
