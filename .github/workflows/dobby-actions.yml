@@ -13,7 +13,7 @@ jobs:
       BUNDLE_WITHOUT: "development:test"
     steps:
       - name: Chekcout action
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: 'simplybusiness/dobby'
           ref: 'v3.0.0'
@@ -22,7 +22,7 @@ jobs:
         with:
           bundler-cache: true
       - name: Bump version
-        uses: simplybusiness/dobby@v3.1.1
+        uses: simplybusiness/dobby@v3
         env:
           DOBBY_APP_ID: ${{ secrets.DOBBY_APP_ID }}
           DOBBY_PRIVATE_KEY: ${{ secrets.DOBBY_PRIVATE_KEY }}
