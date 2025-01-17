@@ -50,7 +50,7 @@ describe Twiglet::Logger do
       :level=,
       :sev_threshold=
     ].each do |call|
-      assert @logger.respond_to?(call), "Logger does not respond to #{call}"
+      assert_respond_to @logger, call, "Logger does not respond to #{call}"
     end
   end
 
