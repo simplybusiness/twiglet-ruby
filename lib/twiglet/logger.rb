@@ -44,25 +44,25 @@ module Twiglet
       @validator.custom_error_handler = block
     end
 
-    def debug(message_or_error = nil, &block)
+    def debug(message_or_error = nil, &)
       message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message, &block)
+      super(message, &)
     end
 
-    def info(message_or_error = nil, &block)
+    def info(message_or_error = nil, &)
       message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message, &block)
+      super(message, &)
     end
 
-    def warn(message_or_error = nil, &block)
+    def warn(message_or_error = nil, &)
       message = message_or_error.is_a?(Exception) ? error_message(message_or_error) : message_or_error
 
-      super(message, &block)
+      super(message, &)
     end
 
-    def error(message_or_error = nil, error = nil, &block)
+    def error(message_or_error = nil, error = nil, &)
       message = if error
                   error_message(error, message_or_error)
                 elsif message_or_error.is_a?(Exception)
@@ -71,20 +71,20 @@ module Twiglet
                   message_or_error
                 end
 
-      super(message, &block)
+      super(message, &)
     end
 
     def with(default_properties)
       self.class.new(
         @service_name,
-        **@args.merge(default_properties: default_properties)
+        **@args, default_properties: default_properties
       )
     end
 
     def validation_schema(validation_schema)
       self.class.new(
         @service_name,
-        **@args.merge(validation_schema: validation_schema)
+        **@args, validation_schema: validation_schema
       )
     end
 
@@ -94,7 +94,7 @@ module Twiglet
 
       self.class.new(
         @service_name,
-        **@args.merge(context_providers: new_context_providers)
+        **@args, context_providers: new_context_providers
       )
     end
 
