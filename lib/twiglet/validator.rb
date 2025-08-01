@@ -10,10 +10,11 @@ module Twiglet
     def initialize(schema)
       @schema = JSON.parse(schema)
       @custom_error_handler = ->(e) { raise e }
+      @validator = JSON::Validator.new(@schema)
     end
 
     def validate(message)
-      JSON::Validator.validate!(@schema, message)
+      @validator.validate(message)
     rescue JSON::Schema::ValidationError => e
       custom_error_handler.call(e)
     end
