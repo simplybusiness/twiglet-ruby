@@ -14,6 +14,14 @@ Gem::Specification.new do |gem|
   gem.summary               = 'Twiglet'
   gem.description           = 'Like a log, only smaller.'
 
+  # Required metadata for trusted publishing
+  gem.metadata = {
+    'source_code_uri' => 'https://github.com/simplybusiness/twiglet-ruby',
+    'changelog_uri' => 'https://github.com/simplybusiness/twiglet-ruby/releases',
+    'bug_tracker_uri' => 'https://github.com/simplybusiness/twiglet-ruby/issues',
+    'documentation_uri' => 'https://github.com/simplybusiness/twiglet-ruby'
+  }
+
   gem.files                 = `git ls-files`.split("\n")
 
   gem.require_paths         = ['lib']
