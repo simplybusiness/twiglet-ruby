@@ -34,14 +34,9 @@ jobs:
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '3.3'
+          ruby-version: ruby
           bundler-cache: true
-      - name: Configure RubyGems for OIDC
-        uses: rubygems/configure-rubygems-credentials@v1.0.0
-      - name: Build gem
-        run: gem build *.gemspec
-      - name: Publish to RubyGems
-        run: gem push *.gem
+      - uses: rubygems/release-gem@v1
       - name: Get Gem Version
         id: get-gem-version
         run: echo "GEM_VERSION=$(bundle exec ruby -e 'puts Twiglet::VERSION')" >> $GITHUB_OUTPUT
