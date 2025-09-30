@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.name                  = 'twiglet'
   gem.version               = Twiglet::VERSION
   gem.authors               = ['Simply Business']
-  gem.email                 = ['tech@simplybusiness.co.uk']
+  gem.email                 = ['opensourcetech+rubygems@simplybusiness.co.uk']
   gem.homepage              = 'https://github.com/simplybusiness/twiglet-ruby'
 
   gem.summary               = 'Twiglet'
@@ -27,7 +27,7 @@ Gem::Specification.new do |gem|
   gem.require_paths         = ['lib']
   gem.required_ruby_version = ['>= 3.1 ', '< 3.5']
 
-  gem.license               = 'Copyright SimplyBusiness'
+  gem.license               = 'MIT'
 
   gem.add_dependency 'json-schema'
   gem.add_development_dependency 'minitest'
