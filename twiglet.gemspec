@@ -22,7 +22,7 @@ Gem::Specification.new do |gem|
     'documentation_uri' => 'https://github.com/simplybusiness/twiglet-ruby'
   }
 
-  gem.files                 = `git ls-files`.split("\n")
+  gem.files                 = Dir.glob(['lib/**/*', 'LICENSE', 'README.md']).reject { |f| File.directory?(f) }
 
   gem.require_paths         = ['lib']
   gem.required_ruby_version = ['>= 3.1 ', '< 3.5']
