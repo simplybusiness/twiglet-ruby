@@ -6,6 +6,7 @@ on:
 
 env:
   CI: true
+  CODACY_PROJECT_NAME: twiglet-ruby
 permissions:
   contents: read
 
@@ -35,4 +36,11 @@ jobs:
       shell: bash
     - name: Run example_app
       run: bundle exec ruby example_app.rb
+      shell: bash
+    - name: Upload coverage to Codacy
+      if: matrix.ruby-version == '3.4'
+      continue-on-error: true
+      env:
+        CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+      run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/coverage.xml
       shell: bash
