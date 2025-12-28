@@ -30,6 +30,7 @@ Gem::Specification.new do |gem|
   gem.license               = 'MIT'
 
   gem.add_dependency 'json-schema'
+  gem.add_development_dependency 'benchmark'
   gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'simplecov', '0.17.1'
