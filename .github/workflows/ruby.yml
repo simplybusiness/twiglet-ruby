@@ -30,6 +30,8 @@ jobs:
       run: bundle install
     - name: Rubocop Check
       run: bundle exec rubocop
+    - name: Validate RBS types
+      run: bundle exec rake rbs
     - name: Run all tests
       run: bundle exec rake test
       shell: bash
