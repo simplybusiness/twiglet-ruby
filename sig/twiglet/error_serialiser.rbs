@@ -1,0 +1,9 @@
+module Twiglet
+  class ErrorSerialiser
+    def serialise_error: (Exception error) -> Hash[Symbol, untyped]
+
+    private
+
+    def add_stack_trace: (Hash[Symbol, untyped] hash_to_add_to, Exception error) -> Hash[Symbol, untyped]
+  end
+end

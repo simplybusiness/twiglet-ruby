@@ -1,0 +1,5 @@
+module Twiglet
+  class Message < Hash[Symbol, untyped]
+    def initialize: (String | Hash[untyped, untyped] | nil msg) -> void
+  end
+end

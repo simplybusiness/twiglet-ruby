@@ -1,0 +1,39 @@
+module Twiglet
+  class Logger < ::Logger
+    DEFAULT_VALIDATION_SCHEMA: String
+
+    @service_name: String
+    @args: Hash[Symbol, untyped]
+    @validator: Validator
+
+    def initialize: (
+      String service_name,
+      ?now: ^() -> Time,
+      ?output: IO,
+      ?level: Integer,
+      ?validation_schema: String,
+      ?default_properties: Hash[Symbol, untyped],
+      ?context_provider: (^() -> Hash[Symbol, untyped])?,
+      ?context_providers: Array[^() -> Hash[Symbol, untyped]],
+      **untyped args
+    ) -> void
+
+    def configure_validation_error_response: () { (JSON::Schema::ValidationError) -> void } -> void
+
+    def debug: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def info: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def warn: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def error: (?String | Exception | nil message_or_error, ?Exception? error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+
+    def with: (Hash[Symbol, untyped] default_properties) -> Logger
+    def validation_schema: (String validation_schema) -> Logger
+    def context_provider: () { () -> Hash[Symbol, untyped] } -> Logger
+
+    alias warning warn
+    alias critical fatal
+
+    private
+
+    def error_message: (Exception error, ?String? message) -> Message
+  end
+end

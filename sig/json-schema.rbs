@@ -1,0 +1,12 @@
+# Type stubs for json-schema gem
+module JSON
+  class Validator
+    def initialize: (Hash[String, untyped] schema) -> void
+    def validate: (untyped data) -> bool
+  end
+
+  module Schema
+    class ValidationError < StandardError
+    end
+  end
+end
