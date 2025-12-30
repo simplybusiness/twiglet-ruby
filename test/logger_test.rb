@@ -271,7 +271,7 @@ describe Twiglet::Logger do
       # Let's add some context to this customer journey
       purchase_logger = @logger
                         .context_provider do
-        { 'context' => { 'id' => 'my-context-id' } }
+                          { 'context' => { 'id' => 'my-context-id' } }
       end.with(
         {
           trace: { id: '1c8a5fb2-fecd-44d8-92a4-449eb2ce4dcb' },
