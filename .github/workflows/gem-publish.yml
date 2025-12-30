@@ -33,6 +33,9 @@ jobs:
   build:
     name: Build and Publish
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - uses: actions/checkout@v6
       - name: Set up Ruby
