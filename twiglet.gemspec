@@ -31,6 +31,7 @@ Gem::Specification.new do |gem|
 
   gem.add_dependency 'json-schema'
   gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'minitest-mock'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rbs'
   gem.add_development_dependency 'simplecov', '0.17.1'
