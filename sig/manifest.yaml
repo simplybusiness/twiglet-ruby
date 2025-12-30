@@ -1,0 +1,6 @@
+# D = Development Dependencies
+# S = Standard Library Dependencies
+dependencies:
+  - name: logger
+  - name: json
+  - name: time

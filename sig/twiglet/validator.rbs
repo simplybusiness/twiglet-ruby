@@ -1,0 +1,11 @@
+module Twiglet
+  class Validator
+    attr_accessor custom_error_handler: ^(JSON::Schema::ValidationError) -> void
+
+    @schema: Hash[String, untyped]
+    @validator: JSON::Validator
+
+    def initialize: (String schema) -> void
+    def validate: (Message message) -> void
+  end
+end

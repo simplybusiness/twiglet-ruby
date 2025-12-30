@@ -1,0 +1,3 @@
+module Twiglet
+  VERSION: String
+end
