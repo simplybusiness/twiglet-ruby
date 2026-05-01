@@ -86,4 +86,24 @@ describe Twiglet::Formatter do
     }
     assert_equal expected_log, JSON.parse(msg)
   end
+
+  it 'produces a fallback log when formatting fails' do
+    validator = Twiglet::Validator.new(Twiglet::Logger::DEFAULT_VALIDATION_SCHEMA)
+    formatter = Twiglet::Formatter.new('petshop', now: @now, validator: validator)
+
+    msg = formatter.call('warn', nil, nil, '')
+    parsed = JSON.parse(msg)
+
+    assert_equal 'warn', parsed.dig('log', 'level')
+    assert_equal 'petshop', parsed.dig('service', 'name')
+    assert_includes parsed['twiglet_error'], 'ValidationError'
+  end
+
+  it 'does not raise when formatting fails' do
+    validator = Twiglet::Validator.new(Twiglet::Logger::DEFAULT_VALIDATION_SCHEMA)
+    formatter = Twiglet::Formatter.new('petshop', now: @now, validator: validator)
+
+    result = formatter.call('error', nil, nil, { message: true })
+    assert_kind_of String, result
+  end
 end

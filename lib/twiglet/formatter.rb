@@ -28,6 +28,9 @@ module Twiglet
       message = Message.new(msg)
       @validator.validate(message)
       log(level: level, message: message)
+    rescue StandardError => e
+      Kernel.warn("Twiglet formatting error: #{e.message}")
+      fallback_log(level: level || 'error', message: msg, error: e)
     end
 
     private
@@ -55,6 +58,19 @@ module Twiglet
           .deep_merge(@default_properties.to_nested)
           .deep_merge(context.to_nested)
           .deep_merge(message.to_nested)
+      ).concat("\n")
+    end
+
+    def fallback_log(level:, message:, error:)
+      JSON.generate(
+        {
+          ecs: { version: '1.5.0' },
+          '@timestamp': @now.call.iso8601(3),
+          service: { name: @service_name },
+          log: { level: level },
+          message: message.to_s,
+          twiglet_error: "#{error.class}: #{error.message}"
+        }
       ).concat("\n")
     end
   end
