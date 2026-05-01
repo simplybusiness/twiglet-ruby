@@ -55,16 +55,16 @@ describe Twiglet::Logger do
   end
 
   describe 'JSON logging' do
-    it 'should throw an error with an empty message' do
-      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
-        @logger.info({ message: '' })
-      end
+    it 'should produce a fallback log with an empty message' do
+      @logger.info({ message: '' })
+      actual_log = read_json(@buffer)
+      assert_includes actual_log[:twiglet_error], 'ValidationError'
     end
 
-    it 'should throw an error if message is missing' do
-      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
-        @logger.info({ foo: 'bar' })
-      end
+    it 'should produce a fallback log if message is missing' do
+      @logger.info({ foo: 'bar' })
+      actual_log = read_json(@buffer)
+      assert_includes actual_log[:twiglet_error], 'ValidationError'
     end
 
     it 'should log mandatory attributes' do
@@ -470,10 +470,10 @@ describe Twiglet::Logger do
   end
 
   describe 'text logging' do
-    it 'should throw an error with an empty message' do
-      assert_raises JSON::Schema::ValidationError, "The property '#/message' was not of a minimum string length of 1" do
-        @logger.info('')
-      end
+    it 'should produce a fallback log with an empty message' do
+      @logger.info('')
+      actual_log = read_json(@buffer)
+      assert_includes actual_log[:twiglet_error], 'ValidationError'
     end
 
     it 'should log mandatory attributes' do
@@ -605,11 +605,10 @@ describe Twiglet::Logger do
   end
 
   describe 'configuring error response' do
-    it 'blows up by default' do
-      assert_raises JSON::Schema::ValidationError,
-                    "The property '#/message' of type boolean did not match the following type: string" do
-        @logger.debug(message: true)
-      end
+    it 'produces a fallback log by default' do
+      @logger.debug(message: true)
+      actual_log = read_json(@buffer)
+      assert_includes actual_log[:twiglet_error], 'ValidationError'
     end
 
     it 'silently swallows errors when configured to do so' do
@@ -669,15 +668,14 @@ describe Twiglet::Logger do
       assert_equal true, log[:pet][:best_boy_or_girl?]
     end
 
-    it 'raises when custom validation rules are broken' do
+    it 'produces a fallback log when custom validation rules are broken' do
       nonconformant = {
         pet: { name: 'Davis' }
       }
 
-      assert_raises JSON::Schema::ValidationError,
-                    "The property '#/pet' did not contain a required property of 'best_boy_or_girl?'" do
-        @logger.debug(nonconformant)
-      end
+      @logger.debug(nonconformant)
+      actual_log = read_json(@buffer)
+      assert_includes actual_log[:twiglet_error], 'ValidationError'
     end
   end
 
@@ -721,18 +719,19 @@ describe Twiglet::Logger do
       log = read_json(@buffer)
       assert_equal 'hi', log[:message]
 
-      error = assert_raises JSON::Schema::ValidationError do
-        logger.info(pet_message)
-      end
-      assert_equal "The property '#/' did not contain a required property of 'message'", error.message
+      @buffer.truncate(0)
+      logger.info(pet_message)
+      log = read_json(@buffer)
+      assert_includes log[:twiglet_error], "did not contain a required property of 'message'"
 
       logger = logger.validation_schema(validation_schema)
 
-      error = assert_raises JSON::Schema::ValidationError do
-        logger.info(message)
-      end
-      assert_equal "The property '#/' did not contain a required property of 'pet'", error.message
+      @buffer.truncate(0)
+      logger.info(message)
+      log = read_json(@buffer)
+      assert_includes log[:twiglet_error], "did not contain a required property of 'pet'"
 
+      @buffer.truncate(0)
       logger.info(pet_message)
       log = read_json(@buffer)
       assert_equal 'Davis', log[:pet][:name]
