@@ -1,0 +1,9 @@
+module HashExtensions
+  def to_nested: () -> Hash[Symbol, untyped]
+  def deep_merge: (Hash[untyped, untyped] hash_to_merge) -> Hash[Symbol, untyped]
+
+  private
+
+  def contains_dotted_key?: () -> bool
+  def build_nested_object: (Symbol | String key, untyped val) -> Hash[Symbol, untyped]
+end

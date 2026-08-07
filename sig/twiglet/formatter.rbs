@@ -1,0 +1,24 @@
+module Twiglet
+  class Formatter < ::Logger::Formatter
+    @service_name: String
+    @now: ^() -> Time
+    @default_properties: Hash[Symbol, untyped]
+    @context_providers: Array[^() -> Hash[Symbol, untyped]]
+    @validator: Validator
+
+    def initialize: (
+      String service_name,
+      validator: Validator,
+      ?default_properties: Hash[Symbol, untyped],
+      ?context_provider: (^() -> Hash[Symbol, untyped])?,
+      ?context_providers: Array[^() -> Hash[Symbol, untyped]],
+      ?now: ^() -> Time
+    ) -> void
+
+    def call: (String severity, Time _time, String? _progname, String | Hash[untyped, untyped] | nil msg) -> String
+
+    private
+
+    def log: (level: String, message: Message) -> String
+  end
+end

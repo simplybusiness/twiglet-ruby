@@ -25,15 +25,19 @@ Gem::Specification.new do |gem|
   gem.files                 = Dir.glob(['lib/**/*', 'LICENSE', 'README.md']).reject { |f| File.directory?(f) }
 
   gem.require_paths         = ['lib']
-  gem.required_ruby_version = ['>= 3.1 ', '< 3.5']
+  gem.required_ruby_version = ['>= 3.2 ', '< 4.1']
 
   gem.license               = 'MIT'
 
   gem.add_dependency 'json-schema'
-  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'benchmark'
+  gem.add_development_dependency 'cgi'
+  gem.add_development_dependency 'minitest', '>= 5.0'
+  gem.add_development_dependency 'minitest-mock'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rexml', '~> 3.3.6'
-  gem.add_development_dependency 'simplecov', '0.17.1'
   gem.add_development_dependency 'simplecov-cobertura', '~> 1.4'
+  gem.add_development_dependency 'rbs'
+  gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'simplycop'
 end

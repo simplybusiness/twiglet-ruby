@@ -7,4 +7,9 @@ Rake::TestTask.new do |t|
   t.verbose = true
 end
 
+desc 'Validate RBS type signatures'
+task :rbs do
+  sh 'bundle exec rbs -I sig -r logger -r json -r time validate'
+end
+
 task default: :test

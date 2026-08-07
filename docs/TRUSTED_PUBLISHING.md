@@ -5,7 +5,7 @@ This repository now uses RubyGems trusted publishing via GitHub Actions OIDC tok
 ## How it works
 
 1. **Automated Publishing**: When code is pushed to the `master` branch, the workflow automatically:
-   - Runs the full test suite across multiple Ruby versions (3.1, 3.2, 3.3, 3.4)
+   - Runs the full test suite across multiple Ruby versions (3.1, 3.2, 3.3, 3.4, 4.0)
    - Builds the gem if tests pass
    - Publishes to RubyGems using OIDC token authentication
    - Creates a GitHub release
