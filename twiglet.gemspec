@@ -35,6 +35,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'minitest', '>= 5.0'
   gem.add_development_dependency 'minitest-mock'
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'rexml', '~> 3.3.6'
+  gem.add_development_dependency 'simplecov-cobertura', '~> 1.4'
   gem.add_development_dependency 'rbs'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'simplycop'
