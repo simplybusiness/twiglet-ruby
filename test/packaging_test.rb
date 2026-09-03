@@ -2,13 +2,8 @@ require 'minitest/autorun'
 require 'open3'
 require 'rbs'
 
-# The gem's RBS contract with its consumers.
-#
-# The signatures under sig/ were added in 9e4f512 but never shipped: gem.files did not name
-# them, so every release contained no RBS at all and downstream projects hand-wrote stubs
-# for Twiglet::Logger. Nothing failed to make that visible - the gem was simply empty.
-# These tests assert against the gemspec's own file list, which is what `gem build`
-# packages, so they hold for whatever builds the gem rather than for one workflow.
+# Asserts the gemspec's own file list, which is what `gem build` packages, so these hold
+# for whatever builds the gem rather than for one workflow.
 describe 'packaged RBS signatures' do
   root = File.expand_path('..', __dir__)
   packaged = Gem::Specification.load(File.join(root, 'twiglet.gemspec')).files
@@ -16,7 +11,7 @@ describe 'packaged RBS signatures' do
   shipped_sigs = packaged.grep(/\.rbs\z/)
 
   it 'has sources to sign' do
-    # Guards the tests below: with no sources they would pass vacuously.
+    # Without this the tests below pass vacuously.
     refute_empty sources
   end
 
@@ -26,17 +21,14 @@ describe 'packaged RBS signatures' do
   end
 
   it 'ships the manifest naming our stdlib dependencies' do
-    # Without it a consumer's `rbs collection` does not know this gem needs logger, json
-    # and time, and Twiglet::Logger's superclass stops resolving for them.
+    # Without it a consumer's `rbs collection` does not learn our stdlib dependencies, and
+    # Twiglet::Logger's superclass stops resolving for them.
     assert_includes packaged, 'sig/manifest.yaml'
   end
 
   it 'declares no methods on types it does not own' do
-    # A shipped .rbs with no lib/ counterpart is a stub for somebody else's type. RBS lets a
-    # consumer reopen a class we declare, but a method we declare and they also declare is a
-    # hard RBS::DuplicatedMethodDefinition that fails their build. json-schema ships no RBS
-    # and is absent from gem_rbs_collection, so a consumer type-checking against it has
-    # written stubs of their own and would collide with ours.
+    # A shipped .rbs with no lib/ counterpart declares somebody else's type, and a method we
+    # declare there is a hard error in the build of a consumer who declares it too.
     foreign = shipped_sigs.reject { |f| sources.include?(f.sub(%r{\Asig/}, 'lib/').sub(/\.rbs\z/, '.rb')) }
     refute_empty foreign, 'expected at least one external stub, or this test proves nothing'
 

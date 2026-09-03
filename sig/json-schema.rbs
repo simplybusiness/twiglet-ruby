@@ -1,16 +1,6 @@
-# Declarations for the json-schema gem, which our own signatures name: Validator as the
-# type of Validator#@validator, and Schema::ValidationError in Logger's public
-# configure_validation_error_response.
-#
-# json-schema ships no RBS and is absent from ruby/gem_rbs_collection, so a consumer cannot
-# resolve these on their own and they have to ship with us.
-#
-# Deliberately METHOD-FREE. These declarations land in every consumer's type environment,
-# and a consumer type-checking against json-schema will have written stubs of their own -
-# there being no upstream ones to use. RBS lets them reopen a class we declare, but a
-# method we declare and they also declare is a hard RBS::DuplicatedMethodDefinition that
-# fails their build, not ours. Nothing here needs the method bodies: this project runs
-# `rbs validate`, which resolves names, and has no Steepfile to check calls against them.
+# Ships to consumers: our signatures name these and json-schema has no RBS of its own.
+# Keep method-free - a method here is a hard error in the build of any consumer with their
+# own json-schema stubs.
 module JSON
   class Validator
   end
