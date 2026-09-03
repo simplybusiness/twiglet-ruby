@@ -22,7 +22,12 @@ Gem::Specification.new do |gem|
     'documentation_uri' => 'https://github.com/simplybusiness/twiglet-ruby'
   }
 
-  gem.files                 = Dir.glob(['lib/**/*', 'LICENSE', 'README.md']).reject { |f| File.directory?(f) }
+  # sig/ ships so consumers can type-check against this gem. The signatures have existed
+  # since 9e4f512 but never reached a release, because this glob did not name them: the
+  # gem contained no RBS at all, and a downstream project had to hand-write stubs for
+  # Twiglet::Logger to type its own code.
+  gem.files                 = Dir.glob(['lib/**/*', 'sig/**/*', 'LICENSE', 'README.md'])
+                                 .reject { |f| File.directory?(f) }
 
   gem.require_paths         = ['lib']
   gem.required_ruby_version = ['>= 3.2 ', '< 4.1']
