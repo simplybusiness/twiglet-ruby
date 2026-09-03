@@ -26,16 +26,18 @@ describe 'packaged RBS signatures' do
     assert_includes packaged, 'sig/manifest.yaml'
   end
 
-  it 'declares no methods on types it does not own' do
-    # A shipped .rbs with no lib/ counterpart declares somebody else's type, and a method we
-    # declare there is a hard error in the build of a consumer who declares it too.
+  it 'adds nothing to types it does not own' do
+    # A shipped .rbs with no lib/ counterpart declares somebody else's type. Anything we put
+    # inside it - a method, attribute, alias, constant, mixin - is a hard error in the build
+    # of a consumer who declares it too, so these stubs may hold only empty nested types.
     foreign = shipped_sigs.reject { |f| sources.include?(f.sub(%r{\Asig/}, 'lib/').sub(/\.rbs\z/, '.rb')) }
     refute_empty foreign, 'expected at least one external stub, or this test proves nothing'
 
     foreign.each do |file|
       buffer = RBS::Buffer.new(name: file, content: File.read(File.join(root, file)))
       decls = RBS::Parser.parse_signature(buffer).last # [buffer, directives, declarations]
-      assert_empty method_names(decls), "#{file} declares methods on a type we do not own"
+      offenders = declared_members(decls).map { |m| m.class.name.split('::').last }
+      assert_empty offenders, "#{file} declares #{offenders.join(', ')} on a type we do not own"
     end
   end
 
@@ -50,16 +52,18 @@ describe 'packaged RBS signatures' do
     assert status.success?, "shipped signatures do not resolve on their own:\n#{out}"
   end
 
-  def method_names(decls)
+  # Every member except a nested class or module, which is the only thing these stubs may
+  # contain. Inverted rather than listing the member kinds that declare something, so a kind
+  # we did not think of fails the test instead of slipping through it.
+  def declared_members(decls)
     decls.flat_map do |decl|
       next [] unless decl.respond_to?(:members)
 
       decl.members.flat_map do |member|
-        case member
-        when RBS::AST::Members::MethodDefinition then [member.name]
-        when RBS::AST::Declarations::Base then method_names([member])
-        else []
-        end
+        # Only Class and Module recurse. Declarations::Constant is also a Declarations::Base,
+        # and it collides downstream just as a method does.
+        nested = member.is_a?(RBS::AST::Declarations::Class) || member.is_a?(RBS::AST::Declarations::Module)
+        nested ? declared_members([member]) : [member]
       end
     end
   end
