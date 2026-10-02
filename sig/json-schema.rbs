@@ -1,8 +1,8 @@
-# Type stubs for json-schema gem
+# Ships to consumers: our signatures name these and json-schema has no RBS of its own.
+# Keep method-free - a method here is a hard error in the build of any consumer with their
+# own json-schema stubs.
 module JSON
   class Validator
-    def initialize: (Hash[String, untyped] schema) -> void
-    def validate: (untyped data) -> bool
   end
 
   module Schema
