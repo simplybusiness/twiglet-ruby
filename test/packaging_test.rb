@@ -26,18 +26,42 @@ describe 'packaged RBS signatures' do
     assert_includes packaged, 'sig/manifest.yaml'
   end
 
-  it 'adds nothing to types it does not own' do
-    # A shipped .rbs with no lib/ counterpart declares somebody else's type. Anything we put
-    # inside it - a method, attribute, alias, constant, mixin - is a hard error in the build
-    # of a consumer who declares it too, so these stubs may hold only empty nested types.
-    foreign = shipped_sigs.reject { |f| sources.include?(f.sub(%r{\Asig/}, 'lib/').sub(/\.rbs\z/, '.rb')) }
-    refute_empty foreign, 'expected at least one external stub, or this test proves nothing'
+  # A shipped .rbs with no lib/ counterpart declares somebody else's type.
+  external = shipped_sigs.reject { |f| sources.include?(f.sub(%r{\Asig/}, 'lib/').sub(/\.rbs\z/, '.rb')) }
 
-    foreign.each do |file|
+  it 'adds nothing to types it does not own' do
+    # Anything we put inside an external type - a method, attribute, alias, constant, mixin - is
+    # a hard error in the build of a consumer who declares it too, so these stubs may hold only
+    # empty nested types.
+    refute_empty external, 'expected at least one external stub, or this test proves nothing'
+
+    external.each do |file|
       buffer = RBS::Buffer.new(name: file, content: File.read(File.join(root, file)))
       decls = RBS::Parser.parse_signature(buffer).last # [buffer, directives, declarations]
       offenders = declared_members(decls).map { |m| m.class.name.split('::').last }
       assert_empty offenders, "#{file} declares #{offenders.join(', ')} on a type we do not own"
+    end
+  end
+
+  it 'declares external types with the same kind and superclass as their owner' do
+    # A class declared as a module, or with a different superclass, is a hard error in the
+    # build of a consumer who declares the type correctly, even with no members on either side.
+    external.each do |file|
+      require File.basename(file, '.rbs') # stubs are named after the gem they cover
+
+      buffer = RBS::Buffer.new(name: file, content: File.read(File.join(root, file)))
+      declared_types(RBS::Parser.parse_signature(buffer).last).each do |name, decl|
+        actual = Object.const_get(name)
+        if decl.is_a?(RBS::AST::Declarations::Class)
+          assert_kind_of Class, actual, "#{file} declares #{name} as a class, but it is a module"
+          if decl.super_class
+            assert_equal actual.superclass, Object.const_get(decl.super_class.name.to_s),
+                         "#{file} declares the wrong superclass for #{name}"
+          end
+        else
+          refute_kind_of Class, actual, "#{file} declares #{name} as a module, but it is a class"
+        end
+      end
     end
   end
 
@@ -65,6 +89,15 @@ describe 'packaged RBS signatures' do
         nested = member.is_a?(RBS::AST::Declarations::Class) || member.is_a?(RBS::AST::Declarations::Module)
         nested ? declared_members([member]) : [member]
       end
+    end
+  end
+
+  def declared_types(decls, namespace = nil)
+    decls.flat_map do |decl|
+      next [] unless decl.is_a?(RBS::AST::Declarations::Class) || decl.is_a?(RBS::AST::Declarations::Module)
+
+      name = [namespace, decl.name.to_s].compact.join('::')
+      [[name, decl], *declared_types(decl.members, name)]
     end
   end
 end

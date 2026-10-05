@@ -5,7 +5,7 @@ module JSON
   class Validator
   end
 
-  module Schema
+  class Schema
     class ValidationError < StandardError
     end
   end
