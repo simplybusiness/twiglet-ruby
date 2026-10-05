@@ -20,10 +20,10 @@ module Twiglet
 
     def configure_validation_error_response: () { (JSON::Schema::ValidationError) -> void } -> void
 
-    def debug: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
-    def info: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
-    def warn: (?String | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
-    def error: (?String | Exception | nil message_or_error, ?Exception? error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def debug: (?String | Hash[untyped, untyped] | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def info: (?String | Hash[untyped, untyped] | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def warn: (?String | Hash[untyped, untyped] | Exception | nil message_or_error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
+    def error: (?String | Hash[untyped, untyped] | Exception | nil message_or_error, ?Exception? error) ?{ () -> (String | Hash[untyped, untyped]) } -> true
 
     def with: (Hash[Symbol, untyped] default_properties) -> Logger
     def validation_schema: (String validation_schema) -> Logger
@@ -34,6 +34,6 @@ module Twiglet
 
     private
 
-    def error_message: (Exception error, ?String? message) -> Message
+    def error_message: (Exception error, ?(String | Hash[untyped, untyped])? message) -> Message
   end
 end
