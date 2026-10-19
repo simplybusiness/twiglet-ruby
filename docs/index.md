@@ -1,4 +1,5 @@
 # Twiglet: Ruby version
+
 Like a log, only smaller.
 
 This library provides a minimal JSON logging interface suitable for use in (micro)services.  See the [RATIONALE](docs/RATIONALE.md) for design rationale and an explantion of the Elastic Common Schema that we are using for log attribute naming.
@@ -17,7 +18,9 @@ gem install twiglet
 require 'twiglet/logger'
 logger = Twiglet::Logger.new('service name')
 ```
+
 #### Optional initialization parameters
+
 A hash can optionally be passed in as a keyword argument for `default_properties`. This hash must be in the Elastic Common Schema format and will be present in every log message created by this Twiglet logger object.
 
 You may also provide an optional `output` keyword argument which should be an object with a `puts` method - like `$stdout`.
@@ -57,6 +60,7 @@ This will write to STDOUT a JSON string:
 A message is always required unless a block is provided. The message can be an object or a string.
 
 #### Error logging
+
 An optional error can also be provided, in which case the error message and backtrace will be logged in the relevant ECS compliant fields:
 
 ```ruby
@@ -74,6 +78,7 @@ These will both result in the same JSON string written to STDOUT:
 ```
 
 #### Custom fields
+
 Log custom event-specific information simply as attributes in a hash:
 
 ```ruby
@@ -107,6 +112,8 @@ This writes:
 {"service":{"name":"service name"},"@timestamp":"2020-05-14T10:56:49.527+01:00","log":{"level":"info"}}
 ```
 
+Top-level keys may be strings or symbols. Twiglet converts them to symbols before merging your hash with its own symbol-keyed fields, such as `log` and `service`. Without this, Ruby treats `"log"` and `:log` as different keys and the output has duplicate JSON keys. Twiglet has converted keys this way since [#2](https://github.com/simplybusiness/twiglet-ruby/pull/2), and has done it in `Twiglet::Message` since [#12](https://github.com/simplybusiness/twiglet-ruby/pull/12). Your hash is not modified, and frozen hashes are accepted. Nested keys are not converted, so use symbols inside nested hashes.
+
 It may be that when making a series of logs that write information about a single event, you may want to avoid duplication by creating an event specific logger that includes the context:
 
 ```ruby
@@ -132,6 +139,7 @@ which will print:
 ```
 
 ### Log formatting
+
 Some third party applications will allow you to optionally specify a [log formatter](https://ruby-doc.org/stdlib-2.4.0/libdoc/logger/rdoc/Logger/Formatter.html).
 Supplying a Twiglet log formatter will format those third party logs so that they are ECS compliant and have the same default parameters as your application's internal logs.
 
@@ -141,10 +149,12 @@ logger.formatter
 ```
 
 ### HTTP Request Logging
+
 Take a look at this sample [Rack application](examples/rack/example_rack_app.rb#L15) with an ECS compliant
 [request logger](/examples/rack/request_logger.rb) as a template when configuring your own request logging middleware with Twiglet.
 
 ### Log format validation
+
 Twiglet allows for the configuration of a custom validation schema. The validation schema must be [JSON Schema](https://json-schema.org/) compliant. Any fields not explicitly included in the provided schema are permitted by default.
 
 For example, given the following JSON Schema:
@@ -197,6 +207,7 @@ end
 ```
 
 #### Customizing error responses
+
 Depending on the application, it may not be desirable for the logger to raise Runtime errors. Twiglet allows you to configure a custom response for handling validation errors.
 
 Configure error handling by writing a block
