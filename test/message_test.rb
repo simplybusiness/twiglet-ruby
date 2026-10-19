@@ -2,6 +2,14 @@ require 'minitest/autorun'
 require_relative '../lib/twiglet/message'
 
 describe Twiglet::Message do
+  it 'returns nil for a missing key when built from a string' do
+    assert_nil Twiglet::Message.new('hello, world')[:missing]
+  end
+
+  it 'returns nil for a missing key when built from a non-string, non-hash value' do
+    assert_nil Twiglet::Message.new(42)[:missing]
+  end
+
   it 'returns a message hash from a string' do
     assert_equal Twiglet::Message.new('hello, world'), { message: 'hello, world' }
   end
